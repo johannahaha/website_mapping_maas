@@ -8,11 +8,21 @@
 
 <style lang="scss">
 @import "./assets/_config.scss";
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $dark;
+  color: $mediumblue;
+  margin:0;
+  background-color:$darkgrey;
 }
 
 #nav {
@@ -21,11 +31,11 @@
 
 #nav a {
   font-weight: bold;
-  color: $light;
+  color: $green;
 }
 
 #nav a.router-link-exact-active {
-  color: $highlight;
+  color: $lightgreen;
 }
 
 </style>
