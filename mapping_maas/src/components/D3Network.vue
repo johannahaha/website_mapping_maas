@@ -1,5 +1,5 @@
 <template>
-    <div id="d3-example" ref="d3-example"></div>
+    <div id="d3-network" ref="d3-network"></div>
 </template>
 
 
@@ -36,12 +36,12 @@ export default {
             //const color = d3.scale.category10();
 
             // We create a force-directed dynamic graph layout.
-            let svg = d3.select("#d3-example").select("svg");
+            let svg = d3.select("#d3-network").select("svg");
             let scope = this;
 
             if (svg.empty()) {
                 svg = d3
-                    .select("#d3-example")
+                    .select("#d3-network")
                     .append("svg")
                     .attr("width", width)
                     .attr("height", height);
@@ -107,15 +107,15 @@ export default {
                     })
                     .attr("stroke-width", function (d) {
                         // The node color depends on the club.
-                        return d.value / 100;
+                        return d.value / 10;
                     })
                     .attr("marker-end", "url(#marker)")
                     .attr("id", function (d){
-                        return "path_" + d.index;
+                        return d.source.title + "-" + d.target.title
                     })
                     .attr("fill","none")
                     .attr("ref", function (d){
-                        return "path_" + d.index;
+                        return d.source.title + "-" + d.target.title
                     });
 
                 // We create a <circle> SVG element for each node
@@ -225,7 +225,8 @@ export default {
                 );
             });
             link.attr("d", d => {
-                let id = "path_"+ d.index
+                //let id = "path_"+ d.index
+                let id = d.source.title + "-" + d.target.title;
                 //console.log(scope.$refs);
                 let thisPath = document.getElementById(id)
                 //let thisPath = d3.select("#paths").select(id)
@@ -245,7 +246,80 @@ export default {
             node.attr("transform", this.transform);
             text.attr("transform", this.transform);
 
-        }
+        },
+        updateGraph(step){
+            //let svg = d3.select("#d3-network").select("svg");
+            let path = ""
+            if(step === 2){
+                path = "/json/14104graphdata.json"
+            }
+            else if(step === 4){
+                path = "/json/13999graphdata.json"
+            }
+            d3.json(path).then(function (graph) {
+                // Apply the general update pattern to the nodes.
+                node = node.data(graph.nodes, function(d) { return d.index;});
+                node.exit().remove();
+                node = node.enter()
+                    .append("circle")
+                    .attr("r", function(d) {
+                        return d.weight * 4;
+                    }) // radius
+                    .style("fill", function (d) {
+                        // The node color depends on the club.
+                        return d.color;
+                    })
+
+                text = text.data(graph.nodes, function(d) { 
+                    console.log(d);
+                    return d.index;
+                });
+                text.exit().remove();
+                text = text.enter()
+                    .append("text")
+                    .attr("x", 8)
+                    .attr("y", ".31em")
+                    .attr("fill", function (d) {
+                        // The node color depends on the club.
+                        return d.color;
+                    })
+                    .style("font-size", "10px")
+                    .text(function(d) {
+                        return d.title;
+                    })
+                // Apply the general update pattern to the links.
+                link = link.data(graph.edges, function(d) { return d.source + "-" + d.target; });
+                link.exit().remove();
+                link = link.enter()
+                    .append("path")
+                    .attr("stroke-width", function (d) {
+                        // The node color depends on the club.
+                        return d.value / 100;
+                    })
+                    .attr("stroke", function (d) {
+                        return d.color
+                    })
+                    .attr("stroke-width", function (d) {
+                        // The node color depends on the club.
+                        return d.value / 10;
+                    })
+                    .attr("marker-end", "url(#marker)")
+                    .attr("id", function (d){
+                        return d.source + "-" + d.target
+                    })
+                    .attr("fill","none")
+                    // .attr("ref", function (d){
+                    //     return d.source.title + "-" + d.target.title
+                    // });
+                    //.merge(link);
+                console.log(link);
+                // Update and restart the simulation.
+                simulation.nodes(graph.nodes);
+                simulation.force("link").links(graph.edges);
+                simulation.alpha(1).restart();
+            })
+
+            }
     },
     mounted() {
         this.windowHeight = window.innerHeight

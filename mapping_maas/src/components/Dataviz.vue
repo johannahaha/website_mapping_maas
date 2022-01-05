@@ -26,26 +26,32 @@
             </div>
         </section>
         <section id="scrolly">
-            <D3Network id="network"/>
+            <D3Network class="network" ref="network"/>
             <!-- -->
             <article>
-                <div class="step" data-step="1">
+                <div class="step" data-step="0">
                     <img class="left" :src="img_path" />
                 </div>
-                <div class="step" data-step="2">
+                <div class="step" data-step="1">
                     <div class="quote">"Mobility is very important"</div>
                 </div>
 
-                <div class="step" data-step="3">
+                <div class="step" data-step="2">
                     <div class="quote">"Mobility is relevant for our future."</div>
                 </div>
-                <div class="step" data-step="4">
+                <div class="step" data-step="3">
                     <div class="quote">"Mobility relevant now."</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="quote">"Mobility still relevant now."</div>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="quote">"Mobility still relevant."</div>
                 </div>
             </article>
         </section>
         <section id="outro">
-            <Network id="network"/>
+            <Network/>
             <div class="text">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna
@@ -110,6 +116,12 @@ export default {
             console.log("enter", response);
             this.step = response.index;
             response.element.classList.add("is-active");
+
+            if(this.step === 2 || this.step === 4){
+                console.log("lets update graph")
+                this.$refs.network.updateGraph(this.step)
+            }
+
         },
         onProgress(step) {
             // console.log('progress', step)
@@ -154,11 +166,11 @@ h1{
 #scrolly {
     z-index: 2;
 
-    #network {
+    .network {
         position:sticky;
         width: 100vw;
         height: 100vh;
-        background-color: $darkgrey;
+        // background-color: $darkgrey;
         z-index:0;
         top: 5vh;
 
