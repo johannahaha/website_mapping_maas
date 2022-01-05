@@ -24,10 +24,10 @@
                 augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor
                 sit amet
             </div>
-            <D3Network/>
         </section>
         <section id="scrolly">
-            <Network id="network"/>
+            <D3Network id="network"/>
+            <!-- -->
             <article>
                 <div class="step" data-step="1">
                     <img class="left" :src="img_path" />
@@ -45,6 +45,7 @@
             </article>
         </section>
         <section id="outro">
+            <Network id="network"/>
             <div class="text">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna
