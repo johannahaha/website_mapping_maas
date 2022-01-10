@@ -11,6 +11,7 @@
     "core-js": "^3.6.5",
     "d3": "^7.2.1",
     "d3-force": "^3.0.0",
+    "gsap": "^3.9.1",
     "intersection-observer": "^0.12.0",
     "scrollama": "^3.0.2",
     "vis-network": "^9.1.0",

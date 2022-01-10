@@ -144,6 +144,7 @@ export default {
     position: relative;
     display: flex;
     flex-direction: column;
+    line-height: 1.5rem;
 }
 
 h1{
@@ -179,6 +180,7 @@ h1{
     article{
         position:relative;
         z-index: 1;
+        pointer-events: none;
     }
 
     .text {
