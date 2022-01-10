@@ -33,20 +33,38 @@
                     <img class="left" :src="img_path" />
                 </div>
                 <div class="step" data-step="1">
-                    <div class="quote">"Mobility is very important"</div>
+                    <div class="quote">"Mobility is very important."</div>
                 </div>
 
                 <div class="step" data-step="2">
                     <div class="quote">"Mobility is relevant for our future."</div>
                 </div>
                 <div class="step" data-step="3">
-                    <div class="quote">"Mobility relevant now."</div>
+                    <div class="quote">"Mobility is relevant now."</div>
                 </div>
                 <div class="step" data-step="4">
-                    <div class="quote">"Mobility still relevant now."</div>
+                    <div class="quote">"Mobility is still relevant now."</div>
                 </div>
                 <div class="step" data-step="5">
-                    <div class="quote">"Mobility still relevant."</div>
+                    <div class="quote">"Mobility is still relevant."</div>
+                </div>
+                <div class="step" data-step="6">
+                    <div class="quote">Dieses Netzwerk ist "Freizeit"</div>
+                </div>
+                <div class="step" data-step="7">
+                    <div class="quote">Dieses Netzwerk ist "zur arbeit gehen"</div>
+                </div>
+                <div class="step" data-step="8">
+                    <div class="quote">Dieses Netzwerk ist "Einkaufen, Besorgung".</div>
+                </div>
+                <div class="step" data-step="9">
+                    <div class="quote">Dieses Netzwerk ist "jemanden bringen, abholen"</div>
+                </div>
+                <div class="step" data-step="10">
+                    <div class="quote">Dieses Netzwerk ist "nach hause"</div>
+                </div>
+                <div class="step" data-step="11">
+                    <div class="quote">Ende"</div>
                 </div>
             </article>
         </section>
@@ -117,7 +135,7 @@ export default {
             this.step = response.index;
             response.element.classList.add("is-active");
 
-            if(this.step === 2 || this.step === 4){
+            if([2,4,6,7,8,9,10].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }

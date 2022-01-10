@@ -1,5 +1,6 @@
 <template>
     <div id="d3-network" ref="d3-network">
+        <h3>Aktuell zu sehen: {{this.currentNetwork}}</h3>
         <div id="hover" v-show="showHover" ref="hover">
             <h3>What people say about the {{type}}</h3>{{hoverMessage}}
             </div>
@@ -16,6 +17,17 @@ let node,link,text;
 let timer;
 //let svgDom;
 
+let default_data = {
+                car: "this is a car",
+                bicycle: "bicycles are great",
+                bus: "bus is here",
+                train: "I take the train",
+                start: "I started the trip",
+                end: "end of a trip",
+                stationary: "nothin happens",
+                walk:"walk walk walk"
+            }
+
 export default {
     data(){
         return{
@@ -24,31 +36,18 @@ export default {
             windowHeight:600,
             windowWidth:600,
             marker_size:8,
-            currentNetwork: "network_13999",
+            currentNetwork: "network_person1",
             hoverMessage: "",
             showHover:false,
             type:"",
             hover_data: {
-                network_13999: {
-                    car: "this is a car",
-                    bicycle: "bicycles are great",
-                    bus: "bus is here",
-                    train: "I take the train",
-                    start: "I started the trip",
-                    end: "end of a trip",
-                    stationary: "nothin happens",
-                    walk:"walk walk walk"
-                },
-                network_14104: {
-                    car: "this is a car",
-                    bicycle: "bicycles are great",
-                    bus: "bus is here",
-                    train: "I take the train",
-                    start: "I started the trip",
-                    end: "end of a trip",
-                    stationary: "nothin happens",
-                    walk:"walk walk walk"
-                }
+                network_person1: default_data,
+                network_person2: default_data,
+                network_einkaufen: default_data,
+                network_zur_arbeit: default_data,
+                network_bringen: default_data,
+                network_nach_hause: default_data,
+                network_freizeit: default_data
             }
         }
     },
@@ -74,9 +73,9 @@ export default {
                     .attr("height", height);
             }
 
-            d3.json("/json/13999graphdata.json").then(function (graph) {
+            d3.json("/json/person1graphdata.json").then(function (graph) {
                 console.log("loaded data");
-                scope.currentNetwork = "network_13999";
+                scope.currentNetwork = "network_person1";
 
 
                 const forceLink = d3.forceLink(graph.edges).id(function (d) {
@@ -265,13 +264,38 @@ export default {
             let scope = this;
             let path = ""
             if(step === 2){
-                this.currentNetwork = "network_14104"
-                path = "/json/14104graphdata.json"
+                this.currentNetwork = "network_person2"
+                path = "/json/person2graphdata.json"
             }
             else if(step === 4){
-                this.currentNetwork = "network_143999"
+                this.currentNetwork = "network_person1"
+                path = "/json/person1graphdata.json"
+            }
+            else if(step === 6){
+                this.currentNetwork = "network_freizeit"
+                path = "/json/freizeitgraphdata.json"
+            }
+            else if(step === 7){
+                this.currentNetwork = "network_zur_arbeit"
+                path = "/json/zur_arbeitgraphdata.json"
+            }
+            else if(step === 8){
+                this.currentNetwork = "network_einkaufen"
+                path = "/json/einkaufengraphdata.json"
+            }
+            else if(step === 9){
+                this.currentNetwork = "network_jemanden_holen_bringen"
+                path = "/json/bringengraphdata.json"
+            }
+            else if(step === 10){
+                this.currentNetwork = "network_nach_hause"
+                path = "/json/nach_hausegraphdata.json"
+            }
+            else{
+                this.currentNetwork = "person1"
                 path = "/json/13999graphdata.json"
             }
+
             d3.json(path).then(function (graph) {
                 // Apply the general update pattern to the nodes.
                 node = node.data(graph.nodes, function(d) { return d.index;});
