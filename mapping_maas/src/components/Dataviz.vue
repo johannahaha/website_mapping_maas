@@ -30,7 +30,8 @@
             <!-- -->
             <article>
                 <div class="step" data-step="0">
-                    <img class="left" :src="img_path" />
+                    <!-- <img class="left" :src="img_path" /> -->
+                    <div class="quote">"Mobility is very important."</div>
                 </div>
                 <div class="step" data-step="1">
                     <div class="quote">"Mobility is very important."</div>
@@ -64,12 +65,20 @@
                     <div class="quote">Dieses Netzwerk ist "nach hause"</div>
                 </div>
                 <div class="step" data-step="11">
+                    <div class="quote">Mobilität</div>
+                </div>
+                <div class="step" data-step="12">
+                    <div class="quote">Mobilität</div>
+                </div>
+                <div class="step" data-step="13">
+                    <div class="quote">Mobilität"</div>
+                </div>
+                <div class="step" data-step="14">
                     <div class="quote">Ende"</div>
                 </div>
             </article>
         </section>
         <section id="outro">
-            <Network/>
             <div class="text">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna
@@ -101,12 +110,10 @@ import "intersection-observer"; // for cross-browser support
 //import Scrollama from 'vue-scrollama' // local registration in this example, can also be globally registered
 import scrollama from "scrollama";
 
-import Network from "../components/Network.vue";
 import D3Network from "../components/D3Network.vue";
 
 export default {
     components: {
-        Network,
         D3Network
     },
     data() {
@@ -135,7 +142,7 @@ export default {
             this.step = response.index;
             response.element.classList.add("is-active");
 
-            if([2,4,6,7,8,9,10].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
+            if([2,4,6,7,8,9,10,11,12,13].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }
@@ -169,7 +176,8 @@ h1{
   font-size:2rem;
   left:0;
   padding: 1rem 0;
-  margin-left:5vw;
+  margin-bottom: 10vh;
+  //margin-left:5vw;
   color:$lightgreen;
 }
 
@@ -177,7 +185,7 @@ h1{
     z-index: 2;
     width: 60vw;       
     align-self: flex-start;
-    margin: 5vw;
+    margin: 5vh 10vw;
 
 }
 

@@ -1,8 +1,11 @@
 <template>
     <div id="d3-network" ref="d3-network">
-        <h3>Aktuell zu sehen: {{this.currentNetwork}}</h3>
+        <h3>Aktuell zu sehen: {{this.currentNetwork}}
+        <!-- <font-awesome-icon icon="bicycle" /> -->
+        </h3>
+        <i class="fas fa-bicycle"></i>
         <div id="hover" v-show="showHover" ref="hover">
-            <h3>What people say about the {{type}}</h3>{{hoverMessage}}
+            <h3>What people say about the {{type}}</h3>{{hoverMessage}}.
             </div>
     </div>
 </template>
@@ -40,6 +43,10 @@ export default {
             hoverMessage: "",
             showHover:false,
             type:"",
+            iconPaths: {
+                bicycle: "/img/bicycle-solid.svg",
+                car: "/img/car-solid.svg"
+            },
             hover_data: {
                 network_person1: default_data,
                 network_person2: default_data,
@@ -47,7 +54,10 @@ export default {
                 network_zur_arbeit: default_data,
                 network_bringen: default_data,
                 network_nach_hause: default_data,
-                network_freizeit: default_data
+                network_freizeit: default_data,
+                network_person3: default_data,
+                network_person4: default_data,
+                network_person5: default_data,
             }
         }
     },
@@ -148,12 +158,35 @@ export default {
                     .selectAll(".node")
                     .data(graph.nodes)
                     .enter()
+                    // .append("svg:image")
+                    // .attr("href",d => {return scope.getIcon(d.title)})
+                    // //.attr("href", "img/bicycle-solid.svg")
+                    // .attr("width", 40)
+                    // .attr("height", 40)
+                    // .attr("x", 228)
+                    // .attr("y",53)
+                    // .append('text')
+                    // .attr('width', "30px" )
+                    // .attr('height', "30px" ) // this will set the height and width
+                    // .attr("class","fas fa-bicycle")
+                    //.attr('text-anchor', 'middle')
+                    //.attr('dominant-baseline', 'central')
+                    // .attr("font-family", "'Font Awesome 5 Free'")
+                    // // 900: solid icons, 400: regular icons
+                    // .attr("font-weight", 900)
+                    // // JavaScript unicode escaping
+                    // .text("\uf015")
+                    //.attr("class","fas fa-bicycle")
+                    //.attr('font-family', "'Font Awesome 5 Free'")
+                    //.text("\uf84a");
+
+
                     .append("circle")
                     .attr("class", "node")
                     .attr("r", function(d) {
                         return d.weight * 4;
                     }) // radius
-                    .style("fill", function (d) {
+                    .style("fill", function (d) { //fill normaly
                         // The node color depends on the club.
                         return d.color;
                     })
@@ -218,6 +251,15 @@ export default {
         },
         transform(d) {
             return "translate(" + d.x + "," + d.y + ")";
+        },
+        getIcon(title){
+            if(title in this.iconPaths){
+                console.log(title, "is in icons");
+                return this.iconPaths[title]
+            }
+            else{
+                return this.iconPaths["car"]
+            }
         },
         onTick(){
             try{
@@ -290,6 +332,18 @@ export default {
             else if(step === 10){
                 this.currentNetwork = "network_nach_hause"
                 path = "/json/nach_hausegraphdata.json"
+            }
+            else if(step === 11){
+                this.currentNetwork = "network_person3"
+                path = "/json/person3graphdata.json"
+            }
+            else if(step === 12){
+                this.currentNetwork = "network_person4"
+                path = "/json/person4graphdata.json"
+            }
+            else if(step === 13){
+                this.currentNetwork = "network_person5"
+                path = "/json/person5graphdata.json"
             }
             else{
                 this.currentNetwork = "person1"
@@ -374,7 +428,10 @@ export default {
 
             if(e.target.classList.contains('node')){
                 console.log("changing radius",e.currentTarget)
-                d3.select(e.currentTarget).transition().attr("r", d => d.weight * 8.0);
+                d3.select(e.currentTarget)
+                    .transition()
+                    .attr("r", d => d.weight * 12.0)
+                    .attr("fill","white")
             }
             // if(e.target.classList.contains('node_label')){
             //     d3.select(e.currentTarget)
@@ -401,7 +458,10 @@ export default {
         },
         leaveHover(e){
             console.log("hover out");
-            d3.select(e.currentTarget).transition().attr("r", d => d.weight * 4.0);
+            d3.select(e.currentTarget)
+                .transition()
+                .attr("r", d => d.weight * 4.0)
+                .attr("fill",d => d.color)
             // d3.select(e.currentTarget)
             //         //.style('font-size', 'Nem')
             //         .transition()
@@ -436,7 +496,6 @@ export default {
         color:red;
     }
 }
-
 #hover{
     background-color: $mediumblue;
     padding: 1rem;
