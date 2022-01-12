@@ -16,7 +16,7 @@
             "weight": 1
         },
         {
-            "title": "public_transport_train",
+            "title": "public_transport",
             "color": "#25a18e",
             "weight": 1
         },
@@ -28,16 +28,6 @@
         {
             "title": "stationary",
             "color": "#004e64",
-            "weight": 1
-        },
-        {
-            "title": "public_transport_change",
-            "color": "#25a18e",
-            "weight": 1
-        },
-        {
-            "title": "public_transport_bus",
-            "color": "#25a18e",
             "weight": 1
         }
     ],
@@ -80,7 +70,7 @@
         },
         {
             "source": "walk",
-            "target": "public_transport_train",
+            "target": "public_transport",
             "value": 4,
             "color": "#00a5cf"
         },
@@ -109,20 +99,14 @@
             "color": "#00a5cf"
         },
         {
-            "source": "walk",
-            "target": "public_transport_bus",
-            "value": 1,
-            "color": "#00a5cf"
-        },
-        {
-            "source": "public_transport_train",
+            "source": "public_transport",
             "target": "walk",
             "value": 3,
             "color": "#25a18e"
         },
         {
-            "source": "public_transport_train",
-            "target": "public_transport_change",
+            "source": "public_transport",
+            "target": "stationary",
             "value": 3,
             "color": "#25a18e"
         },
@@ -151,34 +135,10 @@
             "color": "#004e64"
         },
         {
-            "source": "public_transport_change",
-            "target": "public_transport_train",
+            "source": "stationary",
+            "target": "public_transport",
             "value": 2,
-            "color": "#25a18e"
-        },
-        {
-            "source": "public_transport_change",
-            "target": "public_transport_bus",
-            "value": 1,
-            "color": "#25a18e"
-        },
-        {
-            "source": "public_transport_change",
-            "target": "end",
-            "value": 1,
-            "color": "#25a18e"
-        },
-        {
-            "source": "public_transport_bus",
-            "target": "walk",
-            "value": 1,
-            "color": "#25a18e"
-        },
-        {
-            "source": "public_transport_bus",
-            "target": "public_transport_change",
-            "value": 1,
-            "color": "#25a18e"
+            "color": "#004e64"
         }
     ]
 }

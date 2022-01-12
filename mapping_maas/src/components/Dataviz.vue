@@ -138,7 +138,6 @@ export default {
     },
     methods: {
         onEnter(response) {
-            console.log("enter", response);
             this.step = response.index;
             response.element.classList.add("is-active");
 
@@ -154,7 +153,6 @@ export default {
             this.progress = step.progress;
         },
         onExit(response) {
-            console.log("exit", response);
             this.step = response.index;
             response.element.classList.remove("is-active");
         },

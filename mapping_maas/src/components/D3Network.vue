@@ -16,7 +16,7 @@ import * as d3 from "d3";
 import { gsap } from 'gsap';
 
 let simulation;
-let node,link,text;
+let node,link,text,marker;
 let timer;
 //let svgDom;
 
@@ -38,7 +38,8 @@ export default {
             i:0,
             windowHeight:600,
             windowWidth:600,
-            marker_size:8,
+            marker_size:10,
+            edgeScale: 0.3,
             currentNetwork: "network_person1",
             hoverMessage: "",
             showHover:false,
@@ -63,7 +64,7 @@ export default {
     },
     computed:{
             marker_length: function(){
-                console.log(Math.sqrt(this.marker_size**2 + this.marker_size**2))
+                console.log("marker length",Math.sqrt(this.marker_size**2 + this.marker_size**2))
                 return Math.sqrt(this.marker_size**2 + this.marker_size**2)
             }
     },
@@ -103,24 +104,38 @@ export default {
                 console.log("simulation with edges");
 
                
-                svg.append("defs")
+                marker = svg.append("defs")
                     //.attr("transform",translate)
                     .selectAll("marker")
-                    .data(["marker"])
+                    .data(graph.edges, function (d) { return d.source.id + "-" + d.target.id; })
+                    //.data(["marker"])
                     .enter()
                     .append("marker")
-                    .attr("id", function (d) {
-                        return d
+                    // .attr("id", function (d) {
+                    //     return d
+                    // })
+                    .attr("id", function (d) { 
+                        let id = "marker_" + d.source.title + "-" + d.target.title
+                        console.log(id)
+                        return id
                     })
                     .attr("viewBox", "0 -5 10 10")
                     .attr("refX", 0)
                     .attr("refY", 0)
-                    .attr("markerWidth", scope.marker_size)
-                    .attr("markerHeight", scope.marker_size)
+                    .attr("markerWidth", d=> {
+                        return scope.marker_size + d.value/2})
+                    .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
+                    .attr("markerUnits","userSpaceOnUse")
+                    //.attr("markerWidth", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
+                    //.attr("markerHeight", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
                     .attr("orient", "auto")
-                    .attr("fill", "#004e64")
+                    .attr("fill", d=> {return d.color})
+                    //.attr("fill", "#004e64")
                     .append("path")
-                    .attr("d", "M0,-5L10,0L0,5");
+                    .attr("d", "M0,-5L10,0L0,5")
+                    //.merge(marker);
+
+                console.log("marker: ",marker);
 
                 // We create a <line> SVG element for each link
                 // in the graph.
@@ -138,9 +153,12 @@ export default {
                     })
                     .attr("stroke-width", function (d) {
                         // The node color depends on the club.
-                        return d.value / 10;
+                        return d.value * scope.edgeScale;
                     })
-                    .attr("marker-end", "url(#marker)")
+                    .attr("marker-end", function(d) { 
+                        console.log("url(#marker_" + (d.source.title + "-" + d.target.title) + ")")
+                        return "url(#marker_" + (d.source.title + "-" + d.target.title) + ")"; })
+                    //.attr("marker-end", "url(#marker)")
                     .attr("id", function (d){
                         return d.source.title + "-" + d.target.title
                     })
@@ -263,16 +281,15 @@ export default {
         },
         onTick(){
             try{
-                //if (this.i==3) return;
-                this.i++;
+                if (this.i==3) return;
+                //this.i++;
                 
                 link.attr("d", function (d) {
                     let dx = d.target.x - d.source.x;
                     let dy = d.target.y - d.source.y;
                     let dr = Math.sqrt(dx * dx + dy * dy);
                     return (
-                        "M" + d.source.x + "," + d.source.y +"A" + dr + "," +
-                        dr +  " 0 0,1 " + d.target.x + "," + d.target.y
+                        "M" + d.source.x + "," + d.source.y +"A" + dr + "," + dr +  " 0 0,1 " + d.target.x + "," + d.target.y
                     );
                 });
                 link.attr("d", d => {
@@ -290,8 +307,7 @@ export default {
                     let dr = Math.sqrt(dx * dx + dy * dy);
 
                     return (
-                        "M" +  d.source.x + "," + d.source.y + "A" +
-                        dr + "," + dr +  " 0 0,1 " + m.x + "," +  m.y
+                        "M" +  d.source.x + "," + d.source.y + "A" + dr + "," + dr +  " 0 0,1 " + m.x + "," +  m.y
                     );
                 });
                 node.attr("transform", this.transform);
@@ -299,15 +315,14 @@ export default {
             }
             catch(error){
                 console.log("error on tick",error);
+                this.i = 3; //so it stops
             }
         },
-        updateGraph(step){
-            //let svg = d3.select("#d3-network").select("svg");
-            let scope = this;
+        getCurrentPath(step){
             let path = ""
             if(step === 2){
-                this.currentNetwork = "network_person2"
-                path = "/json/person2graphdata.json"
+                this.currentNetwork = "network_person6"
+                path = "/json/person6graphdata.json"
             }
             else if(step === 4){
                 this.currentNetwork = "network_person1"
@@ -347,11 +362,43 @@ export default {
             }
             else{
                 this.currentNetwork = "person1"
-                path = "/json/13999graphdata.json"
+                path = "/json/person1graphdata.json"
             }
+            return path;
 
+
+        },
+        updateGraph(step){
+            //let svg = d3.select("#d3-network").select("svg");
+            let scope = this;
+            let path = this.getCurrentPath(step);
+            
             d3.json(path).then(function (graph) {
                 // Apply the general update pattern to the nodes.
+                marker = marker.data(graph.edges, function(d) { 
+                    console.log("marker_" + d.source + "-" + d.target);
+                    return "marker_" + d.source + "-" + d.target; });
+                marker.exit().remove();
+                marker = marker.enter()
+                    .append("marker")
+                    .attr("viewBox", "0 -5 10 10")
+                    .attr("refX", 0)
+                    .attr("refY", 0)
+                    .attr("markerWidth", d=> {
+                        return scope.marker_size + d.value/2})
+                    .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
+                    .attr("markerUnits","userSpaceOnUse")
+                    //.attr("markerWidth", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
+                    //.attr("markerHeight", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
+                    .attr("orient", "auto")
+                    .attr("fill", d=> {return d.color})
+                    //.attr("fill", "#004e64")
+                    .append("path")
+                    .attr("d", "M0,-5L10,0L0,5")
+                    .merge(marker)
+
+                console.log("marker: ",marker);
+
                 node = node.data(graph.nodes, function(d) { return d.index;});
                 node.exit().remove();
                 node = node.enter()
@@ -366,8 +413,8 @@ export default {
                 node.on("mouseenter", scope.onHover);
                 node.on("click", scope.onClick);
                 node.on("mouseleave", scope.leaveHover);
+                
                 text = text.data(graph.nodes, function(d) { 
-                    console.log(d);
                     return d.index;
                 });
                 text.exit().remove();
@@ -388,23 +435,22 @@ export default {
                 text.on("mouseenter", scope.onHover);
                 text.on("click", scope.onClick);
                 text.on("mouseleave", scope.leaveHover);
+
                 // Apply the general update pattern to the links.
                 link = link.data(graph.edges, function(d) { return d.source + "-" + d.target; });
                 link.exit().remove();
                 link = link.enter()
                     .append("path")
-                    .attr("stroke-width", function (d) {
-                        // The node color depends on the club.
-                        return d.value / 100;
-                    })
                     .attr("stroke", function (d) {
                         return d.color
                     })
                     .attr("stroke-width", function (d) {
                         // The node color depends on the club.
-                        return d.value / 10;
+                        return d.value * scope.edgeScale;
                     })
-                    .attr("marker-end", "url(#marker)")
+                    .attr("marker-end", function(d) { 
+                        console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
+                        return "url(#marker_" + (d.source + "-" + d.target) + ")"; })
                     .attr("id", function (d){
                         return d.source + "-" + d.target
                     })
