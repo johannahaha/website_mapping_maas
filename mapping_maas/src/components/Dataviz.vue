@@ -1,7 +1,7 @@
 <template>
     <div id="dataviz">
         <section id="intro">
-            <h1 class="title">Dataviz: Mapping Maas</h1>
+            <h1 class="title">OUR WORLD IN KNOTS</h1>
             <div class="text">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna
@@ -26,8 +26,6 @@
             </div>
         </section>
         <section id="scrolly">
-            <D3Network class="network" ref="network"/>
-            <!-- -->
             <article>
                 <div class="step" data-step="0">
                     <!-- <img class="left" :src="img_path" /> -->
@@ -77,6 +75,8 @@
                     <div class="quote">Ende"</div>
                 </div>
             </article>
+            <D3Network class="network" ref="network"/>
+            <!-- -->
         </section>
         <section id="outro">
             <div class="text">
@@ -141,7 +141,7 @@ export default {
             this.step = response.index;
             response.element.classList.add("is-active");
 
-            if([2,4,6,7,8,9,10,11,12,13].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
+            if([0,2,4,6,7,8,9,10,11,12,13].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }
@@ -190,21 +190,26 @@ h1{
 
 #scrolly {
     z-index: 2;
+    display:flex;
+    flex-direction: row;
 
     .network {
         position:sticky;
-        width: 100vw;
+        width: 75vw;
         height: 100vh;
         // background-color: $darkgrey;
         z-index:0;
-        top: 5vh;
+        right:0;
+        top:1vh;
 
     }
 
     article{
+        width: 24vw;
         position:relative;
         z-index: 1;
         pointer-events: none;
+        left: 0;
     }
 
     .text {

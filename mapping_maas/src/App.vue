@@ -4,8 +4,10 @@
         href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
         integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
         crossorigin="anonymous">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <header>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </header>
   </div>
   <router-view/>
 </template>
@@ -40,6 +42,11 @@
 
 #nav a.router-link-exact-active {
   color: $lightgreen;
+}
+
+header {
+  position:fixed;
+  
 }
 
 </style>

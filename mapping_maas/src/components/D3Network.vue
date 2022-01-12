@@ -49,6 +49,8 @@ export default {
                 car: "/img/car-solid.svg"
             },
             hover_data: {
+                network_intro1: default_data,
+                network_intro2: default_data,
                 network_person1: default_data,
                 network_person2: default_data,
                 network_einkaufen: default_data,
@@ -70,7 +72,7 @@ export default {
     },
     methods: {
         setupGraph() {
-            const width = this.windowWidth;
+            const width = this.windowWidth * 0.75;
             const height = this.windowHeight;
 
             let svg = d3.select("#d3-network").select("svg");
@@ -84,9 +86,9 @@ export default {
                     .attr("height", height);
             }
 
-            d3.json("/json/person1graphdata.json").then(function (graph) {
+            d3.json("/json/intro1.json").then(function (graph) {
                 console.log("loaded data");
-                scope.currentNetwork = "network_person1";
+                scope.currentNetwork = "network_intro1";
 
 
                 const forceLink = d3.forceLink(graph.edges).id(function (d) {
@@ -102,7 +104,6 @@ export default {
                 //.force("forceY", d3.forceY().strength(.1).y(height * .5))
 
                 console.log("simulation with edges");
-
                
                 marker = svg.append("defs")
                     //.attr("transform",translate)
@@ -135,7 +136,7 @@ export default {
                     .attr("d", "M0,-5L10,0L0,5")
                     //.merge(marker);
 
-                console.log("marker: ",marker);
+                 console.log(JSON.parse(JSON.stringify(marker)));
 
                 // We create a <line> SVG element for each link
                 // in the graph.
@@ -320,45 +321,53 @@ export default {
         },
         getCurrentPath(step){
             let path = ""
-            if(step === 2){
-                this.currentNetwork = "network_person6"
-                path = "/json/person6graphdata.json"
+            if(step === 0){
+                this.currentNetwork = "network_intro1"
+                path = "/json/intro1.json"
+            }
+            else if(step === 2){
+                this.currentNetwork = "network_intro2"
+                path = "/json/intro2.json"
             }
             else if(step === 4){
                 this.currentNetwork = "network_person1"
                 path = "/json/person1graphdata.json"
             }
             else if(step === 6){
-                this.currentNetwork = "network_freizeit"
-                path = "/json/freizeitgraphdata.json"
+                this.currentNetwork = "network_person2"
+                path = "/json/person2graphdata.json"
             }
             else if(step === 7){
-                this.currentNetwork = "network_zur_arbeit"
-                path = "/json/zur_arbeitgraphdata.json"
-            }
-            else if(step === 8){
-                this.currentNetwork = "network_einkaufen"
-                path = "/json/einkaufengraphdata.json"
-            }
-            else if(step === 9){
-                this.currentNetwork = "network_jemanden_holen_bringen"
-                path = "/json/bringengraphdata.json"
-            }
-            else if(step === 10){
-                this.currentNetwork = "network_nach_hause"
-                path = "/json/nach_hausegraphdata.json"
-            }
-            else if(step === 11){
                 this.currentNetwork = "network_person3"
                 path = "/json/person3graphdata.json"
             }
-            else if(step === 12){
+            else if(step === 8){
                 this.currentNetwork = "network_person4"
                 path = "/json/person4graphdata.json"
             }
-            else if(step === 13){
+            else if(step ===9){
                 this.currentNetwork = "network_person5"
                 path = "/json/person5graphdata.json"
+            }
+            else if(step === 10){
+                this.currentNetwork = "network_freizeit"
+                path = "/json/freizeitgraphdata.json"
+            }
+            else if(step === 11){
+                this.currentNetwork = "network_zur_arbeit"
+                path = "/json/zur_arbeitgraphdata.json"
+            }
+            else if(step === 12){
+                this.currentNetwork = "network_einkaufen"
+                path = "/json/einkaufengraphdata.json"
+            }
+            else if(step === 13){
+                this.currentNetwork = "network_jemanden_holen_bringen"
+                path = "/json/bringengraphdata.json"
+            }
+            else if(step === 14){
+                this.currentNetwork = "network_nach_hause"
+                path = "/json/nach_hausegraphdata.json"
             }
             else{
                 this.currentNetwork = "person1"
@@ -375,29 +384,74 @@ export default {
             
             d3.json(path).then(function (graph) {
                 // Apply the general update pattern to the nodes.
+
+                console.log(JSON.parse(JSON.stringify(marker)));
+
                 marker = marker.data(graph.edges, function(d) { 
                     console.log("marker_" + d.source + "-" + d.target);
-                    return "marker_" + d.source + "-" + d.target; });
-                marker.exit().remove();
-                marker = marker.enter()
-                    .append("marker")
-                    .attr("viewBox", "0 -5 10 10")
-                    .attr("refX", 0)
-                    .attr("refY", 0)
-                    .attr("markerWidth", d=> {
-                        return scope.marker_size + d.value/2})
-                    .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
-                    .attr("markerUnits","userSpaceOnUse")
-                    //.attr("markerWidth", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
-                    //.attr("markerHeight", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
-                    .attr("orient", "auto")
-                    .attr("fill", d=> {return d.color})
-                    //.attr("fill", "#004e64")
-                    .append("path")
-                    .attr("d", "M0,-5L10,0L0,5")
-                    .merge(marker)
+                    return "marker_" + d.source + "-" + d.target;
+                });
 
-                console.log("marker: ",marker);
+                console.log(marker)
+                
+                marker = marker.join(
+                    enter => enter
+                        .append("marker")
+                        .attr("id", function (d) { 
+                            console.log("enter",d.source + "-" + d.target)
+                            let id = "marker_" + d.source + "-" + d.target
+                            return id
+                        })
+                        .attr("viewBox", "0 -5 10 10")
+                        .attr("refX", 0)
+                        .attr("refY", 0)
+                        .attr("orient", "auto")
+                        .append("path")
+                        .attr("d", "M0,-5L10,0L0,5"),
+                    exit => exit.remove(),
+                    update => update
+                        .attr("markerWidth", d=> {
+                            console.log("update",d.source.title + "-" + d.target.title)
+                            return scope.marker_size + d.value/2})
+                        .attr("markerHeight", d=> {return scope.marker_size + d.value/2}))
+    
+                    .merge(marker)
+                    .attr("markerWidth", d=> {
+                            console.log("after merge",d.source + "-" + d.target)
+                            return scope.marker_size + d.value/2})
+                        .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
+                        .attr("markerUnits","userSpaceOnUse")
+                        //.attr("markerWidth", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
+                        //.attr("markerHeight", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
+                        .attr("fill", d=> {return d.color})
+                        //.attr("fill", "#004e64")
+                        .append("path")
+                        .attr("d", "M0,-5L10,0L0,5")
+                // marker.exit().remove();
+                // marker = marker.enter()
+                //     .append("marker")
+                //     .attr("id", function (d) { 
+                //         let id = "marker_" + d.source + "-" + d.target
+                //         console.log(id)
+                //         return id
+                //     })
+                //     .attr("viewBox", "0 -5 10 10")
+                //     .attr("refX", 0)
+                //     .attr("refY", 0)
+                //     .attr("markerWidth", d=> {
+                //         return scope.marker_size + d.value/2})
+                //     .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
+                //     .attr("markerUnits","userSpaceOnUse")
+                //     //.attr("markerWidth", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
+                //     //.attr("markerHeight", d=> {return Math.round(d.value / 10)}) //scope.marker_size)
+                //     .attr("orient", "auto")
+                //     .attr("fill", d=> {return d.color})
+                //     //.attr("fill", "#004e64")
+                //     .append("path")
+                //     .attr("d", "M0,-5L10,0L0,5")
+                //     .merge(marker)
+
+                console.log(JSON.parse(JSON.stringify(marker)));
 
                 node = node.data(graph.nodes, function(d) { return d.index;});
                 node.exit().remove();
@@ -449,7 +503,7 @@ export default {
                         return d.value * scope.edgeScale;
                     })
                     .attr("marker-end", function(d) { 
-                        console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
+                        //console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
                         return "url(#marker_" + (d.source + "-" + d.target) + ")"; })
                     .attr("id", function (d){
                         return d.source + "-" + d.target
