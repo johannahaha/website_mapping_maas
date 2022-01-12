@@ -141,7 +141,7 @@ export default {
             this.step = response.index;
             response.element.classList.add("is-active");
 
-            if([0,2,4,6,7,8,9,10,11,12,13].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
+            if([0,2,4,6,7,8,9,10].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }
@@ -193,6 +193,12 @@ h1{
     display:flex;
     flex-direction: row;
 
+    #sticky_overlay{
+        position:sticky;
+        bottom:0;
+        right:0;
+    }
+
     .network {
         position:sticky;
         width: 75vw;
@@ -200,7 +206,7 @@ h1{
         // background-color: $darkgrey;
         z-index:0;
         right:0;
-        top:1vh;
+        top:0;
 
     }
 
