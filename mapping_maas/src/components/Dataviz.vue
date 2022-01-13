@@ -176,7 +176,7 @@ h1{
   padding: 1rem 0;
   margin-bottom: 10vh;
   //margin-left:5vw;
-  color:$lightgreen;
+  color:$light;
 }
 
 #intro, #outro {
@@ -255,7 +255,7 @@ h1{
 
 
     .step.is-active {
-        color: $lightgreen;
+        color: $light;
     }
 
 }

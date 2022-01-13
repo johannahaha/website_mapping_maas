@@ -26,7 +26,7 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $mediumblue;
+  color: $light;
   margin:0;
   background-color:$darkgrey;
 }
@@ -37,11 +37,11 @@
 
 #nav a {
   font-weight: bold;
-  color: $green;
+  color: $light;
 }
 
 #nav a.router-link-exact-active {
-  color: $lightgreen;
+  color: $light;
 }
 
 header {

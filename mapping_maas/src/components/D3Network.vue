@@ -16,6 +16,7 @@ let simulation;
 let node,link,marker,svg;
 let timer;
 let colorBasics, colorCar, colorBicycle, colorWalk, colorPublicTransport;
+let strokeWidth;
 //let svgDom;
 
 let default_data = {
@@ -75,25 +76,57 @@ export default {
 
             svg = d3.select("#d3-network").select("svg");
             let scope = this;
-            colorBasics = d3.scaleSequential()
-                .domain([80,1])
-                .interpolator(d3.interpolateGreys);
-
-            colorCar = d3.scaleSequential()
-                .domain([80,1])
-                .interpolator(d3.interpolatePurples);
+            // colorBasics = d3.scaleSequential()
+            //     .domain([80,1])
+            //     .interpolator(d3.interpolateGreys);
             
-            colorBicycle = d3.scaleSequential()
-                .domain([80,1])
-                .interpolator(d3.interpolateGreens);
+            colorBasics = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#f1e1bc","#f2fo0eb"])
+                .interpolate(d3.interpolateHsl)
 
-            colorWalk = d3.scaleSequential()
-                .domain([80,1])
-                .interpolator(d3.interpolateBlues);
+            colorWalk = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#3e4b6d","#d7e1ff"])
+                .interpolate(d3.interpolateHsl)
+            
+            colorCar = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#26732e","#cdeaca"])
+                .interpolate(d3.interpolateHsl)
 
-            colorPublicTransport = d3.scaleSequential()
-                .domain([80,1])
-                .interpolator(d3.interpolateReds);
+            colorPublicTransport = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#732667","#dff7f4"])
+                .interpolate(d3.interpolateHsl)
+            
+            colorBicycle = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#979933","#e7e4bd"])
+                .interpolate(d3.interpolateHsl)
+
+            
+            strokeWidth = d3.scaleLinear()
+                .domain([1, 80])
+                .range([3, 30]);
+        
+            console.log(strokeWidth(1));
+            console.log(strokeWidth(70));
+            // colorCar = d3.scaleSequential()
+            //     .domain([80,1])
+            //     .interpolator(d3.interpolatePurples);
+            
+            // colorBicycle = d3.scaleSequential()
+            //     .domain([80,1])
+            //     .interpolator(d3.interpolateGreens);
+
+            // colorWalk = d3.scaleSequential()
+            //     .domain([80,1])
+            //     .interpolator(d3.interpolateBlues);
+
+            // colorPublicTransport = d3.scaleSequential()
+            //     .domain([80,1])
+            //     .interpolator(d3.interpolateReds);
 
             if (svg.empty()) {
                 svg = d3
@@ -169,11 +202,11 @@ export default {
                     .append("path")
                     .attr("class", "path")
                     .attr('stroke',function(d) { 
-                        return scope.getColor(d.source.title,d.value)
+                        return scope.getColor(d.source.title,40)
                     // return d.source.color;
                     })
                     .attr("stroke-width", function (d) {
-                        return d.value * scope.edgeScale;
+                        return strokeWidth(d.value);
                     })
                     .attr("marker-end", function(d) { 
                         return "url(#marker_" + (d.source.title + "-" + d.target.title) + ")"; })
@@ -542,8 +575,7 @@ export default {
                         })
         
                         .attr("stroke-width", function (d) {
-                            // The node color depends on the club.
-                            return d.value * scope.edgeScale;
+                            return strokeWidth(d.value);
                         })
                         .attr("marker-end", function(d) { 
                             //console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
@@ -663,7 +695,7 @@ export default {
 #hover{
     background-color: $mediumblue;
     padding: 1rem;
-    color: $dark;
+    color: $light;
     display: inline-block;
     z-index:2;
     position:absolute;
