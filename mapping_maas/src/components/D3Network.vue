@@ -13,8 +13,9 @@ import * as d3 from "d3";
 import { gsap } from 'gsap';
 
 let simulation;
-let node,link,text,marker;
+let node,link,text,marker,svg;
 let timer;
+let colorBasics, colorCar, colorBicycle, colorWalk, colorPublicTransport;
 //let svgDom;
 
 let default_data = {
@@ -38,6 +39,7 @@ export default {
             marker_size:10,
             edgeScale: 0.3,
             currentNetwork: "network_person1",
+            currentPath: "/json/intro1.json",
             hoverMessage: "",
             showHover:false,
             type:"",
@@ -70,8 +72,27 @@ export default {
     methods: {
         setupGraph() {
 
-            let svg = d3.select("#d3-network").select("svg");
+            svg = d3.select("#d3-network").select("svg");
             let scope = this;
+            colorBasics = d3.scaleSequential()
+                .domain([80,1])
+                .interpolator(d3.interpolateGreys);
+
+            colorCar = d3.scaleSequential()
+                .domain([80,1])
+                .interpolator(d3.interpolatePurples);
+            
+            colorBicycle = d3.scaleSequential()
+                .domain([80,1])
+                .interpolator(d3.interpolateGreens);
+
+            colorWalk = d3.scaleSequential()
+                .domain([80,1])
+                .interpolator(d3.interpolateBlues);
+
+            colorPublicTransport = d3.scaleSequential()
+                .domain([80,1])
+                .interpolator(d3.interpolateReds);
 
             if (svg.empty()) {
                 svg = d3
@@ -81,7 +102,7 @@ export default {
                     .attr("height", this.height);
             }
 
-            d3.json("/json/intro1.json").then(function (graph) {
+            d3.json(this.currentPath).then(function (graph) {
                 console.log("loaded data");
                 scope.currentNetwork = "network_intro1";
 
@@ -126,13 +147,15 @@ export default {
                     .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
                     .attr("markerUnits","userSpaceOnUse")
                     .attr("orient", "auto")
-                    .attr("fill", d=> {return d.color})
+                    .attr("fill", d=> {
+                        return scope.getColor(d.source.title,d.value)
+                        //return d.color
+                    })
                     //.attr("fill", "#004e64")
                     .append("path")
                     .attr("d", "M0,-5L10,0L0,5")
                     //.merge(marker);
 
-                 console.log(JSON.parse(JSON.stringify(marker)));
 
                 // We create a <line> SVG element for each link
                 // in the graph.
@@ -144,8 +167,9 @@ export default {
                     .enter()
                     .append("path")
                     .attr("class", "path")
-                    .attr("stroke", function (d) {
-                        return d.source.color;
+                    .attr('stroke',function(d) { 
+                        return scope.getColor(d.source.title,d.value)
+                    // return d.source.color;
                     })
                     .attr("stroke-width", function (d) {
                         return d.value * scope.edgeScale;
@@ -201,9 +225,12 @@ export default {
                     .attr("r", function(d) {
                         return d.weight * 10;
                     }) // radius
-                    .style("fill", function (d) { //fill normaly
-                        // The node color depends on the club.
-                        return d.color;
+                    // .style("fill", function (d) { //fill normaly
+                    //     // The node color depends on the club.
+                    //     return d.color;
+                    // })
+                    .style("fill", d => {
+                        return scope.getColor(d.title,40)
                     })
                     .each(function(d) {
                         if (d.title === "start"){
@@ -333,46 +360,36 @@ export default {
                 this.i = 3; //so it stops
             }
         },
-        getCurrentPath(step){
+        handleNetworkUpdate(step){
             let path = ""
             if(step === 0){
-                if(!this.currentNetwork === "network_intro1")
-                this.currentNetwork = "network_intro1"
-                path = "/json/intro1.json"
+                this.updateNetworkData("network_intro1","/json/intro1.json")
             }
             else if(step === 2){
-                this.currentNetwork = "network_intro2"
-                path = "/json/intro2.json"
+                this.updateNetworkData("network_intro2","/json/intro2.json")
             }
             else if(step === 4){
-                this.currentNetwork = "network_person1"
-                path = "/json/person1graphdata.json"
+                this.updateNetworkData("network_person1","/json/person1graphdata.json")
             }
             else if(step === 6){
+                this.updateNetworkData("network_person2","/json/person2graphdata.json")
                 this.currentNetwork = "network_person2"
                 path = "/json/person2graphdata.json"
             }
             else if(step === 7){
-                this.currentNetwork = "network_person3"
-                path = "/json/person3graphdata.json"
+                this.updateNetworkData("network_person3","/json/person3graphdata.json")
             }
             else if(step === 8){
-                this.currentNetwork = "network_person4"
-                path = "/json/person4graphdata.json"
+                this.updateNetworkData("network_person4","/json/person4graphdata.json")
             }
             else if(step ===9){
-                this.currentNetwork = "network_person5"
-                path = "/json/person5graphdata.json"
+                this.updateNetworkData("network_person5","/json/person5graphdata.json")
             }
             else if(step === 10){
-                this.currentNetwork = "network_person6"
-                path = "/json/person6graphdata.json"
-                //this.currentNetwork = "network_freizeit"
-                //path = "/json/freizeitgraphdata.json"
+                this.updateNetworkData("network_person6","/json/person6graphdata.json")
             }
             else if(step === 11){
-                this.currentNetwork = "network_zur_arbeit"
-                path = "/json/zur_arbeitgraphdata.json"
+                this.updateNetworkData("network_zur_arbeit","/json/zur_arbeitgraphdata.json")
             }
             else if(step === 12){
                 this.currentNetwork = "network_einkaufen"
@@ -391,16 +408,41 @@ export default {
                 path = "/json/person1graphdata.json"
             }
             return path;
+        },
+        updateNetworkData(updatedNetwork,updatedPath){
+            if(this.currentNetwork !== updatedNetwork){
+                this.currentNetwork = updatedNetwork
+                this.currentPath = updatedPath
+            }
 
-
+        },
+        getColor(title,value){
+            if(title === "car"){
+                return colorCar(value);
+            } 
+            else if(title=== "bicycle"){
+                return colorBicycle(value);
+            } 
+            else if(title === "walk"){
+                return colorWalk(value);
+            }
+            else if(title === "public_transport"){
+                return colorPublicTransport(value);
+            }
+            return colorBasics(value); 
         },
         updateGraph(step){
             //let svg = d3.select("#d3-network").select("svg");
             let scope = this;
-            let path = this.getCurrentPath(step);
+            this.handleNetworkUpdate(step);
+            //let path = this.getCurrentPath(step);
             
-            d3.json(path).then(function (graph) {
+            d3.json(this.currentPath).then(function (graph) {
                 // Apply the general update pattern to the nodes.
+
+                const t = svg.transition()
+                    .duration(5000)
+                    .ease(d3.easeLinear);
 
                 marker = marker.data(graph.edges, function(d) { 
                     return "marker_" + d.source + "-" + d.target;
@@ -430,36 +472,50 @@ export default {
                             return scope.marker_size + d.value/2})
                         .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
                         .attr("markerUnits","userSpaceOnUse")
-                        .attr("fill", d=> {return d.color})
+                        .attr("fill", d=> {
+                            return scope.getColor(d.source,d.value)
+                            //return d.color
+                        })
+                        .attr("orient", "auto")
                         .append("path")
                         .attr("d", "M0,-5L10,0L0,5")
 
 
                 node = node.data(graph.nodes, function(d) { return d.index;});
-                node.exit().remove();
-                node = node.enter()
-                    .append("circle")
-                    .attr("r", function(d) {
-                        return d.weight * 10;
-                    }) // radius
-                    .style("fill", function (d) {
-                        return d.color;
-                    })
-                    .each(function(d) {
-                        if (d.title === "start"){
-                            console.log("set fx for start")
-                            d.fx = scope.width/8;
-                            d.fy = scope.height/8;
-                        }
-                        else if(d.title === "end"){
-                            d.fx = scope.width - scope.width/8;
-                            d.fy = scope.height - scope.height/8;
-                        }
-                        else{
-                            d.fx = undefined
-                            d.fy = undefined
-                        }
-                    })
+
+                node = node.join(
+                    enter => enter
+                        .append("circle")
+                        .attr("r", function(d) {
+                            return d.weight * 10;
+                        }) // radius
+                        // .style("fill", function (d) {
+                        //     return d.color;
+                        // })
+                        .style("fill", function (d) {
+                            return scope.getColor(d.title,40)
+                        })
+                        .each(function(d) {
+                            if (d.title === "start"){
+                                console.log("set fx for start")
+                                d.fx = scope.width/8;
+                                d.fy = scope.height/8;
+                            }
+                            else if(d.title === "end"){
+                                d.fx = scope.width - scope.width/8;
+                                d.fy = scope.height - scope.height/8;
+                            }
+                            else{
+                                d.fx = undefined
+                                d.fy = undefined
+                            }
+                        }),
+                    exit => exit
+                        .call(exit => exit.transition(t))
+                        .attr("r", 1e-6)
+                        .remove()
+                    )
+
 
                 node.on("mouseenter", scope.onHover);
                 node.on("click", scope.onClick);
@@ -490,23 +546,46 @@ export default {
 
                 // Apply the general update pattern to the links.
                 link = link.data(graph.edges, function(d) { return d.source + "-" + d.target; });
-                link.exit().remove();
-                link = link.enter()
-                    .append("path")
-                    .attr("stroke", function (d) {
-                        return d.color
-                    })
-                    .attr("stroke-width", function (d) {
-                        // The node color depends on the club.
-                        return d.value * scope.edgeScale;
-                    })
-                    .attr("marker-end", function(d) { 
-                        //console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
-                        return "url(#marker_" + (d.source + "-" + d.target) + ")"; })
-                    .attr("id", function (d){
-                        return d.source + "-" + d.target
-                    })
-                    .attr("fill","none")
+
+                link = link.join(
+                    enter => enter
+                        .append("path")
+                        .attr('stroke',function(d) { 
+                            //return d.color
+                            return scope.getColor(d.source,d.value)
+                        })
+        
+                        .attr("stroke-width", function (d) {
+                            // The node color depends on the club.
+                            return d.value * scope.edgeScale;
+                        })
+                        .attr("marker-end", function(d) { 
+                            //console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
+                            return "url(#marker_" + (d.source + "-" + d.target) + ")"; })
+                        .attr("id", function (d){
+                            return d.source + "-" + d.target
+                        })
+                        .attr("fill","none"),
+                        // .call(enter => enter.transition(t))
+                        // // .attr("x1", d => {
+                        // //     console.log(d.source.x)
+                        // //     d.source.x})
+                        // // .attr("y1", d => d.source.y)
+                        // // .attr("x2", d => d.target.x)
+                        // // .attr("y2", d => d.target.y)
+                        // .attr("stroke-opacity", 0),
+                    exit => exit
+                        .call(exit => exit.transition(t))
+                        // .attr("x1", d => {
+                        //     console.log(d.source.x)
+                        //     d.source.x})
+                        // .attr("y1", d => d.source.y)
+                        // .attr("x2", d => d.target.x)
+                        // .attr("y2", d => d.target.y)
+                        .attr("stroke-opacity", 0)
+                        .remove()
+                    )
+                    
                     // .attr("ref", function (d){
                     //     return d.source.title + "-" + d.target.title
                     // });
@@ -571,6 +650,7 @@ export default {
                 console.log("leave hover")
             },3000);
         }
+
     },
     mounted() {
         this.height = window.innerHeight;
