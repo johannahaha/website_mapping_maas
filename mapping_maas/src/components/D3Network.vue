@@ -13,7 +13,7 @@ import * as d3 from "d3";
 import { gsap } from 'gsap';
 
 let simulation;
-let node,link,text,marker,svg;
+let node,link,marker,svg;
 let timer;
 let colorBasics, colorCar, colorBicycle, colorWalk, colorPublicTransport;
 //let svgDom;
@@ -40,12 +40,13 @@ export default {
             edgeScale: 0.3,
             currentNetwork: "network_person1",
             currentPath: "/json/intro1.json",
+            iconSize: 40,
             hoverMessage: "",
             showHover:false,
             type:"",
             iconPaths: {
-                bicycle: "/img/bicycle-solid.svg",
-                car: "/img/car-solid.svg"
+                bicycle: "/img/.svg",
+                car: "/img/car.svg"
             },
             hover_data: {
                 network_intro1: default_data,
@@ -195,43 +196,24 @@ export default {
                     .selectAll(".node")
                     .data(graph.nodes)
                     .enter()
-                    // .append("svg:image")
-                    // .attr("href",d => {return scope.getIcon(d.title)})
-                    // // //.attr("href", "img/bicycle-solid.svg")
-                    // .attr("width", 40)
-                    // .attr("height", 40)
-                    // .attr("x", -8)
-                    // .attr("y", -8)
-                    // .attr("x", 228)
-                    // .attr("y",53)
-                    // .append('text')
-                    // .attr('width', "30px" )
-                    // .attr('height', "30px" ) // this will set the height and width
-                    // .attr("class","fas fa-bicycle")
-                    //.attr('text-anchor', 'middle')
-                    //.attr('dominant-baseline', 'central')
-                    // .attr("font-family", "'Font Awesome 5 Free'")
-                    // // 900: solid icons, 400: regular icons
-                    // .attr("font-weight", 900)
-                    // // JavaScript unicode escaping
-                    // .text("\uf015")
-                    //.attr("class","fas fa-bicycle")
-                    //.attr('font-family', "'Font Awesome 5 Free'")
-                    //.text("\uf84a");
+                    .append("svg:image")
+                    .attr("href",d => {return scope.getIcon(d.title)})
+                    .attr("width", scope.iconSize)
+                    .attr("height", scope.iconSize)
+                    .attr("x", -scope.iconSize/2)
+                    .attr("y", -scope.iconSize/2)
 
 
-                    .append("circle")
+                    //.append("circle")
                     .attr("class", "node")
-                    .attr("r", function(d) {
-                        return d.weight * 10;
-                    }) // radius
-                    // .style("fill", function (d) { //fill normaly
-                    //     // The node color depends on the club.
-                    //     return d.color;
+                     //.append("circle")
+                    // .attr("r", function(d) {
+                    //     return d.weight * 10;
+                    // }) // radius
+                    // .style("fill", d => {
+                    //     //return d.color;
+                    //     return scope.getColor(d.title,40)
                     // })
-                    .style("fill", d => {
-                        return scope.getColor(d.title,40)
-                    })
                     .each(function(d) {
                         if (d.title === "start"){
                             console.log("set fx for start",scope.width/4)
@@ -277,28 +259,28 @@ export default {
                 node.on("click", scope.onClick);
                 node.on("mouseleave", scope.leaveHover);
 
-                text = svg.append("g")
-                    .attr("id","node_labels")
-                    //.attr("transform",translate)
-                    .selectAll("text")
-                    .data(graph.nodes)
-                    .enter().append("text")
-                    .attr("class","node_label")
-                    .attr("x", 8)
-                    .attr("y", ".31em")
-                    .attr("fill", function () {
-                        // The node color depends on the club.
-                        return "white"
-                        //return d.color;
-                    })
-                    //.style("font-size", "10px")
-                    .text(function(d) {
-                        return d.title;
-                });
-                console.log(text);
-                text.on("mouseenter", scope.onHover);
-                text.on("click", scope.onClick);
-                text.on("mouseleave", scope.leaveHover);
+                // text = svg.append("g")
+                //     .attr("id","node_labels")
+                //     //.attr("transform",translate)
+                //     .selectAll("text")
+                //     .data(graph.nodes)
+                //     .enter().append("text")
+                //     .attr("class","node_label")
+                //     .attr("x", 8)
+                //     .attr("y", ".31em")
+                //     .attr("fill", function () {
+                //         // The node color depends on the club.
+                //         return "white"
+                //         //return d.color;
+                //     })
+                //     //.style("font-size", "10px")
+                //     .text(function(d) {
+                //         return d.title;
+                // });
+                // console.log(text);
+                // text.on("mouseenter", scope.onHover);
+                // text.on("click", scope.onClick);
+                // text.on("mouseleave", scope.leaveHover);
 
                 // We bind the positions of the SVG elements
                 // to the positions of the dynamic force-directed
@@ -313,13 +295,16 @@ export default {
             return "translate(" + d.x + "," + d.y + ")";
         },
         getIcon(title){
-            if(title in this.iconPaths){
-                console.log(title, "is in icons");
-                return this.iconPaths[title]
-            }
-            else{
-                return this.iconPaths["car"]
-            }
+            let path = "/img/" + title + ".svg"
+            console.log(path)
+            return path
+            // if(title in this.iconPaths){
+            //     console.log(title, "is in icons");
+            //     return this.iconPaths[title]
+            // }
+            // else{
+            //     return this.iconPaths["car"]
+            // }
         },
         onTick(){
             try{
@@ -341,19 +326,24 @@ export default {
                     let thisPath = document.getElementById(id)
                     //let thisPath = d3.select("#paths").select(id)
                     let pl = thisPath.getTotalLength()
-                    let r = d.target.weight * 20 + this.marker_length //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                    let r = this.iconSize/2 + this.marker_length //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
                     let m = thisPath.getPointAtLength(pl - r)
 
-                    let dx = m.x - d.source.x
-                    let dy = m.y - d.source.y
+                    let startx = d.source.x;
+                    let starty = d.source.y;
+
+                    let dx = m.x - startx
+                    let dy = m.y - starty
                     let dr = Math.sqrt(dx * dx + dy * dy);
 
+            
+
                     return (
-                        "M" +  d.source.x + "," + d.source.y + "A" + dr + "," + dr +  " 0 0,1 " + m.x + "," +  m.y
+                        "M" +  startx + "," + starty + "A" + dr + "," + dr +  " 0 0,1 " + m.x + "," +  m.y
                     );
                 });
                 node.attr("transform", this.transform);
-                text.attr("transform", this.transform);
+                //text.attr("transform", this.transform);
             }
             catch(error){
                 console.log("error on tick",error);
@@ -485,16 +475,12 @@ export default {
 
                 node = node.join(
                     enter => enter
-                        .append("circle")
-                        .attr("r", function(d) {
-                            return d.weight * 10;
-                        }) // radius
-                        // .style("fill", function (d) {
-                        //     return d.color;
-                        // })
-                        .style("fill", function (d) {
-                            return scope.getColor(d.title,40)
-                        })
+                        .append("svg:image")
+                        .attr("href",d => {return scope.getIcon(d.title)})
+                        .attr("width", scope.iconSize)
+                        .attr("height", scope.iconSize)
+                        .attr("x", - scope.iconSize/2)
+                        .attr("y", - scope.iconSize/2)
                         .each(function(d) {
                             if (d.title === "start"){
                                 console.log("set fx for start")
@@ -521,28 +507,28 @@ export default {
                 node.on("click", scope.onClick);
                 node.on("mouseleave", scope.leaveHover);
                 
-                text = text.data(graph.nodes, function(d) { 
-                    return d.index;
-                });
-                text.exit().remove();
-                text = text.enter()
-                    //.attr("id","node_labels")
-                    .append("text")
-                    .attr("x", 8)
-                    .attr("y", ".31em")
-                    .attr("fill", function () {
-                        // The node color depends on the club.
-                        return "white"
-                        //return d.color;
-                    })
-                    .attr("class","node_label")
-                    //.style("font-size", "1rem")
-                    .text(function(d) {
-                        return d.title;
-                    })
-                text.on("mouseenter", scope.onHover);
-                text.on("click", scope.onClick);
-                text.on("mouseleave", scope.leaveHover);
+                // text = text.data(graph.nodes, function(d) { 
+                //     return d.index;
+                // });
+                // text.exit().remove();
+                // text = text.enter()
+                //     //.attr("id","node_labels")
+                //     .append("text")
+                //     .attr("x", 8)
+                //     .attr("y", ".31em")
+                //     .attr("fill", function () {
+                //         // The node color depends on the club.
+                //         return "white"
+                //         //return d.color;
+                //     })
+                //     .attr("class","node_label")
+                //     //.style("font-size", "1rem")
+                //     .text(function(d) {
+                //         return d.title;
+                //     })
+                // text.on("mouseenter", scope.onHover);
+                // text.on("click", scope.onClick);
+                // text.on("mouseleave", scope.leaveHover);
 
                 // Apply the general update pattern to the links.
                 link = link.data(graph.edges, function(d) { return d.source + "-" + d.target; });
