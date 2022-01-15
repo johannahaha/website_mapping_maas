@@ -1,9 +1,10 @@
 <template>
-    <div id="d3-network" ref="d3-network">
+    <div>
         <h3>Aktuell zu sehen: {{this.currentNetwork}}</h3>
-        <div id="hover" v-show="showHover" ref="hover">
-            <h3>What people say about the {{type}}</h3>{{hoverMessage}}.
+        <div id="tooltip" v-show="showHover" ref="tooltip">
+            {{hoverMessage}}
         </div>
+        <div id="d3-network"> </div>
     </div>
 </template>
 
@@ -13,63 +14,42 @@ import * as d3 from "d3";
 import { gsap } from 'gsap';
 
 let simulation;
-let node,link,marker,svg;
-let timer;
+let node,link,marker,svg
 let colorBasics, colorCar, colorBicycle, colorWalk, colorPublicTransport;
-let strokeWidth;
+let edgeWidth, nodeSize;
 //let svgDom;
 
 let default_data = {
-                car: "this is a car",
-                bicycle: "bicycles are great",
-                bus: "bus is here",
-                train: "I take the train",
-                start: "I started the trip",
-                end: "end of a trip",
-                stationary: "nothin happens",
-                walk:"walk walk walk"
+                car: "Auto",
+                bicycle: "Fahrrad",
+                public_transport: "Öffentliche Verkehrsmittel (Bus, Tram, Bahn)",
+                start: "Startpunkt einer Fahrt",
+                end: "Endpunkt einer Fahrt",
+                stationary: "kurzer Zwischenstopp",
+                walk:"Zu Fuß"
             }
 
 export default {
     data(){
         return{
-            selections: {},
             i:0,
             width:600,
             height:600,
             marker_size:10,
-            edgeScale: 0.3,
             currentNetwork: "network_person1",
             currentPath: "/json/intro1.json",
-            iconSize: 40,
             hoverMessage: "",
             showHover:false,
             type:"",
-            iconPaths: {
-                bicycle: "/img/.svg",
-                car: "/img/car.svg"
-            },
+            isDragging:false,
             hover_data: {
                 network_intro1: default_data,
                 network_intro2: default_data,
                 network_person1: default_data,
-                network_person2: default_data,
-                network_einkaufen: default_data,
-                network_zur_arbeit: default_data,
-                network_bringen: default_data,
-                network_nach_hause: default_data,
-                network_freizeit: default_data,
                 network_person3: default_data,
-                network_person4: default_data,
-                network_person5: default_data,
+                network_person6: default_data,
             }
         }
-    },
-    computed:{
-            marker_length: function(){
-                console.log("marker length",Math.sqrt(this.marker_size**2 + this.marker_size**2))
-                return Math.sqrt(this.marker_size**2 + this.marker_size**2)
-            }
     },
     methods: {
         setupGraph() {
@@ -80,9 +60,14 @@ export default {
             //     .domain([80,1])
             //     .interpolator(d3.interpolateGreys);
             
+            // colorBasics = d3.scaleLinear()
+            //     .domain([1,80])
+            //     .range(["#f1e1bc","#f2fo0eb"])
+            //     .interpolate(d3.interpolateHsl)
+
             colorBasics = d3.scaleLinear()
                 .domain([1,80])
-                .range(["#f1e1bc","#f2fo0eb"])
+                .range(["#333","#eee"])
                 .interpolate(d3.interpolateHsl)
 
             colorWalk = d3.scaleLinear()
@@ -106,28 +91,14 @@ export default {
                 .interpolate(d3.interpolateHsl)
 
             
-            strokeWidth = d3.scaleLinear()
+            edgeWidth = d3.scaleLinear()
                 .domain([1, 80])
                 .range([3, 30]);
-        
-            console.log(strokeWidth(1));
-            console.log(strokeWidth(70));
-            // colorCar = d3.scaleSequential()
-            //     .domain([80,1])
-            //     .interpolator(d3.interpolatePurples);
             
-            // colorBicycle = d3.scaleSequential()
-            //     .domain([80,1])
-            //     .interpolator(d3.interpolateGreens);
-
-            // colorWalk = d3.scaleSequential()
-            //     .domain([80,1])
-            //     .interpolator(d3.interpolateBlues);
-
-            // colorPublicTransport = d3.scaleSequential()
-            //     .domain([80,1])
-            //     .interpolator(d3.interpolateReds);
-
+            nodeSize = d3.scaleLinear()
+                .domain([10,120])
+                .range([40, 70]);
+    
             if (svg.empty()) {
                 svg = d3
                     .select("#d3-network")
@@ -135,6 +106,23 @@ export default {
                     .attr("width", this.width)
                     .attr("height", this.height);
             }
+            //svg = d3
+                //.select("#d3-network")
+            //     .append("div")
+            //     // Container class to make it responsive.
+            //     .append("id","svg-container") 
+                //.append("svg")
+            //     // Responsive SVG needs these 2 attributes and no width and height attr.
+                //.attr("preserveAspectRatio", "xMinYMin meet")
+                //.attr("viewBox", "0 0 ${this.width} ${this.height}")
+            //     // Class to make it responsive.
+            //     .classed("svg-content-responsive", true)
+            //     // Fill with a rectangle for visualization.
+            //     .append("rect")
+            //     .classed("rect", true)
+            //     .attr("width", 600)
+            //     .attr("height", 400);
+
 
             d3.json(this.currentPath).then(function (graph) {
                 console.log("loaded data");
@@ -151,23 +139,15 @@ export default {
                     .force("collide", d3.forceCollide(150))
                     .force("link", forceLink)
                     .force("center", d3.forceCenter(scope.width / 2, scope.height / 2))
-                    //.force("x", d3.forceX(scope.width / 3).strength(0))
-                    //.force("y", d3.forceY(scope.height * 3).strength(0))
-                //.force("forceX", d3.forceX().strength(.1).x(width * .5))
-                //.force("forceY", d3.forceY().strength(.1).y(height * .5))
 
                 console.log("simulation with edges");
                
                 marker = svg.append("defs")
-                    //.attr("transform",translate)
+
                     .selectAll("marker")
                     .data(graph.edges, function (d) { return d.source.id + "-" + d.target.id; })
-                    //.data(["marker"])
                     .enter()
                     .append("marker")
-                    // .attr("id", function (d) {
-                    //     return d
-                    // })
                     .attr("id", function (d) { 
                         let id = "marker_" + d.source.title + "-" + d.target.title
                         console.log(id)
@@ -185,16 +165,13 @@ export default {
                         return scope.getColor(d.source.title,d.value)
                         //return d.color
                     })
-                    //.attr("fill", "#004e64")
                     .append("path")
                     .attr("d", "M0,-5L10,0L0,5")
-                    //.merge(marker);
 
 
                 // We create a <line> SVG element for each link
                 // in the graph.
                 link = svg.append("g")
-                    //.attr("transform",translate)
                     .attr("id","paths")
                     .selectAll(".path")
                     .data(graph.edges)
@@ -206,7 +183,7 @@ export default {
                     // return d.source.color;
                     })
                     .attr("stroke-width", function (d) {
-                        return strokeWidth(d.value);
+                        return edgeWidth(d.value);
                     })
                     .attr("marker-end", function(d) { 
                         return "url(#marker_" + (d.source.title + "-" + d.target.title) + ")"; })
@@ -231,10 +208,16 @@ export default {
                     .enter()
                     .append("svg:image")
                     .attr("href",d => {return scope.getIcon(d.title)})
-                    .attr("width", scope.iconSize)
-                    .attr("height", scope.iconSize)
-                    .attr("x", -scope.iconSize/2)
-                    .attr("y", -scope.iconSize/2)
+                    .attr("width", function (d) {
+                        return nodeSize(d.weight);
+                    })
+                    .attr("height", function (d) {
+                        return nodeSize(d.weight);
+                    })
+                    // .attr("width", scope.iconSize)
+                    // .attr("height", scope.iconSize)
+                    .attr("x", d => {return -nodeSize(d.weight)/2})
+                    .attr("y", d => {return -nodeSize(d.weight)/2})
 
 
                     //.append("circle")
@@ -252,68 +235,58 @@ export default {
                             console.log("set fx for start",scope.width/4)
                             d.fx = scope.width/8;
                             d.fy = scope.height/8;
+                            //this.showHover = false;
+                            this.isDragging = true
                         }
                         else if(d.title === "end"){
                             console.log("set fx for end",scope.width - scope.width/4)
                             d.fx = scope.width - scope.width/8;
                             d.fy = scope.height - scope.height/8;
+                            this.isDragging = false;
                         }
                         else{
                             d.fx = undefined
                             d.fy = undefined
                         }
-                    });
+                    })
 
-                    // .call(d3.drag()
-                    //         // .on("start", function (event, d) {
-                    //         //     console.log(d);
-                    //         //     if (!event.active)
-                    //         //         simulation.alphaTarget(0.3).restart();
-                    //         //     d.fx = d.x;
-                    //         //     d.fy = d.y;
-                    //         // })
-                    //         .on("drag", function (event, d) {
-                    //             d.fx = event.x;
-                    //             d.fy = event.y;
-                    //         })
-                    //         .on("end", function (event, d) {
-                    //             if (!event.active) simulation.alphaTarget(0);
-                    //             d.fx = null;
-                    //             d.fy = null;
-                    //         })
-                    // );
+                    .call(d3.drag()
+                            .on("start", function (event, d) {
+                                if(d.title === "start" || d.title === "end"){
+                                    return
+                                }
+                                if (!event.active)
+                                    simulation.alphaTarget(0.3).restart();
+                                d.fx = d.x;
+                                d.fy = d.y;
+                            })
+                            .on("drag", function (event, d) {
+                                if(d.title === "start" || d.title === "end"){
+                                    return
+                                }
+                                d.fx = event.x;
+                                d.fy = event.y;
+                            })
+                            .on("end", function (event, d) {
+                                if(d.title === "start" || d.title === "end"){
+                                    return
+                                }
+                                if (!event.active) simulation.alphaTarget(0);
+                                d.fx = null;
+                                d.fy = null;
+                            })
+                    );
 
-                console.log(svg);
-                // The name of each node is the node number.
                 node.append("title").text(function (d) {
                     return d.title;
                 });
-                node.on("mouseenter", scope.onHover);
-                node.on("click", scope.onClick);
-                node.on("mouseleave", scope.leaveHover);
+                node.on("mouseenter",scope.enterTooltip)
+                node.on("mousemove",scope.moveTooltip)
+                node.on("mouseleave",scope.leaveTooltip)
 
-                // text = svg.append("g")
-                //     .attr("id","node_labels")
-                //     //.attr("transform",translate)
-                //     .selectAll("text")
-                //     .data(graph.nodes)
-                //     .enter().append("text")
-                //     .attr("class","node_label")
-                //     .attr("x", 8)
-                //     .attr("y", ".31em")
-                //     .attr("fill", function () {
-                //         // The node color depends on the club.
-                //         return "white"
-                //         //return d.color;
-                //     })
-                //     //.style("font-size", "10px")
-                //     .text(function(d) {
-                //         return d.title;
-                // });
-                // console.log(text);
-                // text.on("mouseenter", scope.onHover);
-                // text.on("click", scope.onClick);
-                // text.on("mouseleave", scope.leaveHover);
+                    
+
+
 
                 // We bind the positions of the SVG elements
                 // to the positions of the dynamic force-directed
@@ -353,13 +326,10 @@ export default {
                     );
                 });
                 link.attr("d", d => {
-                    //let id = "path_"+ d.index
                     let id = d.source.title + "-" + d.target.title;
-                    //console.log(scope.$refs);
                     let thisPath = document.getElementById(id)
-                    //let thisPath = d3.select("#paths").select(id)
                     let pl = thisPath.getTotalLength()
-                    let r = this.iconSize/2 + this.marker_length //16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
+                    let r = nodeSize(d.target.weight)/2 + this.getMarkerLength(this.marker_size + d.value/2)//16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
                     let m = thisPath.getPointAtLength(pl - r)
 
                     let startx = d.source.x;
@@ -388,48 +358,49 @@ export default {
             if(step === 0){
                 this.updateNetworkData("network_intro1","/json/intro1.json")
             }
-            else if(step === 2){
+            else if(step === 1){
                 this.updateNetworkData("network_intro2","/json/intro2.json")
             }
             else if(step === 4){
-                this.updateNetworkData("network_person1","/json/person1graphdata.json")
+                this.updateNetworkData("network_intro3","/json/intro3.json")
             }
             else if(step === 6){
-                this.updateNetworkData("network_person2","/json/person2graphdata.json")
-                this.currentNetwork = "network_person2"
-                path = "/json/person2graphdata.json"
-            }
-            else if(step === 7){
-                this.updateNetworkData("network_person3","/json/person3graphdata.json")
-            }
-            else if(step === 8){
-                this.updateNetworkData("network_person4","/json/person4graphdata.json")
-            }
-            else if(step ===9){
-                this.updateNetworkData("network_person5","/json/person5graphdata.json")
+                this.updateNetworkData("network_person1","/json/person1graphdata.json")
             }
             else if(step === 10){
+                this.updateNetworkData("network_person3","/json/person3graphdata.json")
+            }
+            // else if(step === 7){
+            //     this.updateNetworkData("network_person3","/json/person3graphdata.json")
+            // }
+            else if(step === 12){
                 this.updateNetworkData("network_person6","/json/person6graphdata.json")
             }
-            else if(step === 11){
-                this.updateNetworkData("network_zur_arbeit","/json/zur_arbeitgraphdata.json")
-            }
-            else if(step === 12){
-                this.currentNetwork = "network_einkaufen"
-                path = "/json/einkaufengraphdata.json"
-            }
-            else if(step === 13){
-                this.currentNetwork = "network_jemanden_holen_bringen"
-                path = "/json/bringengraphdata.json"
-            }
-            else if(step === 14){
-                this.currentNetwork = "network_nach_hause"
-                path = "/json/nach_hausegraphdata.json"
-            }
-            else{
-                this.currentNetwork = "person1"
-                path = "/json/person1graphdata.json"
-            }
+            // else if(step ===9){
+            //     this.updateNetworkData("network_person5","/json/person5graphdata.json")
+            // }
+            // else if(step === 10){
+            //     this.updateNetworkData("network_person6","/json/person6graphdata.json")
+            // }
+            // else if(step === 11){
+            //     this.updateNetworkData("network_zur_arbeit","/json/zur_arbeitgraphdata.json")
+            // }
+            // else if(step === 12){
+            //     this.currentNetwork = "network_einkaufen"
+            //     path = "/json/einkaufengraphdata.json"
+            // }
+            // else if(step === 13){
+            //     this.currentNetwork = "network_jemanden_holen_bringen"
+            //     path = "/json/bringengraphdata.json"
+            // }
+            // else if(step === 14){
+            //     this.currentNetwork = "network_nach_hause"
+            //     path = "/json/nach_hausegraphdata.json"
+            // }
+            // else{
+            //     this.currentNetwork = "person1"
+            //     path = "/json/person1graphdata.json"
+            // }
             return path;
         },
         updateNetworkData(updatedNetwork,updatedPath){
@@ -438,6 +409,9 @@ export default {
                 this.currentPath = updatedPath
             }
 
+        },
+        getMarkerLength(size){
+            return Math.sqrt(size**2 + size**2)
         },
         getColor(title,value){
             if(title === "car"){
@@ -455,22 +429,22 @@ export default {
             return colorBasics(value); 
         },
         updateGraph(step){
-            //let svg = d3.select("#d3-network").select("svg");
             let scope = this;
             this.handleNetworkUpdate(step);
-            //let path = this.getCurrentPath(step);
             
             d3.json(this.currentPath).then(function (graph) {
-                // Apply the general update pattern to the nodes.
 
                 const t = svg.transition()
                     .duration(5000)
                     .ease(d3.easeLinear);
 
+                svg.selectAll("marker").remove()
+
                 marker = marker.data(graph.edges, function(d) { 
                     return "marker_" + d.source + "-" + d.target;
                 });
 
+                //marker = marker.join(update => update.remove())
                 marker = marker
                     .join(
                         enter => enter
@@ -485,23 +459,18 @@ export default {
                             .attr("orient", "auto")
                             .append("path")
                             .attr("d", "M0,-5L10,0L0,5"),
-                        exit => exit.remove(),
                         update => update
                             .attr("markerWidth", d=> {
                                 return scope.marker_size + d.value/2})
-                            .attr("markerHeight", d=> {return scope.marker_size + d.value/2}))
-                    .merge(marker)
-                    .attr("markerWidth", d=> {
-                            return scope.marker_size + d.value/2})
-                        .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
-                        .attr("markerUnits","userSpaceOnUse")
-                        .attr("fill", d=> {
-                            return scope.getColor(d.source,d.value)
+                            .attr("markerHeight", d=> {
+                                return scope.marker_size + d.value/2}))
+                            .attr("fill", (d)=> {
+                                console.log("updated",d.source,d.target, d.value)
+                                return scope.getColor(d.source,d.value)
                             //return d.color
-                        })
-                        .attr("orient", "auto")
-                        .append("path")
-                        .attr("d", "M0,-5L10,0L0,5")
+                            }),
+                        exit => exit.remove()
+                    .merge(marker)
 
 
                 node = node.data(graph.nodes, function(d) { return d.index;});
@@ -510,10 +479,14 @@ export default {
                     enter => enter
                         .append("svg:image")
                         .attr("href",d => {return scope.getIcon(d.title)})
-                        .attr("width", scope.iconSize)
-                        .attr("height", scope.iconSize)
-                        .attr("x", - scope.iconSize/2)
-                        .attr("y", - scope.iconSize/2)
+                        .attr("width", function (d) {
+                            return nodeSize(d.weight);
+                        })
+                        .attr("height", function (d) {
+                            return nodeSize(d.weight);
+                        })
+                        .attr("x", d => {return -nodeSize(d.weight)/2})
+                        .attr("y", d => {return -nodeSize(d.weight)/2})
                         .each(function(d) {
                             if (d.title === "start"){
                                 console.log("set fx for start")
@@ -535,33 +508,27 @@ export default {
                         .remove()
                     )
 
-
-                node.on("mouseenter", scope.onHover);
-                node.on("click", scope.onClick);
-                node.on("mouseleave", scope.leaveHover);
-                
-                // text = text.data(graph.nodes, function(d) { 
-                //     return d.index;
-                // });
-                // text.exit().remove();
-                // text = text.enter()
-                //     //.attr("id","node_labels")
-                //     .append("text")
-                //     .attr("x", 8)
-                //     .attr("y", ".31em")
-                //     .attr("fill", function () {
-                //         // The node color depends on the club.
-                //         return "white"
-                //         //return d.color;
-                //     })
-                //     .attr("class","node_label")
-                //     //.style("font-size", "1rem")
-                //     .text(function(d) {
-                //         return d.title;
-                //     })
-                // text.on("mouseenter", scope.onHover);
-                // text.on("click", scope.onClick);
-                // text.on("mouseleave", scope.leaveHover);
+                node.on("mouseenter",scope.enterTooltip)
+                node.on("mousemove",scope.moveTooltip)
+                node.on("mouseleave",scope.leaveTooltip)
+                node.call(d3.drag()
+                            .on("start", function (event, d) {
+                                console.log(d);
+                                if (!event.active)
+                                    simulation.alphaTarget(0.3).restart();
+                                d.fx = d.x;
+                                d.fy = d.y;
+                            })
+                            .on("drag", function (event, d) {
+                                d.fx = event.x;
+                                d.fy = event.y;
+                            })
+                            .on("end", function (event, d) {
+                                if (!event.active) simulation.alphaTarget(0);
+                                d.fx = null;
+                                d.fy = null;
+                            })
+                    );
 
                 // Apply the general update pattern to the links.
                 link = link.data(graph.edges, function(d) { return d.source + "-" + d.target; });
@@ -575,7 +542,7 @@ export default {
                         })
         
                         .attr("stroke-width", function (d) {
-                            return strokeWidth(d.value);
+                            return edgeWidth(d.value);
                         })
                         .attr("marker-end", function(d) { 
                             //console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
@@ -616,59 +583,36 @@ export default {
             })
 
         },
-        onHover(e, d) {
-            console.log("hovering");
-            console.log(e,d)
-            console.log(e.target)
-
-            if(e.target.classList.contains('node')){
-                console.log("changing radius",e.currentTarget)
-                d3.select(e.currentTarget)
-                    .transition()
-                    .attr("r", d => d.weight * 12.0)
-                    .attr("fill","white")
-            }
-            // if(e.target.classList.contains('node_label')){
-            //     d3.select(e.currentTarget)
-            //         .transition()
-            //         .style("font-size", "30px");
-            // }
-    
-
-            //this.todoHovered = `${d.text} is ${d.done ? 'done' : 'not done'}`;
-        },
-        onClick(e,d){
+        enterTooltip(e,d){
+            console.log("enter")
+            this.showHover = true
+            //tooltip.style("opacity", 1)
             let data = this.hover_data[this.currentNetwork]
 
-            this.type = d.title
-            this.hoverMessage = data[this.type];
-            this.showHover = true;
-            
-            gsap.to(this.$refs.hover, {
-                duration:0.5,
-                ease:"power3",
-                x: d.x,
-                y: d.y-100 //ich weiß nicht, warum minus
-            })
+            this.hoverMessage = data[d.title];
         },
-        leaveHover(e){
-            console.log("hover out");
-            d3.select(e.currentTarget)
-                .transition()
-                .attr("r", d => d.weight * 10.0)
-                .attr("fill",d => d.color)
-            // d3.select(e.currentTarget)
-            //         //.style('font-size', 'Nem')
-            //         .transition()
-            //         .style("font-size", "1.3rem");
-            
-            clearTimeout(timer);
-            timer = setTimeout(()=>{
-                this.showHover = false;
-                console.log("leave hover")
-            },3000);
-        }
+        moveTooltip(e,d){
 
+            let tooltip = this.$refs.tooltip
+            let height = tooltip.height
+
+            console.log(height)
+
+            gsap.set(tooltip, {
+                x: d.x-nodeSize(d.weight)/2,
+                y: d.y-nodeSize(d.weight)-30//+nodeSize(d.weight)+10,       
+            })
+
+            if(d.title === "end"){
+                gsap.set(tooltip, {
+                x: d.x-nodeSize(d.weight)*2,      
+            })
+            }
+        },
+        leaveTooltip(){
+            console.log("leave")
+            this.showHover = false;
+        },
     },
     mounted() {
         this.height = window.innerHeight;
@@ -685,6 +629,27 @@ export default {
 <style lang="scss">
 @import "@/assets/_config.scss";
 
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+
+svg .rect {
+  fill: gold;
+  stroke: steelblue;
+  stroke-width: 5px;
+}
+
 #node_labels{
     .node_label{
         position:absolute;
@@ -692,14 +657,15 @@ export default {
         color:red;
     }
 }
-#hover{
-    background-color: $mediumblue;
-    padding: 1rem;
-    color: $light;
-    display: inline-block;
+#tooltip{
+    background-color: $light;
+    padding: 0.5rem;
+    color: $darkgrey;
+    display: block;
     z-index:2;
     position:absolute;
     text-align:middle;
+    border-radius: 1rem;
 
     h3{
         font-size:1rem;

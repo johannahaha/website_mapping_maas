@@ -3,30 +3,30 @@
         {
             "title": "start",
             "color": "#004e64",
-            "weight": 1
+            "weight": 10
         },
         {
             "title": "walk",
             "color": "#00a5cf",
-            "weight": 1
+            "weight": 10
         },
         {
             "title": "end",
             "color": "#004e64",
-            "weight": 1
+            "weight": 10
         }
     ],
     "edges": [
         {
             "source": "start",
             "target": "walk",
-            "value": 36,
+            "value": 10,
             "color": "#004e64"
         },
         {
             "source": "walk",
             "target": "end",
-            "value": 36,
+            "value": 10,
             "color": "#00a5cf"
         }
     ]

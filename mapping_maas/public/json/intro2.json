@@ -3,22 +3,17 @@
         {
             "title": "start",
             "color": "#004e64",
-            "weight": 1
+            "weight": 36
         },
         {
             "title": "walk",
             "color": "#00a5cf",
-            "weight": 1
+            "weight": 36
         },
         {
             "title": "end",
             "color": "#004e64",
-            "weight": 1
-        },
-        {
-            "title": "bicycle",
-            "color": "#9fffcb",
-            "weight": 1
+            "weight": 36
         }
     ],
     "edges": [
@@ -32,31 +27,6 @@
             "source": "walk",
             "target": "end",
             "value": 36,
-            "color": "#00a5cf"
-        },
-        {
-            "source": "start",
-            "target": "bicycle",
-            "value": 17,
-            "color": "#004e64"
-        },
-        
-        {
-            "source": "bicycle",
-            "target": "end",
-            "value": 11,
-            "color": "#9fffcb"
-        },
-        {
-            "source": "bicycle",
-            "target": "walk",
-            "value": 25,
-            "color": "#9fffcb"
-        },
-        {
-            "source": "walk",
-            "target": "bicycle",
-            "value": 18,
             "color": "#00a5cf"
         }
     ]

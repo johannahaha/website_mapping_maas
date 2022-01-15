@@ -1,0 +1,63 @@
+{
+    "nodes": [
+        {
+            "title": "start",
+            "color": "#004e64",
+            "weight": 51
+        },
+        {
+            "title": "walk",
+            "color": "#00a5cf",
+            "weight": 69
+        },
+        {
+            "title": "end",
+            "color": "#004e64",
+            "weight": 51
+        },
+        {
+            "title": "car",
+            "color": "#9fffcb",
+            "weight": 49
+        }
+    ],
+    "edges": [
+        {
+            "source": "start",
+            "target": "walk",
+            "value": 36,
+            "color": "#004e64"
+        },
+        {
+            "source": "walk",
+            "target": "end",
+            "value": 36,
+            "color": "#00a5cf"
+        },
+        {
+            "source": "start",
+            "target": "car",
+            "value": 15,
+            "color": "#004e64"
+        },
+        
+        {
+            "source": "car",
+            "target": "end",
+            "value": 15,
+            "color": "#9fffcb"
+        },
+        {
+            "source": "car",
+            "target": "walk",
+            "value": 34,
+            "color": "#9fffcb"
+        },
+        {
+            "source": "walk",
+            "target": "car",
+            "value": 33,
+            "color": "#00a5cf"
+        }
+    ]
+}

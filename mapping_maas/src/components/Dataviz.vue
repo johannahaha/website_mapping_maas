@@ -29,53 +29,78 @@
             <article>
                 <div class="step" data-step="0">
                     <!-- <img class="left" :src="img_path" /> -->
-                    <div class="quote">"Mobility is very important."</div>
+                    <div class="quote" :style="{'margin-top': '100px'}">Hier siehst du eine solche Vernetzung. Dieses Netzwerk bedeutet, dass die Person zu Fuß vom Startpunkt zum Endpunkt gelaufen ist.</div>
                 </div>
-                <div class="step" data-step="1">
-                    <div class="quote">"Mobility is very important."</div>
+                <div class="step" data-step="1" :style="{'margin-top': height}">
+                    <div class="quote">Je öfter die Person eine Vernetzungslinie verwendet hat, desto dicker ist sie. Hier ist die Person als öfter zum Start zum Endpunkt gegangen.</div>
                 </div>
 
-                <div class="step" data-step="2">
-                    <div class="quote">"Mobility is relevant for our future."</div>
+                <div class="step" data-step="2" :style="{'margin-top': height}">
+                    <div class="quote">Noch sagt das Netzwerk wenig aus. Spannend wird es erst, wenn man weitere Mobilitätsarten dazunimmt.</div>
                 </div>
-                <div class="step" data-step="3">
-                    <div class="quote">"Mobility is relevant now."</div>
+                <div class="step" data-step="3" :style="{'margin-top': height}">
+                    <div class="quote">"Hier sieht man zusätzlich das Auto. Die Person ist also oft erst gelaufen, dann Auto gefahren, und ist dann wieder gelaufen."</div>
                 </div>
-                <div class="step" data-step="4">
-                    <div class="quote">"Mobility is still relevant now."</div>
+                <div class="step" data-step="4" :style="{'margin-top': height}">
+                    <div class="quote">"Dieses Muster lässt sich leicht dadurch erklären, dass das die Person zunächst zum Auto läuft, dann Richtung Zielort fährt, das Auto dort parkt und dann zum Zielort läuft."</div>
                 </div>
-                <div class="step" data-step="5">
+                <div class="step" data-step="5" :style="{'margin-top': height}">
                     <div class="quote">"Mobility is still relevant."</div>
                 </div>
-                <div class="step" data-step="6">
+                <div class="step" data-step="6" :style="{'margin-top': height}">
                     <div class="quote">Dieses Netzwerk ist "Freizeit"</div>
                 </div>
-                <div class="step" data-step="7">
+                <div class="step" data-step="7" :style="{'margin-top': height}">
                     <div class="quote">Dieses Netzwerk ist "zur arbeit gehen"</div>
                 </div>
-                <div class="step" data-step="8">
+                <div class="step" data-step="8" :style="{'margin-top': height}">
                     <div class="quote">Dieses Netzwerk ist "Einkaufen, Besorgung".</div>
                 </div>
-                <div class="step" data-step="9">
+                <div class="step" data-step="9" :style="{'margin-top': height}">
                     <div class="quote">Dieses Netzwerk ist "jemanden bringen, abholen"</div>
                 </div>
-                <div class="step" data-step="10">
+                <div class="step" data-step="10" :style="{'margin-top': height}">
                     <div class="quote">Dieses Netzwerk ist "nach hause"</div>
                 </div>
-                <div class="step" data-step="11">
+                <div class="step" data-step="11" :style="{'margin-top': height}">
                     <div class="quote">Mobilität</div>
                 </div>
-                <div class="step" data-step="12">
+                <div class="step" data-step="12" :style="{'margin-top': height}">
                     <div class="quote">Mobilität</div>
                 </div>
-                <div class="step" data-step="13">
+                <div class="step" data-step="13" :style="{'margin-top': height}">
                     <div class="quote">Mobilität"</div>
                 </div>
-                <div class="step" data-step="14">
+                <div class="step" data-step="14" :style="{'margin-top': height}">
                     <div class="quote">Ende"</div>
                 </div>
             </article>
-            <D3Network class="network" ref="network"/>
+            <D3Network class="network sticky" ref="network"/>
+            <!-- <div class="legend">
+                <div class="sticky">
+                    <div class="legend_item">
+                        <img src = "/img/start.svg"/> <div class="description"> Startpunkt <br>eines Weges </div>
+                    </div>
+                    <div class="legend_item">
+                        <img src = "/img/end.svg"/> <div class="description"> Endpunkt <br>eines Weges </div>
+                    </div>
+                    <div class="legend_item">
+                        <img src = "/img/car.svg"/> <div class="description"> Auto </div>
+                    </div>
+                    <div class="legend_item">
+                        <img src = "/img/bicycle.svg"/> <div class="description"> Fahrrad </div>
+                    </div>
+                    <div class="legend_item">
+                        <img src = "/img/walk.svg"/> 
+                        <div class="description"> Zu Fuß </div>
+                    </div>
+                    <div class="legend_item">
+                        <img src = "/img/public_transport.svg"/> 
+                        <div class="description"> Öffentliche Verkehrsmittel <br>(Bus, Tram, S-Bahn)</div>
+                    </div>
+                </div>
+            
+            </div> -->
             <!-- -->
         </section>
         <section id="outro">
@@ -118,30 +143,32 @@ export default {
     },
     data() {
         return {
-            img_path: "/img/nomadic-julien-wxLBz2kzY9c-unsplash.jpg",
             scroller: scrollama(),
             step: 0,
             progress: 0,
+            height:'600px',
         };
     },
     mounted() {
+        this.height = window.innerHeight + "px";
         this.scroller
             .setup({
                 step: "#scrolly article .step",
-                offset: 0.5,
+                offset: 0.75,
                 progress: true,
                 debug: false,
             })
             .onStepEnter(this.onEnter)
             .onStepProgress(this.onProgress)
             .onStepExit(this.onExit);
+        window.addEventListener("resize", this.onResize);
     },
     methods: {
         onEnter(response) {
             this.step = response.index;
             response.element.classList.add("is-active");
 
-            if([0,2,4,6,7,8,9,10].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
+            if([0,1,4,6,10].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }
@@ -156,7 +183,10 @@ export default {
             this.step = response.index;
             response.element.classList.remove("is-active");
         },
-    },
+        onResize(){
+            this.height = window.innerHeight + "px";
+        }
+    }
 };
 </script>
 
@@ -174,7 +204,7 @@ h1{
   font-size:2rem;
   left:0;
   padding: 1rem 0;
-  margin-bottom: 10vh;
+  margin-bottom: 2rem;
   //margin-left:5vw;
   color:$light;
 }
@@ -183,7 +213,7 @@ h1{
     z-index: 2;
     width: 60vw;       
     align-self: flex-start;
-    margin: 5vh 10vw;
+    margin: 2rem 10vw;
 
     .text {
         h3{
@@ -202,16 +232,38 @@ h1{
     display:flex;
     flex-direction: row;
 
-    #sticky_overlay{
+    .sticky{
         position:sticky;
+    }
+
+    .legend{
         bottom:0;
-        right:0;
+        z-index:2;
+        display:flex;
+        flex-direction:column;
+
+        .sticky{
+            bottom:0;
+
+            .legend_item{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0.75rem;
+            width:3vw;
+
+            .description{
+                padding-left:1rem;
+            }
+        }
+        }
+
+
     }
 
     .network {
-        position:sticky;
         width: 75vw;
-        height: 100vh;
+        height: 100%;
         // background-color: $darkgrey;
         z-index:0;
         right:0;
@@ -246,11 +298,9 @@ h1{
 
 
     .quote {
-        align-self: center;
-        font-size: 2rem;
-        font-style: italic;
-        margin: 5vh 10vh;
-        margin-top:100vh;
+        padding: 0 5vw;
+        //margin-top:100%;
+        //width: 100%
     }
 
 
