@@ -68,7 +68,7 @@
                     <div class="quote">Mobilität</div>
                 </div>
                 <div class="step" data-step="12" :style="{'margin-top': heightPx}">
-                    <div class="quote">Mobilität</div>
+                    <div class="quote">Hier ist die nächste Person</div>
                 </div>
                 <div class="step" data-step="13" :style="{'margin-top': heightPx}">
                     <div class="quote">Mobilität"</div>
@@ -185,7 +185,7 @@ export default {
             gsap.set(step.element,{opacity:0})
             gsap.to(step.element,{opacity:1.0,duration:2,ease:"power3"})
 
-            if([0,1,4,6,10].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
+            if([0,1,4,6,10,12].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }

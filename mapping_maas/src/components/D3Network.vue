@@ -122,7 +122,7 @@ export default {
                 scope.linkData = graph.edges.target;
                 scope.currentNetwork = "network_intro1";
 
-                let widthScale = scope.width/9
+                let widthScale = scope.width/11
 
 
                 const forceLink = d3.forceLink(graph.edges).id(function (d) {
@@ -613,7 +613,7 @@ export default {
                 }
             })
 
-            let widthScale = scope.width/9
+            let widthScale = scope.width/11
 
             //TODO: FORCE LINK
             //TODO: USE HEIGHT BETTER OR IN GENERAL SPACE ON MOBILE
