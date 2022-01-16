@@ -31,51 +31,53 @@
                     <!-- <img class="left" :src="img_path" /> -->
                     <div class="quote" :style="{'margin-top': '100px'}">Hier siehst du eine solche Vernetzung. Dieses Netzwerk bedeutet, dass die Person zu Fuß vom Startpunkt zum Endpunkt gelaufen ist.</div>
                 </div>
-                <div class="step" data-step="1" :style="{'margin-top': height}">
+                <div class="step" data-step="1" :style="{'margin-top': heightPx}">
                     <div class="quote">Je öfter die Person eine Vernetzungslinie verwendet hat, desto dicker ist sie. Hier ist die Person als öfter zum Start zum Endpunkt gegangen.</div>
                 </div>
 
-                <div class="step" data-step="2" :style="{'margin-top': height}">
+                <div class="step" data-step="2" :style="{'margin-top': heightPx}">
                     <div class="quote">Noch sagt das Netzwerk wenig aus. Spannend wird es erst, wenn man weitere Mobilitätsarten dazunimmt.</div>
                 </div>
-                <div class="step" data-step="3" :style="{'margin-top': height}">
+                <div class="step" data-step="3" :style="{'margin-top': heightPx}">
                     <div class="quote">"Hier sieht man zusätzlich das Auto. Die Person ist also oft erst gelaufen, dann Auto gefahren, und ist dann wieder gelaufen."</div>
                 </div>
-                <div class="step" data-step="4" :style="{'margin-top': height}">
+                <div class="step" data-step="4" :style="{'margin-top': heightPx}">
                     <div class="quote">"Dieses Muster lässt sich leicht dadurch erklären, dass das die Person zunächst zum Auto läuft, dann Richtung Zielort fährt, das Auto dort parkt und dann zum Zielort läuft."</div>
                 </div>
-                <div class="step" data-step="5" :style="{'margin-top': height}">
-                    <div class="quote">"Mobility is still relevant."</div>
-                </div>
-                <div class="step" data-step="6" :style="{'margin-top': height}">
+                <transition name="fade">
+                    <div class="step" data-step="5" :style="{'margin-top': heightPx}">
+                        <div class="quote">"Mobility is still relevant."</div>
+                    </div>
+                </transition>
+                <div class="step" data-step="6" :style="{'margin-top': heightPx}">
                     <div class="quote">Dieses Netzwerk ist "Freizeit"</div>
                 </div>
-                <div class="step" data-step="7" :style="{'margin-top': height}">
+                <div class="step" data-step="7" :style="{'margin-top': heightPx}">
                     <div class="quote">Dieses Netzwerk ist "zur arbeit gehen"</div>
                 </div>
-                <div class="step" data-step="8" :style="{'margin-top': height}">
+                <div class="step" data-step="8" :style="{'margin-top': heightPx}">
                     <div class="quote">Dieses Netzwerk ist "Einkaufen, Besorgung".</div>
                 </div>
-                <div class="step" data-step="9" :style="{'margin-top': height}">
+                <div class="step" data-step="9" :style="{'margin-top': heightPx}">
                     <div class="quote">Dieses Netzwerk ist "jemanden bringen, abholen"</div>
                 </div>
-                <div class="step" data-step="10" :style="{'margin-top': height}">
+                <div class="step" data-step="10" :style="{'margin-top': heightPx}">
                     <div class="quote">Dieses Netzwerk ist "nach hause"</div>
                 </div>
-                <div class="step" data-step="11" :style="{'margin-top': height}">
+                <div class="step" data-step="11" :style="{'margin-top': heightPx}">
                     <div class="quote">Mobilität</div>
                 </div>
-                <div class="step" data-step="12" :style="{'margin-top': height}">
+                <div class="step" data-step="12" :style="{'margin-top': heightPx}">
                     <div class="quote">Mobilität</div>
                 </div>
-                <div class="step" data-step="13" :style="{'margin-top': height}">
+                <div class="step" data-step="13" :style="{'margin-top': heightPx}">
                     <div class="quote">Mobilität"</div>
                 </div>
-                <div class="step" data-step="14" :style="{'margin-top': height}">
+                <div class="step" data-step="14" :style="{'margin-top': heightPx}">
                     <div class="quote">Ende"</div>
                 </div>
             </article>
-            <D3Network class="network sticky" ref="network"/>
+            <D3Network class="network sticky" ref="network" :width="widthSvg" :height="height"/>
             <!-- <div class="legend">
                 <div class="sticky">
                     <div class="legend_item">
@@ -134,8 +136,10 @@
 import "intersection-observer"; // for cross-browser support
 //import Scrollama from 'vue-scrollama' // local registration in this example, can also be globally registered
 import scrollama from "scrollama";
+import { gsap } from 'gsap';
 
 import D3Network from "../components/D3Network.vue";
+
 
 export default {
     components: {
@@ -146,15 +150,22 @@ export default {
             scroller: scrollama(),
             step: 0,
             progress: 0,
-            height:'600px',
+            height:600,
+            width:600,
+            lastStep:null
         };
     },
+    computed:{
+        heightPx: function(){return this.height *0.8 + "px"},
+        widthSvg: function(){return this.width *0.75}
+    },
     mounted() {
-        this.height = window.innerHeight + "px";
+        this.height = window.innerHeight;
+        this.width = window.innerWidth;
         this.scroller
             .setup({
                 step: "#scrolly article .step",
-                offset: 0.75,
+                offset: 0.8,
                 progress: true,
                 debug: false,
             })
@@ -164,9 +175,15 @@ export default {
         window.addEventListener("resize", this.onResize);
     },
     methods: {
-        onEnter(response) {
-            this.step = response.index;
-            response.element.classList.add("is-active");
+        onEnter(step) {
+            if(this.lastStep){
+                gsap.to(this.lastStep,{opacity:0.0,duration:2,ease:"power3"})
+            }
+
+            this.step = step.index;
+            this.lastStep = step.element
+            gsap.set(step.element,{opacity:0})
+            gsap.to(step.element,{opacity:1.0,duration:2,ease:"power3"})
 
             if([0,1,4,6,10].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
@@ -179,12 +196,15 @@ export default {
             this.step = step.index;
             this.progress = step.progress;
         },
-        onExit(response) {
-            this.step = response.index;
-            response.element.classList.remove("is-active");
+        onExit(step) {
+            this.step = step.index;
+            step.element.classList.remove("is-active");
+
         },
         onResize(){
-            this.height = window.innerHeight + "px";
+            this.height = window.innerHeight;
+            this.width = window.innerWidth;
+            this.$refs.network.resizeSimulation();
         }
     }
 };
@@ -262,12 +282,12 @@ h1{
     }
 
     .network {
-        width: 75vw;
-        height: 100%;
         // background-color: $darkgrey;
         z-index:0;
         right:0;
         top:0;
+        width:100%;
+        height:100%
 
     }
 
@@ -296,6 +316,18 @@ h1{
         }
     }
 
+    .step{
+        opacity:0;
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 1s;
+        }
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
+
+    }
 
     .quote {
         padding: 0 5vw;

@@ -4,7 +4,7 @@
         <div id="tooltip" v-show="showHover" ref="tooltip">
             {{hoverMessage}}
         </div>
-        <div id="d3-network"> </div>
+        <div id="d3-network" :height="heightPx" :width="widthPx"> <svg id="svg" :view-box="viewBox" preserveAspectRatio='xMaxYMax meet' :style="{height:heightPx, width:widthPx}"> </svg> </div>
     </div>
 </template>
 
@@ -33,14 +33,14 @@ export default {
     data(){
         return{
             i:0,
-            width:600,
-            height:600,
             marker_size:10,
             currentNetwork: "network_person1",
             currentPath: "/json/intro1.json",
             hoverMessage: "",
             showHover:false,
             type:"",
+            nodeData : [],
+            linkData : [],
             isDragging:false,
             hover_data: {
                 network_intro1: default_data,
@@ -50,6 +50,10 @@ export default {
                 network_person6: default_data,
             }
         }
+    },
+    props:{
+        width: Number,
+        height: Number,
     },
     methods: {
         setupGraph() {
@@ -100,47 +104,38 @@ export default {
                 .range([40, 70]);
     
             if (svg.empty()) {
-                svg = d3
-                    .select("#d3-network")
-                    .append("svg")
-                    .attr("width", this.width)
-                    .attr("height", this.height);
+                svg = d3.select("#svg")
+                    // .attr("width", this.width)
+                    // .attr("height", this.height);
             }
-            //svg = d3
-                //.select("#d3-network")
-            //     .append("div")
-            //     // Container class to make it responsive.
-            //     .append("id","svg-container") 
-                //.append("svg")
-            //     // Responsive SVG needs these 2 attributes and no width and height attr.
-                //.attr("preserveAspectRatio", "xMinYMin meet")
-                //.attr("viewBox", "0 0 ${this.width} ${this.height}")
-            //     // Class to make it responsive.
-            //     .classed("svg-content-responsive", true)
-            //     // Fill with a rectangle for visualization.
-            //     .append("rect")
-            //     .classed("rect", true)
-            //     .attr("width", 600)
-            //     .attr("height", 400);
+
 
 
             d3.json(this.currentPath).then(function (graph) {
-                console.log("loaded data");
+
+                scope.nodeData = d3.map(graph.nodes, function(d) {
+                    return d.title;
+                });
+
+
+                //scope.nodeData = graph.nodes;
+                scope.linkData = graph.edges.target;
                 scope.currentNetwork = "network_intro1";
+
+                let widthScale = scope.width/9
 
 
                 const forceLink = d3.forceLink(graph.edges).id(function (d) {
                     return d.title;
-                }).distance(100);
+                }).distance(widthScale);
+
 
                 simulation = d3
                     .forceSimulation(graph.nodes)
-                    .force("charge", d3.forceManyBody().strength(-100))
-                    .force("collide", d3.forceCollide(150))
+                    .force("charge", d3.forceManyBody().strength(-widthScale))
+                    .force("collide", d3.forceCollide(widthScale * 1.5))
                     .force("link", forceLink)
                     .force("center", d3.forceCenter(scope.width / 2, scope.height / 2))
-
-                console.log("simulation with edges");
                
                 marker = svg.append("defs")
 
@@ -150,7 +145,6 @@ export default {
                     .append("marker")
                     .attr("id", function (d) { 
                         let id = "marker_" + d.source.title + "-" + d.target.title
-                        console.log(id)
                         return id
                     })
                     .attr("viewBox", "0 -5 10 10")
@@ -182,6 +176,7 @@ export default {
                         return scope.getColor(d.source.title,40)
                     // return d.source.color;
                     })
+                    .attr("stroke-opacity",1)
                     .attr("stroke-width", function (d) {
                         return edgeWidth(d.value);
                     })
@@ -197,8 +192,6 @@ export default {
 
                 // We create a <circle> SVG element for each node
                 // in the graph, and we specify a few attributes.
-
-                console.log(scope.width)
 
                 node = svg.append("g")
                     //.attr("transform",translate)
@@ -232,14 +225,12 @@ export default {
                     // })
                     .each(function(d) {
                         if (d.title === "start"){
-                            console.log("set fx for start",scope.width/4)
                             d.fx = scope.width/8;
                             d.fy = scope.height/8;
                             //this.showHover = false;
                             this.isDragging = true
                         }
                         else if(d.title === "end"){
-                            console.log("set fx for end",scope.width - scope.width/4)
                             d.fx = scope.width - scope.width/8;
                             d.fy = scope.height - scope.height/8;
                             this.isDragging = false;
@@ -291,8 +282,6 @@ export default {
                 // We bind the positions of the SVG elements
                 // to the positions of the dynamic force-directed
                 // graph, at each time step.
-                let pathElements = d3.select("#paths")
-                console.log(pathElements)
                 simulation.on("tick", scope.onTick);
                 console.log("mounted done");
             });
@@ -302,7 +291,6 @@ export default {
         },
         getIcon(title){
             let path = "/img/" + title + ".svg"
-            console.log(path)
             return path
             // if(title in this.iconPaths){
             //     console.log(title, "is in icons");
@@ -434,9 +422,9 @@ export default {
             
             d3.json(this.currentPath).then(function (graph) {
 
-                const t = svg.transition()
-                    .duration(5000)
-                    .ease(d3.easeLinear);
+
+
+                const t = svg.transition().duration(2000)
 
                 svg.selectAll("marker").remove()
 
@@ -465,10 +453,12 @@ export default {
                             .attr("markerHeight", d=> {
                                 return scope.marker_size + d.value/2}))
                             .attr("fill", (d)=> {
-                                console.log("updated",d.source,d.target, d.value)
                                 return scope.getColor(d.source,d.value)
                             //return d.color
-                            }),
+                            })
+                            .attr("opacity", 0)
+                            .call(update => update.transition(t)
+                                .attr("opacity", 1.0)),
                         exit => exit.remove()
                     .merge(marker)
 
@@ -489,7 +479,6 @@ export default {
                         .attr("y", d => {return -nodeSize(d.weight)/2})
                         .each(function(d) {
                             if (d.title === "start"){
-                                console.log("set fx for start")
                                 d.fx = scope.width/8;
                                 d.fy = scope.height/8;
                             }
@@ -501,10 +490,20 @@ export default {
                                 d.fx = undefined
                                 d.fy = undefined
                             }
-                        }),
+                        })
+                        .style("opacity", 0)
+                        .attr("cx", () => {
+                            return 10
+                        })
+                        .attr("cy", () => {
+                            return 10
+
+                        })
+                        .call(enter => enter.transition(t)
+                            .style("opacity", 1)),
                     exit => exit
-                        .call(exit => exit.transition(t))
-                        .attr("r", 1e-6)
+                        .call(exit => exit.transition(t)
+                            .attr("opacity", 0))
                         .remove()
                     )
 
@@ -513,7 +512,6 @@ export default {
                 node.on("mouseleave",scope.leaveTooltip)
                 node.call(d3.drag()
                             .on("start", function (event, d) {
-                                console.log(d);
                                 if (!event.active)
                                     simulation.alphaTarget(0.3).restart();
                                 d.fx = d.x;
@@ -544,47 +542,33 @@ export default {
                         .attr("stroke-width", function (d) {
                             return edgeWidth(d.value);
                         })
+                        .attr("stroke-opacity",1)
                         .attr("marker-end", function(d) { 
-                            //console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
                             return "url(#marker_" + (d.source + "-" + d.target) + ")"; })
                         .attr("id", function (d){
                             return d.source + "-" + d.target
                         })
-                        .attr("fill","none"),
-                        // .call(enter => enter.transition(t))
-                        // // .attr("x1", d => {
-                        // //     console.log(d.source.x)
-                        // //     d.source.x})
-                        // // .attr("y1", d => d.source.y)
-                        // // .attr("x2", d => d.target.x)
-                        // // .attr("y2", d => d.target.y)
-                        // .attr("stroke-opacity", 0),
-                    exit => exit
-                        .call(exit => exit.transition(t))
-                        // .attr("x1", d => {
-                        //     console.log(d.source.x)
-                        //     d.source.x})
-                        // .attr("y1", d => d.source.y)
-                        // .attr("x2", d => d.target.x)
-                        // .attr("y2", d => d.target.y)
+                        .attr("fill","none")
                         .attr("stroke-opacity", 0)
+                        .call(enter => enter.transition(t)
+                            .attr("stroke-opacity", 1.0)),
+                    exit => exit
+                        .call(exit => exit.transition(t)
+                            .attr("stroke-opacity", 0))
                         .remove()
                     )
-                    
-                    // .attr("ref", function (d){
-                    //     return d.source.title + "-" + d.target.title
-                    // });
-                    //.merge(link);
-                console.log(link);
+
                 // Update and restart the simulation.
                 simulation.nodes(graph.nodes);
                 simulation.force("link").links(graph.edges);
                 simulation.alpha(1).restart();
+
+                scope.nodeData = graph.nodes.target;
+                scope.linkData = graph.edges.target;
             })
 
         },
         enterTooltip(e,d){
-            console.log("enter")
             this.showHover = true
             //tooltip.style("opacity", 1)
             let data = this.hover_data[this.currentNetwork]
@@ -594,9 +578,6 @@ export default {
         moveTooltip(e,d){
 
             let tooltip = this.$refs.tooltip
-            let height = tooltip.height
-
-            console.log(height)
 
             gsap.set(tooltip, {
                 x: d.x-nodeSize(d.weight)/2,
@@ -610,45 +591,58 @@ export default {
             }
         },
         leaveTooltip(){
-            console.log("leave")
             this.showHover = false;
         },
+        node(nodeId) {
+            return this.nodeData.find(function (node) {
+                return node.id == nodeId;
+            })
+        },
+        resizeSimulation(){
+            let scope = this;
+
+            node.each(function(d) {
+                if (d.title === "start"){
+                    d.fx = scope.width/8;
+                    d.fy = scope.height/8;
+                    //this.showHover = false;
+                }
+                else if(d.title === "end"){
+                    d.fx = scope.width - scope.width/8;
+                    d.fy = scope.height - scope.height/8;
+                }
+            })
+
+            let widthScale = scope.width/9
+
+            //TODO: FORCE LINK
+            //TODO: USE HEIGHT BETTER OR IN GENERAL SPACE ON MOBILE
+            simulation
+                .force("charge", d3.forceManyBody().strength(-widthScale))
+                .force("collide", d3.forceCollide(widthScale * 1.5))
+                .force("center", d3.forceCenter(this.width / 2, this.height / 2))
+                // 0.3 is arbitrary
+                .alpha(0.3)
+                .restart()
+        }
     },
     mounted() {
-        this.height = window.innerHeight;
-        this.width = window.innerWidth  * 0.75;
         this.setupGraph();
-        window.addEventListener('resize', () => {
-            this.windowHeight = window.innerHeight
-            this.windowWidth = window.innerWidth;
-        })
     },
+    computed:{
+        viewBox: function(){
+            return '0 0 '+ this.width + ' ' + this.height;
+        },
+        heightPx: function(){
+            return this.height + "px"},
+        widthPx: function(){
+            return this.width + "px"},
+    }
 };
 </script>
 
 <style lang="scss">
 @import "@/assets/_config.scss";
-
-.svg-container {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  padding-bottom: 100%; /* aspect ratio */
-  vertical-align: top;
-  overflow: hidden;
-}
-.svg-content-responsive {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  left: 0;
-}
-
-svg .rect {
-  fill: gold;
-  stroke: steelblue;
-  stroke-width: 5px;
-}
 
 #node_labels{
     .node_label{
