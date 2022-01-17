@@ -3,7 +3,11 @@
         <section id="intro">
             <h1 class="title">Our Mobility in Knots</h1>
             <div class="text">
-                Introtext kommt hier hin.
+                Thanks to a study conducted by FHP and Universität Siegen, we were able to work with a dataset of 32 participants. They mostly are residents of a small part of northern Potsdam. Not only did they record their GPS pathways. They also collected the mode of transportation and the reason for each, very specific trip. That gave us a unique insight into a set of very privacy-sensitive yet highly interesting data points that possibly tell us more about how individual mobility works. 
+                <br><br>
+                This data was recorded in early 2021, right when the pandemic was peaking again and certain lockdown measures were in place. That's why our dataset is also a glimpse into the world of mobility during a global pandemic.
+                <br><br>
+                We asked ourselves how we can create a meaningful, rich visualization of the data while still ensuring the participants' privacy - and came up with mobility networks. But before we take a deep dive into our data, let's first go for a trial run...
             </div>
         </section>
         <section id="scrolly">
@@ -67,7 +71,7 @@
                     <div class="quote">Ende"</div>
                 </div>
             </article>
-            <D3Network class="network sticky" ref="network" :width="widthSvg" :height="height"/>
+            <D3Network class="network sticky" ref="network" :width="widthSvg" :height="heightSvg"/>
             <!-- <div class="legend">
                 <div class="sticky">
                     <div class="legend_item">
@@ -150,7 +154,13 @@ export default {
     computed:{
         heightPx: function(){return this.height *0.8 + "px"},
         paddingPx: function(){return this.height * 0.2 + "px"},
-        widthSvg: function(){return this.width *0.66}
+        widthSvg: function(){
+            console.log("width before", this.width)
+            return this.width *0.66},
+        heightSvg: function(){
+            let height = this.height - this.onvertRemToPixels(2)
+            console.log("new height - rem",height)
+            return height}
     },
     mounted() {
         this.height = window.innerHeight;
@@ -198,6 +208,9 @@ export default {
             this.height = window.innerHeight;
             this.width = window.innerWidth;
             this.$refs.network.resizeSimulation();
+        },
+        onvertRemToPixels(rem) {    
+            return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
         }
     }
 };
@@ -223,9 +236,10 @@ h1{
 }
 
 #intro{
-    width: 100vw;
+    width: 66vw;
     padding: 2rem 5vw;
     margin-bottom: 4rem;
+    margin: 0 auto;
 }
 
 #outro {
@@ -278,7 +292,7 @@ h1{
     }
 
     article{
-        width: 33vw;
+        //width: 33vw;
         position:relative;
         z-index: 1;
         pointer-events: none;

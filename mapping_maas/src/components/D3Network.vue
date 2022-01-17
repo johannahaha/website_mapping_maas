@@ -21,7 +21,7 @@ let edgeWidth, nodeSize;
 
 let default_data = {
                 car: "car",
-                bicycle: "bike",
+                bicycle: "bicycle",
                 public_transport: "public transport (bus, tram, train)",
                 start: "starting point of a journey",
                 end: "end point of a journey",
@@ -48,6 +48,7 @@ export default {
             },
             showHover:false,
             type:"",
+            hoverAmount:0,
             nodeData : [],
             linkData : [],
             isDragging:false,
@@ -236,8 +237,8 @@ export default {
                     // })
                     .each(function(d) {
                         if (d.title === "start"){
-                            d.fx = scope.width/8;
-                            d.fy = scope.height/8;
+                            d.fx = scope.width/10;
+                            d.fy = scope.height/10;
                             //this.showHover = false;
                             this.isDragging = true
                         }
@@ -587,6 +588,7 @@ export default {
             let data = this.hover_data[this.currentNetwork]
 
             this.hoverMessage = data[d.title];
+            this.hoverAmount = d.weight;
         },
         moveTooltip(e,d){
 
@@ -680,7 +682,7 @@ export default {
 }
 
 #description{
-    padding:1rem;
+    padding-top:2.5rem;
     font-family: Vollkorn;
     font-size:1.3rem;
 }
