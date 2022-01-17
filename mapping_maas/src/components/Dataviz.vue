@@ -216,8 +216,7 @@ export default {
 h1{
   font-size:2rem;
   left:0;
-  padding: 1rem 0;
-  margin-bottom: 2rem;
+  margin: 7rem 0;
   //margin-left:5vw;
   color:$light;
   font-family: Vollkorn;

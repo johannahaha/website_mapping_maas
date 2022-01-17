@@ -1,15 +1,30 @@
 <template>
-  <div id="nav">
+  <div>
     <link rel="stylesheet" 
         href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
         integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
         crossorigin="anonymous">
     <header>
-      <router-link to="/">Our Mobility in Knots</router-link>
+      <a href="/" @click="reloadPage">Our Mobility in Knots</a>
     </header>
+    <Dataviz/>
   </div>
-  <router-view/>
 </template>
+
+<script>
+import Dataviz from './components/Dataviz.vue'
+
+export default {
+  components:{
+    Dataviz
+  },
+  methods:{
+    reloadPage(){
+        window.location.reload();
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 @import "./assets/_config.scss";
@@ -30,12 +45,6 @@
   background-color:$darkgrey;
 }
 
-#nav {
-  font-family: Vollkorn;
-  font-size:1rem;
-  padding: 30px;
-}
-
 // #nav a {
 //   font-weight: bold;
 // }
@@ -49,7 +58,10 @@ header {
   display: block;
   text-align:left;
   border-radius: 1rem;
-
+  font-family: Vollkorn;
+  font-size:1.3rem;
+  margin:5vw;
+  margin-top:2rem;
 
   a{
     text-decoration: none;
