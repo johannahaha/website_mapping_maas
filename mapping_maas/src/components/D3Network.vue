@@ -367,15 +367,15 @@ export default {
             else if(step === 8){
                 this.updateNetworkData("network_person1","/json/person1graphdata.json")
             }
-            else if(step === 11){
+            else if(step === 13){
                 this.updateNetworkData("network_person3","/json/person3graphdata.json")
             }
             // else if(step === 7){
             //     this.updateNetworkData("network_person3","/json/person3graphdata.json")
             // }
-            else if(step === 14){
-                this.updateNetworkData("network_person6","/json/person6graphdata.json")
-            }
+            // else if(step === 14){
+            //     this.updateNetworkData("network_person6","/json/person6graphdata.json")
+            // }
             // else if(step ===9){
             //     this.updateNetworkData("network_person5","/json/person5graphdata.json")
             // }

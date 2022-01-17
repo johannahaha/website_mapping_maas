@@ -47,28 +47,40 @@
                     <div class="quote">This is a nine-to-five-persons mobility. Walking towards the car, driving towards work and back and occasionally doing errands in local supermarkets are the main reasons for mobility.</div>
                 </div>
                 <div class="step" data-step="10" :style="{'margin-top': heightPx}">
-                    <div class="quote">When moving away from classic car-centric mobility, things can get complicated fast.</div>
+                    <div class="quote">Here are some quotes from the conducted survey: "For me, my car is a necessary commodity that should only serve its purpose."</div>
                 </div>
                 <div class="step" data-step="11" :style="{'margin-top': heightPx}">
-                    <div class="quote">Our next participant's mobility seems to be massively influenced by the pandemic. Most days, this person barely leaves the house - only for an occasional walk during the day.</div>
+                    <div class="quote">"Due to the pandemic, I use public transport rather less and the car rather more often."</div>
                 </div>
                 <div class="step" data-step="12" :style="{'margin-top': heightPx}">
-                    <div class="quote">Other days, the home office doesn't seem to do it. The participant travels by bike to the Main Station, waits for the regional train, and then heads off to work. On their way back, they run an errand or…</div>
+                    <div class="quote">"The car is my main means of transport. I think my mobility is typical for where I live."</div>
                 </div>
                 <div class="step" data-step="13" :style="{'margin-top': heightPx}">
-                    <div class="quote">...pick someone up, maybe their kid. This kind of mobility is maybe more time-consuming because it could depend on fixed schedules of trains or the physical place you locked your bicycle, but it allows you to be flexible in your mobility without being drawn into the rush hour.</div>
+                    <div class="quote">When moving away from classic car-centric mobility, things can get complicated fast.</div>
                 </div>
                 <!-- <div class="step" data-step="13" :style="{'margin-top': heightPx}">
                     <div class="quote">You can see how the bicycle is the most used mode of mobility.</div>
                 </div> -->
                 <div class="step" data-step="14" :style="{'margin-top': heightPx}">
-                    <div class="quote">Person 6</div>
+                    <div class="quote">The participant stated in the survey: "Bicycling is my main mode of transportation and I do not own a car."</div>
                 </div>
                 <div class="step" data-step="15" :style="{'margin-top': heightPx}">
-                    <div class="quote">Person 6</div>
+                    <div class="quote">and "for me, avoiding rush hour was the biggest challenge to adapting my mobility behavior to Corona pandemic - driving less to the office was not a challenge."</div>
                 </div>
                 <div class="step" data-step="16" :style="{'margin-top': heightPx}">
-                    <div class="quote">Ende"</div>
+                    <div class="quote">Also, the participant has some wishes for their neighborhood: "there is a lack of a health food store, public playgrounds, swimming pool, recycling center, and vegetarian restaurant in my neighborhood."</div>
+                </div>
+                <div class="step" data-step="17" :style="{'margin-top': heightPx}">
+                    <div class="quote">Their mobility seems to be massively influenced by the pandemic. Most days, this person barely leaves the house - only for an occasional walk during the day.</div>
+                </div>
+                <div class="step" data-step="18" :style="{'margin-top': heightPx}">
+                    <div class="quote">Other days, the home office doesn't seem to do it. The participant travels by bike to the Main Station, waits for the regional train, and then heads off to work. On their way back, they run an errand or…</div>
+                </div>
+                <div class="step" data-step="19" :style="{'margin-top': heightPx}">
+                    <div class="quote">...pick someone up, maybe their kid. For this participant, the reason for using the bicycle is mainly the shorter travel time. This contrasts common beliefs, that this mobility is more time-consuming because it could depend on fixed schedules of trains or the physical place you locked your Bicycle.</div>
+                </div>
+                <div class="step" data-step="20" :style="{'margin-top': heightPx}">
+                    <div class="quote">If you look at the visualisation, you can see a strong correlation between bicycling and short stops and vice versa. This could be related to the fact that traffic is not optimized for bicycles, so they have to stop frequently. Even though biking is the fastest mode of transport for the participant, it could still be better.</div>
                 </div>
             </article>
             <D3Network class="network sticky" ref="network" :width="widthSvg" :height="heightSvg"/>
@@ -102,26 +114,27 @@
         <section id="outro">
             <div class="text">
                 <h3>
-                    Mobilität ist individuell 
+                    Mobility is individual
                 </h3>
                 <p>
-                    Jede:r von uns hat ihre/seine ganz persönlichen Mobilitätsvorlieben. Wie bewege ich mich im Alltag, um zwischendurch vielleicht auch schöne Momente in der Natur zu erleben? Welche Orte integriere ich in meine Routinen, weil es dort vielleicht die besten Brötchen der Stadt gibt? Wo muss ich zu welchem Zeitpunkt sein, und kann deshalb keine Minute erlauen? Diese Entscheidungen und Verbindungen sind sehr individuell und oft nur schwer erfassbar. Mit diesen Befragungsdaten konnten jedoch einen Einblick in die individuelle Mobilität und die einzigartigen Beweggründe der Teilnehmer:innen bekommen.
+                    Each of us has his or her personal mobility preferences. How do I move around in everyday life, perhaps to experience beautiful moments in nature in between? Which shops do I integrate into my routines because they might have the best bread rolls in town? Where do I have to be at what time, and therefore can't spare a minute? These decisions and connections are highly individual and often difficult to capture. However, with this survey data, we were able to gain insight into individual mobility and the unique motivations of the participants.
                 </p>
                 </div>    
             <div class="text">
                 <h3>
-                    Mobilität ist sensibel
+                    Mobility is sensitive
                 </h3>
                 <p>
-                Jeder Ziel- und Endpunkt, jede Umstiegsuhrzeit und jeder Verkehrsmittelwechsel verrät etwas über die einzelne Person. Mit den Erkenntnissen, die wir zu moderner Überwachung durch private Firmen wie auch Staaten haben zeigt sich die Sprengkraft der Daten, die Anbieter wie Google, Facebook oder E-Scooter-Anbieter sammeln. Diese Daten sind besonders wertvoll und sollten auch besonders geschützt werden - dies erfordert spezielle Maßnahmen wie ein Verbot zur Nutzung von Daten für Werbezwecke bei der Ausschreibung von MAAS-Stationen.
+                    Every startpoint and destination, every transferring time, and every change of means of transport reveal something about the individual person. Working with this kind of data made us more aware of what can possibly be done with all those data points and also how we can visualize them without attacking the privacy of participants in the study. That's why we choose to look at networks and the interconnectedness of means of mobility.
                 </p>
             </div>  
             <div class="text">
                 <h3>
-                    Mobilität ist plural
+                    Mobility is plural
                 </h3>
                 <p>
-                Unser individuelles Mobilitätsverhalten reagiert auf verschiedene Faktoren: Das Angebot an verschiedenen Verkehrsmitteln, die Verfügbarkeit und Taking des öffentlichen Nahverkehrs, unser individuelles Zeitbudget und, wie in den Daten gut zu sehen ist, die aktuelle (pandemische) Weltsituation. Mobilität bleibt jedoch niemals eindimensional: Sie findet fast immer zwischen Bewegungsarten, zwischen unterschiedlichsten und in Kombination von miteinander ideal funktionierenden Verkehrsmitteln statt. Diese Verbindungen von Verkehrsmitteln geben uns Anlass zur genauen Betrachtung: Welcher Umstieg fühlt sich gut an, welche Wartezeit nervig? Wie viele Leihfahrräder sind genug, wenn morgens alle zur Lohnarbeit fahren müssen?
+                Our mobility behavior responds to various factors: the range of different means of transport, the availability and quality of public transport, our time budget, and, as can be seen well in the data, the current (pandemic) world situation.
+                Mobility, however, never remains one-dimensional: Being mobile in a city means moving between modes of movement, looking for a combination of modes that work well together and suit your individual needs. These connections of means of transport give us reason to take a close look: which transfer feels good, which waiting time annoying? How many rental bicycles are enough when everyone has to go to work in the morning?    
                 </p>
             </div>
         </section>
@@ -188,7 +201,7 @@ export default {
             gsap.set(step.element,{opacity:0})
             gsap.to(step.element,{opacity:1.0,duration:3})
 
-            if([0,3,5,8,11,14].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
+            if([0,3,5,8,13].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }
