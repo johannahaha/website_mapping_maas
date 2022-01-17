@@ -29,51 +29,60 @@
             <article>
                 <div class="step" data-step="0">
                     <!-- <img class="left" :src="img_path" /> -->
-                    <div class="quote" :style="{'margin-top': '100px'}">Hier siehst du eine solche Vernetzung. Dieses Netzwerk bedeutet, dass die Person zu Fuß vom Startpunkt zum Endpunkt gelaufen ist.</div>
+                    <div class="quote" :style="{'margin-top': '100px'}">This is the simplest possible mobility, as it only consists one mode of mobility: Walking.</div>
                 </div>
                 <div class="step" data-step="1" :style="{'margin-top': heightPx}">
-                    <div class="quote">Je öfter die Person eine Vernetzungslinie verwendet hat, desto dicker ist sie. Hier ist die Person als öfter zum Start zum Endpunkt gegangen.</div>
+                    <div class="quote">Just follow the arrow that begins at the knot “Start”. That will lead you to the mobility mode the person has chosen. From this point, you will get to the end of the path.</div>
                 </div>
 
                 <div class="step" data-step="2" :style="{'margin-top': heightPx}">
-                    <div class="quote">Noch sagt das Netzwerk wenig aus. Spannend wird es erst, wenn man weitere Mobilitätsarten dazunimmt.</div>
+                    <div class="quote">As we can see, this person is starting and ending walks - nothing more.</div>
                 </div>
                 <div class="step" data-step="3" :style="{'margin-top': heightPx}">
-                    <div class="quote">"Hier sieht man zusätzlich das Auto. Die Person ist also oft erst gelaufen, dann Auto gefahren, und ist dann wieder gelaufen."</div>
+                    <div class="quote">The more a participant used a specific switch between mobility modes, the thicker the connection between the knots gets.</div>
                 </div>
                 <div class="step" data-step="4" :style="{'margin-top': heightPx}">
-                    <div class="quote">"Dieses Muster lässt sich leicht dadurch erklären, dass das die Person zunächst zum Auto läuft, dann Richtung Zielort fährt, das Auto dort parkt und dann zum Zielort läuft."</div>
+                    <div class="quote">There is no information about the time or the place of the mobility. That way, we ensure the privacy of each participant while still establishing a meaningful visualization.</div>
                 </div>
                 <transition name="fade">
                     <div class="step" data-step="5" :style="{'margin-top': heightPx}">
-                        <div class="quote">"Mobility is still relevant."</div>
+                        <div class="quote">Lets make it a little more complicated and see what happens. This person walks and has a car, so two different modes of mobility. Sometimes the person does both, maybe taking a walk after a longer drive or simply having to walk to find where they have left the car before.</div>
                     </div>
                 </transition>
                 <div class="step" data-step="6" :style="{'margin-top': heightPx}">
-                    <div class="quote">Dieses Netzwerk ist "Freizeit"</div>
+                    <div class="quote">Driving a car is closely linked to walking in this example - and wouldn't be possible without it. The explanation is straightforward: a person must walk to get to the car.</div>
                 </div>
                 <div class="step" data-step="7" :style="{'margin-top': heightPx}">
-                    <div class="quote">Dieses Netzwerk ist "zur arbeit gehen"</div>
+                    <div class="quote">This close link will get more interesting later, when we see how public transportation and individual supporting mobility accounts for a flexible and very individual model of mobility that allows to be spontanious.</div>
                 </div>
                 <div class="step" data-step="8" :style="{'margin-top': heightPx}">
-                    <div class="quote">Dieses Netzwerk ist "Einkaufen, Besorgung".</div>
+                    <div class="quote">This is the first graph representing the mobility of one of the participants during the lockdown of march 2021. We can't see how the participants mobility was before the pandemic, but we can clearly identify a focus on individual mobility.</div>
                 </div>
                 <div class="step" data-step="9" :style="{'margin-top': heightPx}">
-                    <div class="quote">Dieses Netzwerk ist "jemanden bringen, abholen"</div>
+                    <div class="quote">This is a nine-to-five-persons mobility. Walking towards the car, driving towards work and back and occasionally doing errands in local supermarkets are the main reasons for mobility.</div>
                 </div>
                 <div class="step" data-step="10" :style="{'margin-top': heightPx}">
-                    <div class="quote">Dieses Netzwerk ist "nach hause"</div>
+                    <div class="quote">When moving away from classic car-centric mobility, things can get complicated fast.</div>
                 </div>
                 <div class="step" data-step="11" :style="{'margin-top': heightPx}">
-                    <div class="quote">Mobilität</div>
+                    <div class="quote">Our next participant's mobility seems to be massively influenced by the pandemic. Most days, this person barely leaves the house - only for an occasional walk during the day.</div>
                 </div>
                 <div class="step" data-step="12" :style="{'margin-top': heightPx}">
-                    <div class="quote">Hier ist die nächste Person</div>
+                    <div class="quote">Other days, the home office doesn't seem to do it. The participant travels by bike to the Main Station, waits for the regional train, and then heads off to work. On their way back, they run an errand or…</div>
                 </div>
                 <div class="step" data-step="13" :style="{'margin-top': heightPx}">
-                    <div class="quote">Mobilität"</div>
+                    <div class="quote">...pick someone up, maybe their kid. This kind of mobility is maybe more time-consuming because it could depend on fixed schedules of trains or the physical place you locked your bicycle, but it allows you to be flexible in your mobility without being drawn into the rush hour.</div>
                 </div>
+                <!-- <div class="step" data-step="13" :style="{'margin-top': heightPx}">
+                    <div class="quote">You can see how the bicycle is the most used mode of mobility.</div>
+                </div> -->
                 <div class="step" data-step="14" :style="{'margin-top': heightPx}">
+                    <div class="quote">Person 6</div>
+                </div>
+                <div class="step" data-step="15" :style="{'margin-top': heightPx}">
+                    <div class="quote">Person 6</div>
+                </div>
+                <div class="step" data-step="16" :style="{'margin-top': heightPx}">
                     <div class="quote">Ende"</div>
                 </div>
             </article>
@@ -156,8 +165,8 @@ export default {
         };
     },
     computed:{
-        heightPx: function(){return this.height *0.8 + "px"},
-        widthSvg: function(){return this.width *0.75}
+        heightPx: function(){return this.height + "px"},
+        widthSvg: function(){return this.width *0.66}
     },
     mounted() {
         this.height = window.innerHeight;
@@ -185,7 +194,7 @@ export default {
             gsap.set(step.element,{opacity:0})
             gsap.to(step.element,{opacity:1.0,duration:2,ease:"power3"})
 
-            if([0,1,4,6,10,12].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
+            if([0,3,5,8,11,14].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
                 console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }
@@ -292,7 +301,7 @@ h1{
     }
 
     article{
-        width: 24vw;
+        width: 33vw;
         position:relative;
         z-index: 1;
         pointer-events: none;
@@ -301,19 +310,6 @@ h1{
 
     .text {
         z-index:2;
-    }
-
-    img {
-        width: 60vw;
-        margin: 5vw;
-
-        &.left {
-            align-self: flex-start;
-        }
-
-        &.right {
-            align-self: flex-end;
-        }
     }
 
     .step{

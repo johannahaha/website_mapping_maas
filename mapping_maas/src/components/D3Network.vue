@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>Aktuell zu sehen: {{this.currentNetwork}}</h3>
+        <div id="description">{{this.currentDescription}}</div>
         <div id="tooltip" v-show="showHover" ref="tooltip">
             {{hoverMessage}}
         </div>
@@ -37,6 +37,15 @@ export default {
             currentNetwork: "network_person1",
             currentPath: "/json/intro1.json",
             hoverMessage: "",
+            currentDescription:"",
+            description: {
+                network_intro1: "Introduction",
+                network_intro2: "Introduction",
+                network_intro3: "Introduction",
+                network_person1: "Driving to Work - Mobility of participant 1 in March 2021 during lockdown",
+                network_person3: "Homeoffice & Bicycle - Mobility of participant 2 in March 2021 during lockdown",
+                network_person6: "Mobility of participant 3  in March 2021 during lockdown"
+            },
             showHover:false,
             type:"",
             nodeData : [],
@@ -45,6 +54,7 @@ export default {
             hover_data: {
                 network_intro1: default_data,
                 network_intro2: default_data,
+                network_intro3: default_data,
                 network_person1: default_data,
                 network_person3: default_data,
                 network_person6: default_data,
@@ -121,6 +131,7 @@ export default {
                 //scope.nodeData = graph.nodes;
                 scope.linkData = graph.edges.target;
                 scope.currentNetwork = "network_intro1";
+                scope.currentDescription = scope.description["network_intro1"]
 
                 let widthScale = scope.width/11
 
@@ -346,22 +357,22 @@ export default {
             if(step === 0){
                 this.updateNetworkData("network_intro1","/json/intro1.json")
             }
-            else if(step === 1){
+            else if(step === 3){
                 this.updateNetworkData("network_intro2","/json/intro2.json")
             }
-            else if(step === 4){
+            else if(step === 5){
                 this.updateNetworkData("network_intro3","/json/intro3.json")
             }
-            else if(step === 6){
+            else if(step === 8){
                 this.updateNetworkData("network_person1","/json/person1graphdata.json")
             }
-            else if(step === 10){
+            else if(step === 11){
                 this.updateNetworkData("network_person3","/json/person3graphdata.json")
             }
             // else if(step === 7){
             //     this.updateNetworkData("network_person3","/json/person3graphdata.json")
             // }
-            else if(step === 12){
+            else if(step === 14){
                 this.updateNetworkData("network_person6","/json/person6graphdata.json")
             }
             // else if(step ===9){
@@ -395,6 +406,8 @@ export default {
             if(this.currentNetwork !== updatedNetwork){
                 this.currentNetwork = updatedNetwork
                 this.currentPath = updatedPath
+                this.currentDescription = this.description[this.currentNetwork]
+                console.log(this.currentDescription)
             }
 
         },
@@ -664,6 +677,11 @@ export default {
     h3{
         font-size:1rem;
     }
+}
+
+#description{
+    padding:0.5rem;
+    font-weight: bold;
 }
 
 </style>
