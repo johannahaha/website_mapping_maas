@@ -20,13 +20,13 @@ let edgeWidth, nodeSize;
 //let svgDom;
 
 let default_data = {
-                car: "Auto",
-                bicycle: "Fahrrad",
-                public_transport: "Öffentliche Verkehrsmittel (Bus, Tram, Bahn)",
-                start: "Startpunkt einer Fahrt",
-                end: "Endpunkt einer Fahrt",
-                stationary: "kurzer Zwischenstopp",
-                walk:"Zu Fuß"
+                car: "car",
+                bicycle: "bike",
+                public_transport: "public transport (bus, tram, train)",
+                start: "starting point of a journey",
+                end: "end point of a journey",
+                stationary: "short stop in between",
+                walk:"walking"
             }
 
 export default {
@@ -680,8 +680,9 @@ export default {
 }
 
 #description{
-    padding:0.5rem;
-    font-weight: bold;
+    padding:1rem;
+    font-family: Vollkorn;
+    font-size:1.3rem;
 }
 
 </style>
