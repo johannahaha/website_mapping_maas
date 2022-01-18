@@ -165,8 +165,8 @@ export default {
         };
     },
     computed:{
-        heightPx: function(){return this.height *0.8 + "px"},
-        paddingPx: function(){return this.height * 0.2 + "px"},
+        heightPx: function(){return this.height * 0.05 + "px"},
+        paddingPx: function(){return this.height * 0.1 + "px"},
         widthSvg: function(){
             console.log("width before", this.width)
             return this.width *0.66},
@@ -181,7 +181,7 @@ export default {
         this.scroller
             .setup({
                 step: "#scrolly article .step",
-                offset: 0.8,
+                offset: 0.6,
                 progress: true,
                 debug: false,
             })
@@ -330,7 +330,7 @@ h1{
     }
 
     .quote {
-        padding: 30vw 5vw;
+        padding: 15vw 5vw;
         //padding-top:200px;
         //margin-top:100%;
         //width: 100%
