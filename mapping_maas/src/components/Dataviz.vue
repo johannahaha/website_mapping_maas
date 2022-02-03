@@ -12,75 +12,17 @@
         </section>
         <section id="scrolly">
             <article>
-                <div class="step" data-step="0">
-                    <!-- <img class="left" :src="img_path" /> -->
-                    <div class="quote" :style="{'margin-top': heightPx}">This is the simplest possible mobility, as it only consists one mode of mobility: Walking.</div>
+                <div v-for="text in intro" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
+                    <div class="quote" v-if="isEnglish">{{text.eng}}</div>
+                    <div class="quote" v-else>{{text.de}}</div>
                 </div>
-                <div class="step" data-step="1" :style="{'margin-top': heightPx}">
-                    <div class="quote">Just follow the arrow that begins at the knot “Start”. That will lead you to the mobility mode the person has chosen. From this point, you will get to the end of the path.</div>
+                <div v-for="text in network_person1" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
+                    <div class="quote" v-if="isEnglish">{{text.eng}}</div>
+                    <div class="quote" v-else>{{text.de}}</div>
                 </div>
-
-                <div class="step" data-step="2" :style="{'margin-top': heightPx}">
-                    <div class="quote">As we can see, this person is starting and ending walks - nothing more.</div>
-                </div>
-                <div class="step" data-step="3" :style="{'margin-top': heightPx}">
-                    <div class="quote">The more a participant used a specific switch between mobility modes, the thicker the connection between the knots gets.</div>
-                </div>
-                <div class="step" data-step="4" :style="{'margin-top': heightPx}">
-                    <div class="quote">There is no information about the time or the place of the mobility. That way, we ensure the privacy of each participant while still establishing a meaningful visualization.</div>
-                </div>
-                <transition name="fade">
-                    <div class="step" data-step="5" :style="{'margin-top': heightPx}">
-                        <div class="quote">Lets make it a little more complicated and see what happens. This person walks and has a car, so two different modes of mobility. Sometimes the person does both, maybe taking a walk after a longer drive or simply having to walk to find where they have left the car before.</div>
-                    </div>
-                </transition>
-                <div class="step" data-step="6" :style="{'margin-top': heightPx}">
-                    <div class="quote">Driving a car is closely linked to walking in this example - and wouldn't be possible without it. The explanation is straightforward: a person must walk to get to the car.</div>
-                </div>
-                <div class="step" data-step="7" :style="{'margin-top': heightPx}">
-                    <div class="quote">This close link will get more interesting later, when we see how public transportation and individual supporting mobility accounts for a flexible and very individual model of mobility that allows to be spontanious.</div>
-                </div>
-                <div class="step" data-step="8" :style="{'margin-top': heightPx}">
-                    <div class="quote">This is the first graph representing the mobility of one of the participants during the lockdown of march 2021. We can't see how the participants mobility was before the pandemic, but we can clearly identify a focus on individual mobility.</div>
-                </div>
-                <div class="step" data-step="9" :style="{'margin-top': heightPx}">
-                    <div class="quote">This is a nine-to-five-persons mobility. Walking towards the car, driving towards work and back and occasionally doing errands in local supermarkets are the main reasons for mobility.</div>
-                </div>
-                <div class="step" data-step="10" :style="{'margin-top': heightPx}">
-                    <div class="quote">Here are some quotes from the conducted survey: "For me, my car is a necessary commodity that should only serve its purpose."</div>
-                </div>
-                <div class="step" data-step="11" :style="{'margin-top': heightPx}">
-                    <div class="quote">"Due to the pandemic, I use public transport rather less and the car rather more often."</div>
-                </div>
-                <div class="step" data-step="12" :style="{'margin-top': heightPx}">
-                    <div class="quote">"The car is my main means of transport. I think my mobility is typical for where I live."</div>
-                </div>
-                <div class="step" data-step="13" :style="{'margin-top': heightPx}">
-                    <div class="quote">When moving away from classic car-centric mobility, things can get complicated fast.</div>
-                </div>
-                <!-- <div class="step" data-step="13" :style="{'margin-top': heightPx}">
-                    <div class="quote">You can see how the bicycle is the most used mode of mobility.</div>
-                </div> -->
-                <div class="step" data-step="14" :style="{'margin-top': heightPx}">
-                    <div class="quote">The participant stated in the survey: "Bicycling is my main mode of transportation and I do not own a car."</div>
-                </div>
-                <div class="step" data-step="15" :style="{'margin-top': heightPx}">
-                    <div class="quote">and "for me, avoiding rush hour was the biggest challenge to adapting my mobility behavior to Corona pandemic - driving less to the office was not a challenge."</div>
-                </div>
-                <div class="step" data-step="16" :style="{'margin-top': heightPx}">
-                    <div class="quote">Also, the participant has some wishes for their neighborhood: "there is a lack of a health food store, public playgrounds, swimming pool, recycling center, and vegetarian restaurant in my neighborhood."</div>
-                </div>
-                <div class="step" data-step="17" :style="{'margin-top': heightPx}">
-                    <div class="quote">Their mobility seems to be massively influenced by the pandemic. Most days, this person barely leaves the house - only for an occasional walk during the day.</div>
-                </div>
-                <div class="step" data-step="18" :style="{'margin-top': heightPx}">
-                    <div class="quote">Other days, the home office doesn't seem to do it. The participant travels by bike to the Main Station, waits for the regional train, and then heads off to work. On their way back, they run an errand or…</div>
-                </div>
-                <div class="step" data-step="19" :style="{'margin-top': heightPx}">
-                    <div class="quote">...pick someone up, maybe their kid. For this participant, the reason for using the bicycle is mainly the shorter travel time. This contrasts common beliefs, that this mobility is more time-consuming because it could depend on fixed schedules of trains or the physical place you locked your Bicycle.</div>
-                </div>
-                <div class="step" data-step="20" :style="{'margin-top': heightPx}">
-                    <div class="quote">If you look at the visualisation, you can see a strong correlation between bicycling and short stops and vice versa. This could be related to the fact that traffic is not optimized for bicycles, so they have to stop frequently. Even though biking is the fastest mode of transport for the participant, it could still be better.</div>
+                <div v-for="text in network_person2" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
+                    <div class="quote" v-if="isEnglish">{{text.eng}}</div>
+                    <div class="quote" v-else>{{text.de}}</div>
                 </div>
             </article>
             <D3Network class="network sticky" ref="network" :width="widthSvg" :height="heightSvg"/>
@@ -154,6 +96,11 @@ export default {
     components: {
         D3Network
     },
+    props:{
+        isEnglish:{
+            type:Boolean
+        }
+    },
     data() {
         return {
             scroller: scrollama(),
@@ -161,19 +108,47 @@ export default {
             progress: 0,
             height:600,
             width:600,
-            lastStep:null
+            lastStep:null,
+            //scrollingText:{
+            intro: {
+                step0:{id:0,eng:"This is the simplest possible mobility, as it only consists one mode of mobility: Walking.",de:"hi"},
+                step1:{id:1,eng:"Just follow the arrow that begins at the knot “Start”. That will lead you to the mobility mode the person has chosen. From this point, you will get to the end of the path.",de:"hi"},
+                step2:{id:2,eng:"As we can see, this person is starting and ending walks - nothing more.",de:"hi"},
+                step3:{id:3,eng:"The more a participant used a specific switch between mobility modes, the thicker the connection between the knots gets.",de:"hi"},
+                step4:{id:4,eng:"There is no information about the time or the place of the mobility. That way, we ensure the privacy of each participant while still establishing a meaningful visualization.",de:"hi"},
+                step5:{id:5,eng:"Lets make it a little more complicated and see what happens. This person walks and has a car, so two different modes of mobility. Sometimes the person does both, maybe taking a walk after a longer drive or simply having to walk to find where they have left the car before.",de:"hi"},
+                step6:{id:6,eng:"Driving a car is closely linked to walking in this example - and wouldn't be possible without it. The explanation is straightforward: a person must walk to get to the car.",de:"hi"},
+                step7:{id:7,eng:"This close link will get more interesting later, when we see how public transportation and individual supporting mobility accounts for a flexible and very individual model of mobility that allows to be spontanious.",de:"hi"}
+            },
+            network_person1: {
+                step8:{id:8,eng:"This is the first graph representing the mobility of one of the participants during the lockdown of march 2021. We can't see how the participants mobility was before the pandemic, but we can clearly identify a focus on individual mobility.",de:"hi"},
+                step9:{id:9,eng:"This is a nine-to-five-persons mobility. Walking towards the car, driving towards work and back and occasionally doing errands in local supermarkets are the main reasons for mobility.",de:"hi"},
+                step10:{id:10,eng:'Here are some quotes from the conducted survey: "For me, my car is a necessary commodity that should only serve its purpose."',de:"hi"},
+                step11:{id:11,eng:'"Due to the pandemic, I use public transport rather less and the car rather more often."',de:"hi"},
+                step12:{id:12,eng:'"The car is my main means of transport. I think my mobility is typical for where I live."',de:"hi"},
+            },
+            network_person2:{
+                step13:{id:13,eng:"When moving away from classic car-centric mobility, things can get complicated fast.",de:"hi"},
+                step14:{id:14,eng:'The participant stated in the survey: "Bicycling is my main mode of transportation and I do not own a car."',de:"hi"},
+                step15:{id:15,eng:'and "for me, avoiding rush hour was the biggest challenge to adapting my mobility behavior to Corona pandemic - driving less to the office was not a challenge."',de:"hi"},
+                step16:{id:16,eng:'>Also, the participant has some wishes for their neighborhood: "there is a lack of a health food store, public playgrounds, swimming pool, recycling center, and vegetarian restaurant in my neighborhood."',de:"hi"},
+                step17:{id:17,eng:"Their mobility seems to be massively influenced by the pandemic. Most days, this person barely leaves the house - only for an occasional walk during the day.",de:"hi"},
+                step18:{id:18,eng:"Other days, the home office doesn't seem to do it. The participant travels by bike to the Main Station, waits for the regional train, and then heads off to work. On their way back, they run an errand or…",de:"hi"},
+                step19:{id:19,eng:"...pick someone up, maybe their kid. For this participant, the reason for using the bicycle is mainly the shorter travel time. This contrasts common beliefs, that this mobility is more time-consuming because it could depend on fixed schedules of trains or the physical place you locked your Bicycle.",de:"hi"},
+                step20:{id:20,eng:"If you look at the visualisation, you can see a strong correlation between bicycling and short stops and vice versa. This could be related to the fact that traffic is not optimized for bicycles, so they have to stop frequently. Even though biking is the fastest mode of transport for the participant, it could still be better.",de:"hi"}
+            }
+            //}
         };
     },
     computed:{
         heightPx: function(){return this.height * 0.05 + "px"},
         paddingPx: function(){return this.height * 0.1 + "px"},
         widthSvg: function(){
-            console.log("width before", this.width)
             return this.width *0.66},
         heightSvg: function(){
             let height = this.height - this.onvertRemToPixels(2)
-            console.log("new height - rem",height)
-            return height}
+            return height
+        }
     },
     mounted() {
         this.height = window.innerHeight;
@@ -201,14 +176,13 @@ export default {
             gsap.set(step.element,{opacity:0})
             gsap.to(step.element,{opacity:1.0,duration:3})
 
+            //TODO: scrolling up 
             if([0,3,5,8,13].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
-                console.log("lets update graph")
                 this.$refs.network.updateGraph(this.step)
             }
 
         },
         onProgress(step) {
-            // console.log('progress', step)
             this.step = step.index;
             this.progress = step.progress;
         },

@@ -408,7 +408,6 @@ export default {
                 this.currentNetwork = updatedNetwork
                 this.currentPath = updatedPath
                 this.currentDescription = this.description[this.currentNetwork]
-                console.log(this.currentDescription)
             }
 
         },
