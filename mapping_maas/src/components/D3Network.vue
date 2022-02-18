@@ -72,7 +72,50 @@ export default {
 
             let svg = d3.select("#d3-network").select("svg");
             let scope = this;
+<<<<<<< Updated upstream
 
+=======
+
+            //COLORS
+            colorBasics = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#333","#eee"])
+                .interpolate(d3.interpolateHsl)
+
+            colorWalk = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#598DB3","#80CAFF"])
+                .interpolate(d3.interpolateHsl)
+            
+            colorCar = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#B3B3B3","#fff"])
+                .interpolate(d3.interpolateHsl)
+
+            colorPublicTransport = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#6159B3","#8A80FF"])
+                .interpolate(d3.interpolateHsl)
+            
+            colorBicycle = d3.scaleLinear()
+                .domain([1,80])
+                .range(["#74B359","#A6FF80"])
+                .interpolate(d3.interpolateHsl)
+
+            
+            //SCALES
+            edgeWidth = d3.scaleLinear()
+                .domain([1, 80])
+                .range([3, 30]);
+            
+            nodeSize = d3.scaleLinear()
+                .domain([10,120])
+                .range([15,30])
+                //.range([40, 70]);
+    
+            
+            //SVG
+>>>>>>> Stashed changes
             if (svg.empty()) {
                 svg = d3
                     .select("#d3-network")
@@ -81,8 +124,22 @@ export default {
                     .attr("height", this.height);
             }
 
+<<<<<<< Updated upstream
             d3.json("/json/intro1.json").then(function (graph) {
                 console.log("loaded data");
+=======
+
+            //LOAD JSON
+            d3.json(this.currentPath).then(function (graph) {
+
+                scope.nodeData = d3.map(graph.nodes, function(d) {
+                    return d.title;
+                });
+
+
+                //scope.nodeData = graph.nodes;
+                scope.linkData = graph.edges.target;
+>>>>>>> Stashed changes
                 scope.currentNetwork = "network_intro1";
 
 
@@ -126,16 +183,21 @@ export default {
                     .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
                     .attr("markerUnits","userSpaceOnUse")
                     .attr("orient", "auto")
+<<<<<<< Updated upstream
                     .attr("fill", d=> {return d.color})
                     //.attr("fill", "#004e64")
+=======
+                    .attr("fill", d=> {
+                        return scope.getColor(d.source.title,d.target.title,d.value)
+                        //return d.color
+                    })
+>>>>>>> Stashed changes
                     .append("path")
                     .attr("d", "M0,-5L10,0L0,5")
                     //.merge(marker);
 
                  console.log(JSON.parse(JSON.stringify(marker)));
 
-                // We create a <line> SVG element for each link
-                // in the graph.
                 link = svg.append("g")
                     //.attr("transform",translate)
                     .attr("id","paths")
@@ -144,8 +206,14 @@ export default {
                     .enter()
                     .append("path")
                     .attr("class", "path")
+<<<<<<< Updated upstream
                     .attr("stroke", function (d) {
                         return d.source.color;
+=======
+                    .attr('stroke',function(d) { 
+                        return scope.getColor(d.source.title,d.target.title,40)
+                    // return d.source.color;
+>>>>>>> Stashed changes
                     })
                     .attr("stroke-width", function (d) {
                         return d.value * scope.edgeScale;
@@ -286,6 +354,7 @@ export default {
             return "translate(" + d.x + "," + d.y + ")";
         },
         getIcon(title){
+<<<<<<< Updated upstream
             if(title in this.iconPaths){
                 console.log(title, "is in icons");
                 return this.iconPaths[title]
@@ -293,6 +362,10 @@ export default {
             else{
                 return this.iconPaths["car"]
             }
+=======
+            let path = "/img/" + title + ".svg"
+            return path
+>>>>>>> Stashed changes
         },
         onTick(){
             try{
@@ -378,6 +451,7 @@ export default {
                 this.currentNetwork = "network_einkaufen"
                 path = "/json/einkaufengraphdata.json"
             }
+<<<<<<< Updated upstream
             else if(step === 13){
                 this.currentNetwork = "network_jemanden_holen_bringen"
                 path = "/json/bringengraphdata.json"
@@ -385,14 +459,37 @@ export default {
             else if(step === 14){
                 this.currentNetwork = "network_nach_hause"
                 path = "/json/nach_hausegraphdata.json"
+=======
+
+        },
+        getMarkerLength(size){
+            return Math.sqrt(size**2 + size**2)
+        },
+        getColor(title,target,value){
+            if(title === "car"){
+                return colorCar(value);
+            } 
+            else if(title=== "bicycle"){
+                return colorBicycle(value);
+            } 
+            else if(title === "walk"){
+                return colorWalk(value);
+>>>>>>> Stashed changes
             }
             else{
                 this.currentNetwork = "person1"
                 path = "/json/person1graphdata.json"
             }
+<<<<<<< Updated upstream
             return path;
 
 
+=======
+            else if(title ==="stationary" || title ==="start"){
+                return this.getColor(target,target,value)
+            }
+            return colorBasics(value); //das ist dann nur noch für stationary zum ende
+>>>>>>> Stashed changes
         },
         updateGraph(step){
             //let svg = d3.select("#d3-network").select("svg");
@@ -424,7 +521,20 @@ export default {
                         update => update
                             .attr("markerWidth", d=> {
                                 return scope.marker_size + d.value/2})
+<<<<<<< Updated upstream
                             .attr("markerHeight", d=> {return scope.marker_size + d.value/2}))
+=======
+                            .attr("markerHeight", d=> {
+                                return scope.marker_size + d.value/2}))
+                            .attr("fill", (d)=> {
+                                return scope.getColor(d.source,d.target,d.value)
+                            //return d.color
+                            })
+                            .attr("opacity", 0)
+                            .call(update => update.transition(t)
+                                .attr("opacity", 1.0)),
+                        exit => exit.remove()
+>>>>>>> Stashed changes
                     .merge(marker)
                     .attr("markerWidth", d=> {
                             return scope.marker_size + d.value/2})
@@ -490,6 +600,7 @@ export default {
 
                 // Apply the general update pattern to the links.
                 link = link.data(graph.edges, function(d) { return d.source + "-" + d.target; });
+<<<<<<< Updated upstream
                 link.exit().remove();
                 link = link.enter()
                     .append("path")
@@ -512,6 +623,36 @@ export default {
                     // });
                     //.merge(link);
                 console.log(link);
+=======
+
+                link = link.join(
+                    enter => enter
+                        .append("path")
+                        .attr('stroke',function(d) { 
+                            //return d.color
+                            return scope.getColor(d.source,d.target,d.value)
+                        })
+        
+                        .attr("stroke-width", function (d) {
+                            return edgeWidth(d.value);
+                        })
+                        .attr("stroke-opacity",1)
+                        .attr("marker-end", function(d) { 
+                            return "url(#marker_" + (d.source + "-" + d.target) + ")"; })
+                        .attr("id", function (d){
+                            return d.source + "-" + d.target
+                        })
+                        .attr("fill","none")
+                        .attr("stroke-opacity", 0)
+                        .call(enter => enter.transition(t)
+                            .attr("stroke-opacity", 1.0)),
+                    exit => exit
+                        .call(exit => exit.transition(t)
+                            .attr("stroke-opacity", 0))
+                        .remove()
+                    )
+
+>>>>>>> Stashed changes
                 // Update and restart the simulation.
                 simulation.nodes(graph.nodes);
                 simulation.force("link").links(graph.edges);
