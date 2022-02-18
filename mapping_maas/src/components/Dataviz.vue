@@ -24,6 +24,22 @@
                     <div class="quote" v-if="isEnglish">{{text.eng}}</div>
                     <div class="quote" v-else>{{text.de}}</div>
                 </div>
+                <div v-for="text in network_person3" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
+                    <div class="quote" v-if="isEnglish">{{text.eng}}</div>
+                    <div class="quote" v-else>{{text.de}}</div>
+                </div>
+                <div v-for="text in network_person4" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
+                    <div class="quote" v-if="isEnglish">{{text.eng}}</div>
+                    <div class="quote" v-else>{{text.de}}</div>
+                </div>
+                <div v-for="text in network_person5" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
+                    <div class="quote" v-if="isEnglish">{{text.eng}}</div>
+                    <div class="quote" v-else>{{text.de}}</div>
+                </div>
+                <div v-for="text in network_person6" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
+                    <div class="quote" v-if="isEnglish">{{text.eng}}</div>
+                    <div class="quote" v-else>{{text.de}}</div>
+                </div>
             </article>
             <D3Network class="network sticky" ref="network" :width="widthSvg" :height="heightSvg"/>
             <!-- <div class="legend">
@@ -136,6 +152,18 @@ export default {
                 step18:{id:18,eng:"Other days, the home office doesn't seem to do it. The participant travels by bike to the Main Station, waits for the regional train, and then heads off to work. On their way back, they run an errand or…",de:"hi"},
                 step19:{id:19,eng:"...pick someone up, maybe their kid. For this participant, the reason for using the bicycle is mainly the shorter travel time. This contrasts common beliefs, that this mobility is more time-consuming because it could depend on fixed schedules of trains or the physical place you locked your Bicycle.",de:"hi"},
                 step20:{id:20,eng:"If you look at the visualisation, you can see a strong correlation between bicycling and short stops and vice versa. This could be related to the fact that traffic is not optimized for bicycles, so they have to stop frequently. Even though biking is the fastest mode of transport for the participant, it could still be better.",de:"hi"}
+            },
+            network_person3:{
+                step21:{id:21,eng:"person 3",de:"person3"}
+            },
+            network_person4:{
+                step22:{id:22,eng:"person 4",de:"person4"}
+            },
+            network_person5:{
+                step23:{id:23,eng:"person 5",de:"person5"}
+            },
+            network_person6:{
+                step24:{id:24,eng:"person 6",de:"person6"}
             }
             //}
         };
@@ -176,10 +204,17 @@ export default {
             gsap.set(step.element,{opacity:0})
             gsap.to(step.element,{opacity:1.0,duration:3})
 
-            //TODO: scrolling up 
-            if([0,3,5,8,13].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
+            let stepList = [0,3,5,8,13,21,22,23,24]
+            
+            console.log("step: ",step.index)
+            if(step.direction === "down" && stepList.includes(this.step)){
                 this.$refs.network.updateGraph(this.step)
             }
+            else if(step.direction === "up" && stepList.includes(this.step+1)){
+                let index = stepList.indexOf(this.step+1) - 1
+                this.$refs.network.updateGraph(stepList[index])
+            }
+            
 
         },
         onProgress(step) {

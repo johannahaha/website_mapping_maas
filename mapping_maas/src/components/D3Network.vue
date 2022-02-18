@@ -42,9 +42,12 @@ export default {
                 network_intro1: "Introduction",
                 network_intro2: "Introduction",
                 network_intro3: "Introduction",
-                network_person1: "Driving to Work - Mobility of participant 1 in March 2021 during lockdown",
-                network_person3: "Homeoffice & Bicycle - Mobility of participant 2 in March 2021 during lockdown",
-                network_person6: "Mobility of participant 3  in March 2021 during lockdown"
+                network_person1: "Driving to Work",
+                network_person2: "Homeoffice & Bicycle",
+                network_person3: "Mobility of participant 3",
+                network_person4: "Mobility of participant 4",
+                network_person5: "Mobility of participant 5",
+                network_person6: "Mobility of participant 6"
             },
             showHover:false,
             type:"",
@@ -365,42 +368,23 @@ export default {
                 this.updateNetworkData("network_intro3","/json/intro3.json")
             }
             else if(step === 8){
-                this.updateNetworkData("network_person1","/json/person1graphdata.json")
+                this.updateNetworkData("network_person1","/json/person1.json")
             }
             else if(step === 13){
-                this.updateNetworkData("network_person3","/json/person3graphdata.json")
+                this.updateNetworkData("network_person2","/json/person2.json")
             }
-            // else if(step === 7){
-            //     this.updateNetworkData("network_person3","/json/person3graphdata.json")
-            // }
-            // else if(step === 14){
-            //     this.updateNetworkData("network_person6","/json/person6graphdata.json")
-            // }
-            // else if(step ===9){
-            //     this.updateNetworkData("network_person5","/json/person5graphdata.json")
-            // }
-            // else if(step === 10){
-            //     this.updateNetworkData("network_person6","/json/person6graphdata.json")
-            // }
-            // else if(step === 11){
-            //     this.updateNetworkData("network_zur_arbeit","/json/zur_arbeitgraphdata.json")
-            // }
-            // else if(step === 12){
-            //     this.currentNetwork = "network_einkaufen"
-            //     path = "/json/einkaufengraphdata.json"
-            // }
-            // else if(step === 13){
-            //     this.currentNetwork = "network_jemanden_holen_bringen"
-            //     path = "/json/bringengraphdata.json"
-            // }
-            // else if(step === 14){
-            //     this.currentNetwork = "network_nach_hause"
-            //     path = "/json/nach_hausegraphdata.json"
-            // }
-            // else{
-            //     this.currentNetwork = "person1"
-            //     path = "/json/person1graphdata.json"
-            // }
+            else if(step === 21){
+                this.updateNetworkData("network_person3","/json/person3.json")
+            }
+            else if(step === 22){
+                this.updateNetworkData("network_person4","/json/person4.json")
+            }
+            else if(step === 23){
+                this.updateNetworkData("network_person5","/json/person5.json")
+            }
+            else if(step === 24){
+                this.updateNetworkData("network_person6","/json/person6.json")
+            }
             return path;
         },
         updateNetworkData(updatedNetwork,updatedPath){

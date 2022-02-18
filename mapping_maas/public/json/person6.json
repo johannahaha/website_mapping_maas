@@ -1,0 +1,126 @@
+{
+    "nodes": [
+        {
+            "title": "start",
+            "color": "#004e64",
+            "weight": 17,
+            "route_from": 0
+        },
+        {
+            "title": "bicycle",
+            "color": "#9fffcb",
+            "weight": 13,
+            "route_from": 16158
+        },
+        {
+            "title": "walk",
+            "color": "#00a5cf",
+            "weight": 41,
+            "route_from": 20806
+        },
+        {
+            "title": "stationary",
+            "color": "#004e64",
+            "weight": 20,
+            "route_from": 356
+        },
+        {
+            "title": "public_transport",
+            "color": "#25a18e",
+            "weight": 20,
+            "route_from": 261090
+        },
+        {
+            "title": "end",
+            "color": "#004e64",
+            "weight": 41,
+            "route_from": 10
+        }
+    ],
+    "edges": [
+        {
+            "source": "start",
+            "target": "bicycle",
+            "value": 2,
+            "color": "#004e64"
+        },
+        {
+            "source": "start",
+            "target": "walk",
+            "value": 12,
+            "color": "#004e64"
+        },
+        {
+            "source": "start",
+            "target": "public_transport",
+            "value": 3,
+            "color": "#004e64"
+        },
+        {
+            "source": "bicycle",
+            "target": "walk",
+            "value": 6,
+            "color": "#9fffcb"
+        },
+        {
+            "source": "bicycle",
+            "target": "end",
+            "value": 6,
+            "color": "#9fffcb"
+        },
+        {
+            "source": "walk",
+            "target": "bicycle",
+            "value": 9,
+            "color": "#00a5cf"
+        },
+        {
+            "source": "walk",
+            "target": "public_transport",
+            "value": 7,
+            "color": "#00a5cf"
+        },
+        {
+            "source": "walk",
+            "target": "end",
+            "value": 11,
+            "color": "#00a5cf"
+        },
+        {
+            "source": "walk",
+            "target": "stationary",
+            "value": 9,
+            "color": "#00a5cf"
+        },
+        {
+            "source": "stationary",
+            "target": "bicycle",
+            "value": 1,
+            "color": "#004e64"
+        },
+        {
+            "source": "stationary",
+            "target": "walk",
+            "value": 3,
+            "color": "#004e64"
+        },
+        {
+            "source": "stationary",
+            "target": "public_transport",
+            "value": 6,
+            "color": "#004e64"
+        },
+        {
+            "source": "public_transport",
+            "target": "walk",
+            "value": 15,
+            "color": "#25a18e"
+        },
+        {
+            "source": "public_transport",
+            "target": "stationary",
+            "value": 1,
+            "color": "#25a18e"
+        }
+    ]
+}
