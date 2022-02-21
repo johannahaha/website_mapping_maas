@@ -70,30 +70,6 @@
             <!-- -->
         </section>
         <section id="outro">
-<<<<<<< Updated upstream
-            <div class="text">
-<<<<<<< HEAD
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-                sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
-                est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                invidunt ut labore et dolore magna aliquyam erat, sed diam
-                voluptua. At vero eos et accusam et justo duo dolores et ea
-                rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-                Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in
-                hendrerit in vulputate velit esse molestie consequat, vel illum
-                dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                iusto odio dignissim qui blandit praesent luptatum zzril delenit
-                augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor
-                sit amet
-=======
             <D3BarChart :width="widthSvgBarChart" :height="heightSvg"/>
             <div id="outro_text">
                 <div class="text">
@@ -121,8 +97,7 @@
                     Mobility, however, never remains one-dimensional: Being mobile in a city means moving between modes of movement, looking for a combination of modes that work well together and suit your individual needs. These connections of means of transport give us reason to take a close look: which transfer feels good, which waiting time annoying? How many rental bicycles are enough when everyone has to go to work in the morning?    
                     </p>
                 </div>
->>>>>>> Stashed changes
-=======
+
                 <h3>
                     Mobility is individual
                 </h3>
@@ -146,7 +121,6 @@
                 Our mobility behavior responds to various factors: the range of different means of transport, the availability and quality of public transport, our time budget, and, as can be seen well in the data, the current (pandemic) world situation.
                 Mobility, however, never remains one-dimensional: Being mobile in a city means moving between modes of movement, looking for a combination of modes that work well together and suit your individual needs. These connections of means of transport give us reason to take a close look: which transfer feels good, which waiting time annoying? How many rental bicycles are enough when everyone has to go to work in the morning?    
                 </p>
->>>>>>> master
             </div>
         </section>
     </div>
@@ -223,12 +197,7 @@ export default {
             //}
         };
     },
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> master
-    computed:{
+        computed:{
         heightPx: function(){return this.height * 0.05 + "px"},
         paddingPx: function(){return this.height * 0.1 + "px"},
         widthSvg: function(){
@@ -236,16 +205,10 @@ export default {
         heightSvg: function(){
             let height = this.height - this.onvertRemToPixels(2)
             return height
-<<<<<<< HEAD
         },
         widthSvgBarChart:function(){
             return this.width *0.8},
     },
->>>>>>> Stashed changes
-=======
-        }
-    },
->>>>>>> master
     mounted() {
         this.height = window.innerHeight;
         this.width = window.innerWidth;
@@ -272,21 +235,10 @@ export default {
             gsap.set(step.element,{opacity:0})
             gsap.to(step.element,{opacity:1.0,duration:3})
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-            if([0,2,4,6,7,8,9,10].includes(this.step)){//this.step === 2 || this.step === 4 || this.step.in()){
-                console.log("lets update graph")
-=======
-            let stepList = [0,3,5,8,13,21,22,23,24]
-            
-            if(step.direction === "down" && stepList.includes(this.step)){
->>>>>>> Stashed changes
-=======
             let stepList = [0,3,5,8,13,21,22,23,24]
             
             console.log("step: ",step.index)
             if(step.direction === "down" && stepList.includes(this.step)){
->>>>>>> master
                 this.$refs.network.updateGraph(this.step)
             }
             else if(step.direction === "up" && stepList.includes(this.step+1)){
@@ -347,10 +299,7 @@ h1{
     z-index: 2;
     width: 100vw;       
     align-self: flex-start;
-<<<<<<< HEAD
-<<<<<<< Updated upstream
     margin: 5vh 10vw;
-=======
     padding: 2rem 5vw;
     margin-bottom: 4rem;
 
@@ -362,7 +311,6 @@ h1{
         gap: 5vw;
     }
 
-=======
     padding: 2rem 5vw;
     display:flex;
     flex-direction: row;
@@ -370,8 +318,6 @@ h1{
     align-items:flex-start;
     gap: 5vw;
     margin-bottom: 4rem;
-
->>>>>>> master
 
     .text{
         h3{
@@ -383,12 +329,6 @@ h1{
             padding: 2rem 0;
         }
     }
-
-    
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> master
 
 }
 

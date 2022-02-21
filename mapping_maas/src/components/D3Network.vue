@@ -74,10 +74,6 @@ export default {
 
             svg = d3.select("#d3-network").select("svg");
             let scope = this;
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-
-=======
 
             //COLORS
             colorBasics = d3.scaleLinear()
@@ -107,90 +103,31 @@ export default {
 
             
             //SCALES
-=======
-            // colorBasics = d3.scaleSequential()
-            //     .domain([80,1])
-            //     .interpolator(d3.interpolateGreys);
-            
-            // colorBasics = d3.scaleLinear()
-            //     .domain([1,80])
-            //     .range(["#f1e1bc","#f2fo0eb"])
-            //     .interpolate(d3.interpolateHsl)
-
-            colorBasics = d3.scaleLinear()
-                .domain([1,80])
-                .range(["#333","#eee"])
-                .interpolate(d3.interpolateHsl)
-
-            colorWalk = d3.scaleLinear()
-                .domain([1,80])
-                .range(["#3e4b6d","#d7e1ff"])
-                .interpolate(d3.interpolateHsl)
-            
-            colorCar = d3.scaleLinear()
-                .domain([1,80])
-                .range(["#26732e","#cdeaca"])
-                .interpolate(d3.interpolateHsl)
-
-            colorPublicTransport = d3.scaleLinear()
-                .domain([1,80])
-                .range(["#732667","#dff7f4"])
-                .interpolate(d3.interpolateHsl)
-            
-            colorBicycle = d3.scaleLinear()
-                .domain([1,80])
-                .range(["#979933","#e7e4bd"])
-                .interpolate(d3.interpolateHsl)
-
-            
->>>>>>> master
             edgeWidth = d3.scaleLinear()
                 .domain([1, 80])
                 .range([3, 30]);
             
             nodeSize = d3.scaleLinear()
                 .domain([10,120])
-<<<<<<< HEAD
                 .range([15,30])
                 //.range([40, 70]);
     
             
             //SVG
->>>>>>> Stashed changes
-=======
-                .range([40, 70]);
-    
->>>>>>> master
             if (svg.empty()) {
                 svg = d3.select("#svg")
                     // .attr("width", this.width)
                     // .attr("height", this.height);
             }
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-            d3.json("/json/intro1.json").then(function (graph) {
-                console.log("loaded data");
-=======
-
-            //LOAD JSON
-=======
-
-
->>>>>>> master
             d3.json(this.currentPath).then(function (graph) {
 
                 scope.nodeData = d3.map(graph.nodes, function(d) {
                     return d.title;
                 });
 
-
                 //scope.nodeData = graph.nodes;
                 scope.linkData = graph.edges.target;
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> master
                 scope.currentNetwork = "network_intro1";
                 scope.currentDescription = scope.description["network_intro1"]
 
@@ -227,22 +164,10 @@ export default {
                     .attr("markerHeight", d=> {return scope.marker_size + d.value/2})
                     .attr("markerUnits","userSpaceOnUse")
                     .attr("orient", "auto")
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-                    .attr("fill", d=> {return d.color})
-                    //.attr("fill", "#004e64")
-=======
                     .attr("fill", d=> {
                         return scope.getColor(d.source.title,d.target.title,d.value)
                         //return d.color
                     })
->>>>>>> Stashed changes
-=======
-                    .attr("fill", d=> {
-                        return scope.getColor(d.source.title,d.value)
-                        //return d.color
-                    })
->>>>>>> master
                     .append("path")
                     .attr("d", "M0,-5L10,0L0,5")
 
@@ -254,20 +179,9 @@ export default {
                     .enter()
                     .append("path")
                     .attr("class", "path")
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-                    .attr("stroke", function (d) {
-                        return d.source.color;
-=======
                     .attr('stroke',function(d) { 
                         return scope.getColor(d.source.title,d.target.title,40)
                     // return d.source.color;
->>>>>>> Stashed changes
-=======
-                    .attr('stroke',function(d) { 
-                        return scope.getColor(d.source.title,40)
-                    // return d.source.color;
->>>>>>> master
                     })
                     .attr("stroke-opacity",1)
                     .attr("stroke-width", function (d) {
@@ -383,30 +297,8 @@ export default {
             return "translate(" + d.x + "," + d.y + ")";
         },
         getIcon(title){
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-            if(title in this.iconPaths){
-                console.log(title, "is in icons");
-                return this.iconPaths[title]
-            }
-            else{
-                return this.iconPaths["car"]
-            }
-=======
             let path = "/img/" + title + ".svg"
             return path
->>>>>>> Stashed changes
-=======
-            let path = "/img/" + title + ".svg"
-            return path
-            // if(title in this.iconPaths){
-            //     console.log(title, "is in icons");
-            //     return this.iconPaths[title]
-            // }
-            // else{
-            //     return this.iconPaths["car"]
-            // }
->>>>>>> master
         },
         onTick(){
             try{
@@ -469,16 +361,16 @@ export default {
             else if(step === 21){
                 this.updateNetworkData("network_person3","/json/person3.json")
             }
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-            else if(step === 13){
-                this.currentNetwork = "network_jemanden_holen_bringen"
-                path = "/json/bringengraphdata.json"
+            else if(step === 22){
+                this.updateNetworkData("network_person4","/json/person4.json")
             }
-            else if(step === 14){
-                this.currentNetwork = "network_nach_hause"
-                path = "/json/nach_hausegraphdata.json"
-=======
+            else if(step === 23){
+                this.updateNetworkData("network_person5","/json/person5.json")
+            }
+            else if(step === 24){
+                this.updateNetworkData("network_person6","/json/person6.json")
+            }
+            return path;
 
         },
         getMarkerLength(size){
@@ -493,20 +385,16 @@ export default {
             } 
             else if(title === "walk"){
                 return colorWalk(value);
->>>>>>> Stashed changes
-=======
-            else if(step === 22){
-                this.updateNetworkData("network_person4","/json/person4.json")
             }
-            else if(step === 23){
-                this.updateNetworkData("network_person5","/json/person5.json")
->>>>>>> master
+
+            else if(title === "public_transport"){
+                return colorPublicTransport(value);
             }
-            else if(step === 24){
-                this.updateNetworkData("network_person6","/json/person6.json")
+
+            else if(title ==="stationary" || title ==="start"){
+                return this.getColor(target,target,value)
             }
-<<<<<<< Updated upstream
-            return path;
+            return colorBasics(value); 
         },
         updateNetworkData(updatedNetwork,updatedPath){
             if(this.currentNetwork !== updatedNetwork){
@@ -514,35 +402,6 @@ export default {
                 this.currentPath = updatedPath
                 this.currentDescription = this.description[this.currentNetwork]
             }
-
-<<<<<<< HEAD
-
-=======
-            else if(title ==="stationary" || title ==="start"){
-                return this.getColor(target,target,value)
-            }
-            return colorBasics(value); //das ist dann nur noch für stationary zum ende
->>>>>>> Stashed changes
-=======
-        },
-        getMarkerLength(size){
-            return Math.sqrt(size**2 + size**2)
-        },
-        getColor(title,value){
-            if(title === "car"){
-                return colorCar(value);
-            } 
-            else if(title=== "bicycle"){
-                return colorBicycle(value);
-            } 
-            else if(title === "walk"){
-                return colorWalk(value);
-            }
-            else if(title === "public_transport"){
-                return colorPublicTransport(value);
-            }
-            return colorBasics(value); 
->>>>>>> master
         },
         updateGraph(step){
             let scope = this;
@@ -578,30 +437,15 @@ export default {
                         update => update
                             .attr("markerWidth", d=> {
                                 return scope.marker_size + d.value/2})
-<<<<<<< HEAD
-<<<<<<< Updated upstream
                             .attr("markerHeight", d=> {return scope.marker_size + d.value/2}))
-=======
-                            .attr("markerHeight", d=> {
-                                return scope.marker_size + d.value/2}))
                             .attr("fill", (d)=> {
                                 return scope.getColor(d.source,d.target,d.value)
-=======
-                            .attr("markerHeight", d=> {
-                                return scope.marker_size + d.value/2}))
-                            .attr("fill", (d)=> {
-                                return scope.getColor(d.source,d.value)
->>>>>>> master
                             //return d.color
                             })
                             .attr("opacity", 0)
                             .call(update => update.transition(t)
                                 .attr("opacity", 1.0)),
                         exit => exit.remove()
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> master
                     .merge(marker)
 
 
@@ -672,44 +516,13 @@ export default {
 
                 // Apply the general update pattern to the links.
                 link = link.data(graph.edges, function(d) { return d.source + "-" + d.target; });
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-                link.exit().remove();
-                link = link.enter()
-                    .append("path")
-                    .attr("stroke", function (d) {
-                        return d.color
-                    })
-                    .attr("stroke-width", function (d) {
-                        // The node color depends on the club.
-                        return d.value * scope.edgeScale;
-                    })
-                    .attr("marker-end", function(d) { 
-                        //console.log("url(#marker_" + (d.source + "-" + d.target) + ")")
-                        return "url(#marker_" + (d.source + "-" + d.target) + ")"; })
-                    .attr("id", function (d){
-                        return d.source + "-" + d.target
-                    })
-                    .attr("fill","none")
-                    // .attr("ref", function (d){
-                    //     return d.source.title + "-" + d.target.title
-                    // });
-                    //.merge(link);
-                console.log(link);
-=======
-=======
->>>>>>> master
 
                 link = link.join(
                     enter => enter
                         .append("path")
                         .attr('stroke',function(d) { 
                             //return d.color
-<<<<<<< HEAD
                             return scope.getColor(d.source,d.target,d.value)
-=======
-                            return scope.getColor(d.source,d.value)
->>>>>>> master
                         })
         
                         .attr("stroke-width", function (d) {
@@ -731,10 +544,6 @@ export default {
                         .remove()
                     )
 
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> master
                 // Update and restart the simulation.
                 simulation.nodes(graph.nodes);
                 simulation.force("link").links(graph.edges);
