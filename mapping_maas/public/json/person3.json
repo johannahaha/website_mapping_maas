@@ -3,42 +3,44 @@
         {
             "title": "start",
             "color": "#004e64",
-            "weight": 1
+            "weight": 39,
+            "route_from": 0
         },
         {
             "title": "bicycle",
             "color": "#9fffcb",
-            "weight": 1
+            "weight": 39,
+            "route_from": 44298
         },
         {
             "title": "stationary",
             "color": "#004e64",
-            "weight": 1
+            "weight": 4,
+            "route_from": 692
         },
         {
             "title": "walk",
             "color": "#00a5cf",
-            "weight": 1
-        },
-        {
-            "title": "end",
-            "color": "#004e64",
-            "weight": 1
+            "weight": 78,
+            "route_from": 28515
         },
         {
             "title": "car",
             "color": "#7ae582",
-            "weight": 1
+            "weight": 29,
+            "route_from": 157782
         },
         {
-            "title": "public_transport_train",
+            "title": "public_transport",
             "color": "#25a18e",
-            "weight": 1
+            "weight": 4,
+            "route_from": 9862
         },
         {
-            "title": "public_transport_change",
-            "color": "#25a18e",
-            "weight": 1
+            "title": "end",
+            "color": "#004e64",
+            "weight": 29,
+            "route_from": 10
         }
     ],
     "edges": [
@@ -62,6 +64,12 @@
         },
         {
             "source": "bicycle",
+            "target": "walk",
+            "value": 25,
+            "color": "#9fffcb"
+        },
+        {
+            "source": "bicycle",
             "target": "stationary",
             "value": 3,
             "color": "#9fffcb"
@@ -73,10 +81,10 @@
             "color": "#9fffcb"
         },
         {
-            "source": "bicycle",
-            "target": "walk",
-            "value": 25,
-            "color": "#9fffcb"
+            "source": "stationary",
+            "target": "bicycle",
+            "value": 4,
+            "color": "#004e64"
         },
         {
             "source": "stationary",
@@ -86,20 +94,14 @@
         },
         {
             "source": "stationary",
-            "target": "bicycle",
-            "value": 4,
-            "color": "#004e64"
-        },
-        {
-            "source": "stationary",
-            "target": "stationary",
-            "value": 2,
-            "color": "#004e64"
-        },
-        {
-            "source": "stationary",
             "target": "car",
             "value": 3,
+            "color": "#004e64"
+        },
+        {
+            "source": "stationary",
+            "target": "public_transport",
+            "value": 1,
             "color": "#004e64"
         },
         {
@@ -110,8 +112,8 @@
         },
         {
             "source": "walk",
-            "target": "end",
-            "value": 21,
+            "target": "car",
+            "value": 14,
             "color": "#00a5cf"
         },
         {
@@ -122,27 +124,15 @@
         },
         {
             "source": "walk",
-            "target": "walk",
-            "value": 5,
+            "target": "end",
+            "value": 21,
             "color": "#00a5cf"
         },
         {
             "source": "walk",
-            "target": "car",
-            "value": 14,
-            "color": "#00a5cf"
-        },
-        {
-            "source": "walk",
-            "target": "public_transport_train",
+            "target": "public_transport",
             "value": 3,
             "color": "#00a5cf"
-        },
-        {
-            "source": "car",
-            "target": "car",
-            "value": 3,
-            "color": "#7ae582"
         },
         {
             "source": "car",
@@ -152,31 +142,25 @@
         },
         {
             "source": "car",
-            "target": "end",
-            "value": 7,
-            "color": "#7ae582"
-        },
-        {
-            "source": "car",
             "target": "stationary",
             "value": 4,
             "color": "#7ae582"
         },
         {
-            "source": "public_transport_train",
+            "source": "car",
+            "target": "end",
+            "value": 7,
+            "color": "#7ae582"
+        },
+        {
+            "source": "public_transport",
             "target": "walk",
             "value": 3,
             "color": "#25a18e"
         },
         {
-            "source": "public_transport_train",
-            "target": "public_transport_change",
-            "value": 1,
-            "color": "#25a18e"
-        },
-        {
-            "source": "public_transport_change",
-            "target": "public_transport_train",
+            "source": "public_transport",
+            "target": "stationary",
             "value": 1,
             "color": "#25a18e"
         }
