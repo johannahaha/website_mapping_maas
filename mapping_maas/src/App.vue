@@ -84,6 +84,7 @@ export default {
     margin: 5vw;
 
     &_button{
+        -webkit-appearance:none;
         font-family:Vollkorn;
         color:$light;
         background-color: $darkgrey;

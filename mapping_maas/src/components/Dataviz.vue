@@ -97,31 +97,7 @@
                     Mobility, however, never remains one-dimensional: Being mobile in a city means moving between modes of movement, looking for a combination of modes that work well together and suit your individual needs. These connections of means of transport give us reason to take a close look: which transfer feels good, which waiting time annoying? How many rental bicycles are enough when everyone has to go to work in the morning?    
                     </p>
                 </div>
-
-                <h3>
-                    Mobility is individual
-                </h3>
-                <p>
-                    Each of us has his or her personal mobility preferences. How do I move around in everyday life, perhaps to experience beautiful moments in nature in between? Which shops do I integrate into my routines because they might have the best bread rolls in town? Where do I have to be at what time, and therefore can't spare a minute? These decisions and connections are highly individual and often difficult to capture. However, with this survey data, we were able to gain insight into individual mobility and the unique motivations of the participants.
-                </p>
-                </div>    
-            <div class="text">
-                <h3>
-                    Mobility is sensitive
-                </h3>
-                <p>
-                    Every startpoint and destination, every transferring time, and every change of means of transport reveal something about the individual person. Working with this kind of data made us more aware of what can possibly be done with all those data points and also how we can visualize them without attacking the privacy of participants in the study. That's why we choose to look at networks and the interconnectedness of means of mobility.
-                </p>
-            </div>  
-            <div class="text">
-                <h3>
-                    Mobility is plural
-                </h3>
-                <p>
-                Our mobility behavior responds to various factors: the range of different means of transport, the availability and quality of public transport, our time budget, and, as can be seen well in the data, the current (pandemic) world situation.
-                Mobility, however, never remains one-dimensional: Being mobile in a city means moving between modes of movement, looking for a combination of modes that work well together and suit your individual needs. These connections of means of transport give us reason to take a close look: which transfer feels good, which waiting time annoying? How many rental bicycles are enough when everyone has to go to work in the morning?    
-                </p>
-            </div>
+            </div>    
         </section>
     </div>
 </template>
@@ -207,6 +183,7 @@ export default {
             return height
         },
         widthSvgBarChart:function(){
+            console.log("barchart: ",this.width *0.8)
             return this.width *0.8},
     },
     mounted() {
@@ -237,7 +214,6 @@ export default {
 
             let stepList = [0,3,5,8,13,21,22,23,24]
             
-            console.log("step: ",step.index)
             if(step.direction === "down" && stepList.includes(this.step)){
                 this.$refs.network.updateGraph(this.step)
             }
@@ -299,7 +275,6 @@ h1{
     z-index: 2;
     width: 100vw;       
     align-self: flex-start;
-    margin: 5vh 10vw;
     padding: 2rem 5vw;
     margin-bottom: 4rem;
 
@@ -309,26 +284,19 @@ h1{
         justify-content: space-between;
         align-items:flex-start;
         gap: 5vw;
+
+        .text{
+            h3{
+                padding: 2rem 0;
+                font-family: Vollkorn;
+                font-size:1.5rem;
+            }
+            p {
+                padding: 2rem 0;
+            }
+    }
     }
 
-    padding: 2rem 5vw;
-    display:flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items:flex-start;
-    gap: 5vw;
-    margin-bottom: 4rem;
-
-    .text{
-        h3{
-            padding: 2rem 0;
-            font-family: Vollkorn;
-            font-size:1.5rem;
-        }
-        p {
-            padding: 2rem 0;
-        }
-    }
 
 }
 
