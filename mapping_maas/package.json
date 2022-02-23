@@ -19,6 +19,7 @@
     "scrollama": "^3.0.2",
     "vis-network": "^9.1.0",
     "vue": "^3.0.0",
+    "vue-meta": "^2.4.0",
     "vue-scrollama": "^2.0.6"
   },
   "devDependencies": {
