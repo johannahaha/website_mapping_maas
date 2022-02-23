@@ -1,7 +1,9 @@
 <template>
     <div>
-        Average Meters made with each mode of transport (of all participants)
-        <div id="d3-bar-chart" :height="heightPx" :width="widthPx">
+        <div id="tooltip" v-show="showHover" ref="tooltip">
+            {{hoverMessage}}
+        </div>
+        <div id="d3-legend" :height="heightPx" :width="widthPx" :path="path">
             <svg
                 id="svg"
                 :view-box="viewBox"
@@ -11,32 +13,32 @@
                 <g
                     v-for="(bar, i) in bars"
                     :key="`bar-${i}`"
-                    :transform="`translate(0 ${barHeight * (i + 0.3)})`"
+                    :transform="`translate(0 ${barHeight * (i + 0.5)})`"
                 >
                     <image
-                        :x="chartWidth - offsetRight / 2"
-                        :y="-(offsetRight - 10) / 3"
+                        :x="0"
+                        y="-10"
                         :href="getIcon(bar.mode)"
-                        :width="offsetRight"
-                        :height="offsetRight"
+                        :width="offsetLeft"
+                        :height="offsetLeft"
                     />
                     <rect
-                        :x="bar.x - 10"
+                        :x="offsetLeft"
                         y="0"
                         :width="bar.width"
-                        :height="15"
+                        :height="5"
                         :style="barStyle(bar.mode)"
-                        rx="7.5"
-                        ry="7.5"
+                        rx="2.5"
+                        ry="2.5"
                     />
-                    <text
+                    <!-- <text
                         :x="bar.x"
                         y="0"
                         dy="-0.5em"
                         :style="textStyle(bar.mode)"
                     >
                         {{ toKilometer(bar.value) }} km
-                    </text>
+                    </text> -->
                 </g>
             </svg>
         </div>
@@ -52,27 +54,30 @@ export default {
     data() {
         return {
             data: [],
-            offsetRight: 25,
+            offsetLeft: 25,
+            hoverMessage: "",
+            showHover:false
         };
     },
     props: {
         width: Number,
         height: Number,
+        path:String
     },
     methods: {
-        setupBarChart() {
+        setupLegend() {
             //svg = d3.select("#d3-barchart").select("svg");
             let scope = this;
             let filterList = ["car","bicycle","walk","public_transport"]
-            d3.json("/json/totalgraphdata.json").then(function (data) {
-                scope.data = data.nodes.map((d) => {
-                        console.log(d);
-                        return {
-                            transport_mode: d.title,
-                            route_sum: +d.route_from,
-                            route_mean: +d.route_mean,
-                        };
-                    });
+            d3.json(this.path).then(function (data) {
+                // scope.data = data.nodes.map((d) => {
+                //         console.log(d);
+                //         return {
+                //             transport_mode: d.title,
+                //             route_sum: +d.route_from,
+                //             route_mean: +d.route_mean,
+                //         };
+                //     });
                     scope.data = data.nodes.reduce(function(filtered, d) {
                     if (filterList.includes(d.title)) {
                         let node = {
@@ -84,15 +89,11 @@ export default {
                     }
                     return filtered;
                     }, []);
-                    // scope.data = data.nodes.map((d) => {
-                    //     console.log(d);
-                    //     return {
-                    //         transport_mode: d.title,
-                    //         route_sum: +d.route_from,
-                    //         route_mean: +d.route_mean,
-                    //     };
-                    // });
-            });
+            }).then(console.log(scope.data));
+        },
+        updateLegend(){
+            console.log("update legend");
+            this.setupLegend();
         },
         getIcon(title) {
             let path = "/img/" + title + ".svg";
@@ -134,26 +135,26 @@ export default {
             return this.width + "px";
         },
         barHeight() {
-            return (this.height - 25) / this.data.length;
+            return this.height / this.data.length;
         },
         chartHeight() {
             return this.height;
         },
         chartWidth() {
-            return this.width - this.offsetRight;
+            return this.width - this.offsetLeft;
         },
         scaleY() {
-            const values = this.data.map((d) => d["route_mean"]);
+            const values = this.data.map((d) => d["route_sum"]);
             const domain = [0, d3.max(values)];
-            const range = [0, this.chartWidth - this.offsetRight];
+            const range = [0, this.chartWidth - this.offsetLeft];
             return d3.scaleLinear().domain(domain).range(range);
         },
         bars() {
             return this.data.map((d) => {
-                const barWidth = this.scaleY(d["route_mean"]);
+                const barWidth = this.scaleY(d["route_sum"]);
                 return {
                     mode: d.transport_mode,
-                    value: d["route_mean"],
+                    value: d["route_sum"],
                     x: this.chartWidth - barWidth,
                     width: barWidth,
                 };
@@ -161,7 +162,7 @@ export default {
         },
     },
     mounted() {
-        this.setupBarChart();
+        this.setupLegend();
     },
 };
 </script>

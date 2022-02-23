@@ -1,6 +1,7 @@
 <template>
     <div>
         <div id="description">{{this.currentDescription}}</div>
+        <D3Legend id="legend" ref="legend" :height="heightLegend" :width="widthLegend" :path="currentPath"></D3Legend>
         <div id="tooltip" v-show="showHover" ref="tooltip">
             {{hoverMessage}}
         </div>
@@ -10,6 +11,8 @@
 
 
 <script>
+import D3Legend from "../components/D3Legend.vue";
+
 import * as d3 from "d3";
 import { gsap } from 'gsap';
 
@@ -30,6 +33,9 @@ let default_data = {
             }
 
 export default {
+    components:{
+        D3Legend
+    },
     data(){
         return{
             i:0,
@@ -232,8 +238,8 @@ export default {
                     // })
                     .each(function(d) {
                         if (d.title === "start"){
-                            d.fx = scope.width/10;
-                            d.fy = scope.height/10;
+                            d.fx = scope.width/8;
+                            d.fy = scope.height/8;
                             //this.showHover = false;
                             this.isDragging = true
                         }
@@ -408,7 +414,7 @@ export default {
             this.handleNetworkUpdate(step);
             
             d3.json(this.currentPath).then(function (graph) {
-
+                scope.$refs.legend.updateLegend();
 
 
                 const t = svg.transition().duration(2000)
@@ -621,9 +627,17 @@ export default {
             return '0 0 '+ this.width + ' ' + this.height;
         },
         heightPx: function(){
-            return this.height + "px"},
+            return this.height + "px"
+        },
         widthPx: function(){
-            return this.width + "px"},
+            return this.width + "px"
+        },
+        heightLegend: function(){
+            return this.height * 0.2
+        },
+        widthLegend: function(){
+            return this.width * 0.2
+        },
     }
 };
 </script>
@@ -638,6 +652,13 @@ export default {
         color:red;
     }
 }
+#legend{
+    position:absolute;
+    z-index:1;
+    bottom: 0;
+    left:0;
+}
+
 #tooltip{
     background-color: $light;
     padding: 0.5rem;
@@ -654,6 +675,8 @@ export default {
 }
 
 #description{
+    position:absolute;
+    top:0;
     padding-top:2.5rem;
     font-family: Vollkorn;
     font-size:1.3rem;
