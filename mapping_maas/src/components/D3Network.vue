@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="description">{{this.currentDescription}}</div>
-        <D3Legend id="legend" ref="legend" :height="heightLegend" :width="widthLegend" :path="currentPath"></D3Legend>
+        <D3Legend id="legend" ref="legend" :height="heightLegend" :width="widthLegend" :path="currentPath" :isEnglish="isEnglish"></D3Legend>
         <div id="tooltip" v-show="showHover" ref="tooltip">
             {{hoverMessage}}
         </div>
@@ -20,17 +20,8 @@ let simulation;
 let node,link,marker,svg
 let colorBasics, colorCar, colorBicycle, colorWalk, colorPublicTransport;
 let edgeWidth, nodeSize;
+let timer;
 //let svgDom;
-
-let default_data = {
-                car: "car",
-                bicycle: "bicycle",
-                public_transport: "public transport (bus, tram, train)",
-                start: "starting point of a journey",
-                end: "end point of a journey",
-                stationary: "short stop in between",
-                walk:"walking"
-            }
 
 export default {
     components:{
@@ -45,35 +36,70 @@ export default {
             hoverMessage: "",
             currentDescription:"",
             description: {
-                network_intro1: "Introduction",
-                network_intro2: "Introduction",
-                network_intro3: "Introduction",
-                network_person1: "Driving to Work",
-                network_person2: "Homeoffice & Bicycle",
+                network_intro1: {
+                    de:"Einleitung",
+                    eng:"Introduction"
+                },
+                network_intro2: {
+                    de:"Einleitung",
+                    eng:"Introduction"
+                },
+                network_intro3: {
+                    de:"Einleitung",
+                    eng:"Introduction"
+                },
+                network_person1: {
+                    de:"Zur Arbeit Fahren",
+                    eng:"Driving to Work"
+                },
+                network_person2: {
+                    de:"Homeoffice & Fahrrad",
+                    eng:"Homeoffice & Bicycle"
+                },
                 network_person3: "Mobility of participant 3",
                 network_person4: "Mobility of participant 4",
                 network_person5: "Mobility of participant 5",
-                network_person6: "Mobility of participant 6"
+                network_person6: {
+                    de:"S-Bahn nach Berlin",
+                    eng:"Train to Berlin"
+                },
             },
             showHover:false,
             type:"",
-            hoverAmount:0,
             nodeData : [],
             linkData : [],
             isDragging:false,
             hover_data: {
-                network_intro1: default_data,
-                network_intro2: default_data,
-                network_intro3: default_data,
-                network_person1: default_data,
-                network_person3: default_data,
-                network_person6: default_data,
-            }
+                eng:{
+                    car: "car",
+                    bicycle: "bicycle",
+                    public_transport: "public transport (bus, tram, train)",
+                    start: "starting point of a journey",
+                    end: "end point of a journey",
+                    stationary: "short stop in between",
+                    walk:"walking"
+                },
+                de: {
+                    car: "Auto",
+                    bicycle: "Fahrrad",
+                    public_transport: "Öffenliche Verkehrmittel (Bus, Tram, Bahn)",
+                    start: "Start einer Fahrt",
+                    end: "Ende einer Fahrt",
+                    stationary: "kurzer Zwischenstop",
+                    walk:"Zu Fuß"
+                }
+            },
         }
     },
     props:{
         width: Number,
         height: Number,
+        isEnglish:Boolean
+    },
+    watch: {
+        isEnglish: function() {
+            this.changeDescription()
+        }
     },
     methods: {
         setupGraph() {
@@ -115,8 +141,8 @@ export default {
             
             nodeSize = d3.scaleLinear()
                 .domain([10,120])
-                .range([15,30])
-                //.range([40, 70]);
+                //.range([15,30])
+                .range([40, 70]);
     
             
             //SVG
@@ -135,7 +161,7 @@ export default {
                 //scope.nodeData = graph.nodes;
                 scope.linkData = graph.edges.target;
                 scope.currentNetwork = "network_intro1";
-                scope.currentDescription = scope.description["network_intro1"]
+                scope.changeDescription();
 
                 let widthScale = scope.width/11
 
@@ -202,6 +228,9 @@ export default {
                     .attr("ref", function (d){
                         return d.source.title + "-" + d.target.title
                     });
+                link.on("pointerenter",scope.enterTooltip)
+                link.on("pointermove",scope.moveTooltip)
+                link.on("pointerleave",scope.leaveTooltip)
 
                 // We create a <circle> SVG element for each node
                 // in the graph, and we specify a few attributes.
@@ -284,9 +313,9 @@ export default {
                 node.append("title").text(function (d) {
                     return d.title;
                 });
-                node.on("mouseenter",scope.enterTooltip)
-                node.on("mousemove",scope.moveTooltip)
-                node.on("mouseleave",scope.leaveTooltip)
+                node.on("pointerenter",scope.enterTooltip)
+                node.on("pointermove",scope.moveTooltip)
+                node.on("pointerleave",scope.leaveTooltip)
 
                     
 
@@ -402,11 +431,21 @@ export default {
             }
             return colorBasics(value); 
         },
+        changeDescription(){
+            let info = this.description[this.currentNetwork]
+            if(this.isEnglish){
+                this.currentDescription = info.eng
+            }
+            else{
+                this.currentDescription = info.de
+            }
+        },
         updateNetworkData(updatedNetwork,updatedPath){
             if(this.currentNetwork !== updatedNetwork){
                 this.currentNetwork = updatedNetwork
                 this.currentPath = updatedPath
-                this.currentDescription = this.description[this.currentNetwork]
+                this.changeDescription();
+                this.showHover = false
             }
         },
         updateGraph(step){
@@ -499,9 +538,9 @@ export default {
                         .remove()
                     )
 
-                node.on("mouseenter",scope.enterTooltip)
-                node.on("mousemove",scope.moveTooltip)
-                node.on("mouseleave",scope.leaveTooltip)
+                node.on("pointerenter",scope.enterTooltip)
+                node.on("pointermove",scope.moveTooltip)
+                node.on("pointerleave",scope.leaveTooltip)
                 node.call(d3.drag()
                             .on("start", function (event, d) {
                                 if (!event.active)
@@ -549,6 +588,9 @@ export default {
                             .attr("stroke-opacity", 0))
                         .remove()
                     )
+                link.on("pointerenter",scope.enterTooltip)
+                link.on("pointermove",scope.moveTooltip)
+                link.on("pointerleave",scope.leaveTooltip)
 
                 // Update and restart the simulation.
                 simulation.nodes(graph.nodes);
@@ -561,30 +603,68 @@ export default {
 
         },
         enterTooltip(e,d){
-            this.showHover = true
+            let tooltip = this.$refs.tooltip
+            gsap.to(tooltip,{
+                duration:1,
+                opacity:1,
+                onComplete: () => {this.showHover = true}
+            })
             //tooltip.style("opacity", 1)
-            let data = this.hover_data[this.currentNetwork]
 
-            this.hoverMessage = data[d.title];
-            this.hoverAmount = d.weight;
+            let data = this.hover_data.eng
+            if(!this.isEnglish){
+                data = this.hover_data.de
+            }
+
+            if(e.target.tagName === "image"){
+                this.hoverMessage = data[d.title];
+            }
+            else if (e.target.tagName === "path"){
+                this.hoverMessage = data[d.source.title]
+
+                if(d.source.title === "start"|| d.source.title === "stationary"){
+                    this.hoverMessage = data[d.target.title];
+                }
+            }
         },
         moveTooltip(e,d){
 
             let tooltip = this.$refs.tooltip
 
-            gsap.set(tooltip, {
-                x: d.x-nodeSize(d.weight)/2,
-                y: d.y-nodeSize(d.weight)-30//+nodeSize(d.weight)+10,       
-            })
+            if(e.target.tagName === "image"){
 
-            if(d.title === "end"){
                 gsap.set(tooltip, {
-                x: d.x-nodeSize(d.weight)*2,      
-            })
+                    x: d.x-nodeSize(d.weight)/2,
+                    y: d.y-nodeSize(d.weight)-30//+nodeSize(d.weight)+10,       
+                })
+
+                if(d.title === "end"){
+                    gsap.set(tooltip, {
+                        x: d.x-nodeSize(d.weight)*2,      
+                    })
+                }
             }
+            else if(e.target.tagName === "path"){
+                //console.log(e)
+                gsap.to(tooltip, {
+                    duration:0.1,
+                    x: d3.pointer(e)[0] + 30,
+                    y: d3.pointer(e)[1] - 20  
+                })
+            }
+
+
         },
         leaveTooltip(){
-            this.showHover = false;
+            let tooltip = this.$refs.tooltip
+            clearTimeout(timer);
+            timer = setTimeout(()=>{
+                gsap.to(tooltip,{
+                duration:1,
+                opacity:0,
+                onComplete: () => {this.showHover = false}
+            })
+            },2000);
         },
         node(nodeId) {
             return this.nodeData.find(function (node) {
@@ -636,7 +716,7 @@ export default {
             return this.height * 0.2
         },
         widthLegend: function(){
-            return this.width * 0.2
+            return this.width * 0.3
         },
     }
 };
@@ -660,26 +740,16 @@ export default {
 }
 
 #tooltip{
-    background-color: $light;
-    padding: 0.5rem;
-    color: $darkgrey;
-    display: block;
-    z-index:2;
-    position:absolute;
-    text-align:middle;
-    border-radius: 1rem;
-
-    h3{
-        font-size:1rem;
-    }
+    @include tooltip
 }
 
 #description{
-    position:absolute;
-    top:0;
+    position: absolute;
+    @include small-headline;
     padding-top:2.5rem;
-    font-family: Vollkorn;
-    font-size:1.3rem;
+    padding-bottom: 0rem;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 </style>

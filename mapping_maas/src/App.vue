@@ -24,6 +24,13 @@
 import Dataviz from "./components/Dataviz.vue";
 
 export default {
+    name: 'App',
+    metaInfo: {
+        meta: [
+            { charset: 'utf-8' },
+            { name: 'Our Mobility in Knots', content: 'width=device-width, initial-scale=1' }
+        ]
+    },
     components: {
         Dataviz,
     },
@@ -81,7 +88,7 @@ export default {
     position:fixed;
     z-index: 3;
     right:0;
-    margin: 5vw;
+    margin: 2.5rem;
 
     &_button{
         -webkit-appearance:none;

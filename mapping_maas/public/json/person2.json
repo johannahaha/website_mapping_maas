@@ -4,37 +4,37 @@
             "title": "start",
             "color": "#004e64",
             "weight": 27,
-            "route_from": 0
+            "route_from": 0.0
         },
         {
             "title": "bicycle",
             "color": "#9fffcb",
             "weight": 38,
-            "route_from": 90081
+            "route_from": 4504.05
         },
         {
             "title": "walk",
             "color": "#00a5cf",
             "weight": 27,
-            "route_from": 25365
+            "route_from": 1585.31
         },
         {
             "title": "stationary",
             "color": "#004e64",
-            "weight": 2,
-            "route_from": 2087
+            "weight": 27,
+            "route_from": 553.29
         },
         {
             "title": "public_transport",
             "color": "#25a18e",
-            "weight": 2,
-            "route_from": 2964
+            "weight": 27,
+            "route_from": 20023.5
         },
         {
             "title": "end",
             "color": "#004e64",
-            "weight": 4,
-            "route_from": 10
+            "weight": 27,
+            "route_from": 0
         }
     ],
     "edges": [
@@ -89,7 +89,7 @@
         {
             "source": "walk",
             "target": "public_transport",
-            "value": 4,
+            "value": 5,
             "color": "#00a5cf"
         },
         {
@@ -107,25 +107,25 @@
         {
             "source": "stationary",
             "target": "end",
-            "value": 1,
+            "value": 2,
             "color": "#004e64"
         },
         {
             "source": "stationary",
             "target": "public_transport",
-            "value": 2,
+            "value": 3,
             "color": "#004e64"
         },
         {
             "source": "public_transport",
             "target": "walk",
-            "value": 3,
+            "value": 4,
             "color": "#25a18e"
         },
         {
             "source": "public_transport",
             "target": "stationary",
-            "value": 3,
+            "value": 4,
             "color": "#25a18e"
         }
     ]

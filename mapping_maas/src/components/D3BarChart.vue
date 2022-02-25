@@ -1,6 +1,6 @@
 <template>
-    <div>
-        Average Meters made with each mode of transport (of all participants)
+    <div id="bar-chart-container">
+        <h3>  How far did a participant on average travel with each transport mode in a trip?</h3>
         <div id="d3-bar-chart" :height="heightPx" :width="widthPx">
             <svg
                 id="svg"
@@ -40,10 +40,14 @@
                 </g>
             </svg>
         </div>
+        (vielleicht eher in unsere Dokumentation als auf unserer Seite)
+        A trip consists of several routes with different modes of transport that are needed to get from the start to the destination. To determine the average meters traveled by each mode of transportation, we first added up the routes traveled by each mode of transportation in each trip. Then we averaged these routes. If we had calculated only the average meters of all recorded routes without taking the trips into account, we would have distorted the result. Because then we would have ignored the fact that, for example, one uses several means of public transport in a row and walks in between. You don't do that when you use a car, so it would look like a car covers much longer distances.
     </div>
 </template>
 
 <script>
+//parts of this code are from this course / repo: https://github.com/uclab-potsdam/scrollytelling-beginners
+
 import * as d3 from "d3";
 
 //let svg;
@@ -65,33 +69,17 @@ export default {
             let scope = this;
             let filterList = ["car","bicycle","walk","public_transport"]
             d3.json("/json/totalgraphdata.json").then(function (data) {
-                scope.data = data.nodes.map((d) => {
-                        console.log(d);
-                        return {
-                            transport_mode: d.title,
-                            route_sum: +d.route_from,
-                            route_mean: +d.route_mean,
-                        };
-                    });
-                    scope.data = data.nodes.reduce(function(filtered, d) {
-                    if (filterList.includes(d.title)) {
-                        let node = {
-                            transport_mode: d.title,
-                            route_sum: +d.route_from,
-                            route_mean: +d.route_mean,
-                        }
-                        filtered.push(node);
+                scope.data = data.nodes.reduce(function(filtered, d) {
+                if (filterList.includes(d.title)) {
+                    let node = {
+                        transport_mode: d.title,
+                        route_mean: +d.route_from,
                     }
-                    return filtered;
-                    }, []);
-                    // scope.data = data.nodes.map((d) => {
-                    //     console.log(d);
-                    //     return {
-                    //         transport_mode: d.title,
-                    //         route_sum: +d.route_from,
-                    //         route_mean: +d.route_mean,
-                    //     };
-                    // });
+                    filtered.push(node);
+                }
+                return filtered;
+                }, []);
+
             });
         },
         getIcon(title) {
@@ -102,7 +90,6 @@ export default {
             if (title === "car") {
                 return "#E3E3E3";
             } else if (title === "bicycle") {
-                console.log("give color of bike hehe");
                 return "#95E673";
             } else if (title === "walk") {
                 return "#73B6E6";
@@ -168,6 +155,14 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/_config.scss";
+
+#bar-chart-container{
+    margin: 10% 0;
+
+    h3{
+        @include small-headline;
+    }
+}
 
 svg {
     text {

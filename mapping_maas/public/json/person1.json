@@ -4,36 +4,31 @@
             "title": "start",
             "color": "#004e64",
             "weight": 52,
-            "route_from": 0,
-            "route_mean": 0
+            "route_from": 0.0
         },
         {
             "title": "walk",
             "color": "#00a5cf",
             "weight": 85,
-            "route_from": 79407,
-            "route_mean": 79407
+            "route_from": 1588.14
         },
         {
             "title": "car",
             "color": "#7ae582",
             "weight": 62,
-            "route_from": 1627711,
-            "route_mean": 1627711
+            "route_from": 36171.36
         },
         {
             "title": "stationary",
             "color": "#004e64",
             "weight": 18,
-            "route_from": 1259,
-            "route_mean": 1627711
+            "route_from": 83.93
         },
         {
             "title": "end",
             "color": "#004e64",
             "weight": 18,
-            "route_from": 10,
-            "route_mean": 1627711
+            "route_from": 0
         }
     ],
     "edges": [

@@ -3,6 +3,27 @@
 $light: #F2F0EB;
 $darkgrey: #111;
 
+@mixin small-headline{
+    padding: 2rem 0;
+    font-family: Vollkorn;
+    font-size:1.3rem;
+}
+
+@mixin tooltip{
+    background-color: $light;
+    padding: 0.5rem;
+    color: $darkgrey;
+    display: block;
+    z-index:2;
+    position:absolute;
+    text-align:middle;
+    border-radius: 1rem;
+
+    h3{
+        font-size:1rem;
+    }
+}
+
 // $fa-font-path: "/webfonts";
 // @import "scss/fontawesome.scss";
 // @import "scss/solid.scss";
