@@ -3,22 +3,26 @@
         {
             "title": "start",
             "color": "#004e64",
-            "weight": 51
+            "weight": 51,
+            "route_from": 0.0
         },
         {
             "title": "walk",
             "color": "#00a5cf",
-            "weight": 69
+            "weight": 69,
+            "route_from": 1588.14
         },
         {
             "title": "end",
             "color": "#004e64",
-            "weight": 51
+            "weight": 51,
+            "route_from": 0.0
         },
         {
             "title": "car",
             "color": "#9fffcb",
-            "weight": 49
+            "weight": 49,
+            "route_from": 36171.36
         }
     ],
     "edges": [

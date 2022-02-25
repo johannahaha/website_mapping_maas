@@ -20,6 +20,7 @@ let simulation;
 let node,link,marker,svg
 let colorBasics, colorCar, colorBicycle, colorWalk, colorPublicTransport;
 let edgeWidth, nodeSize;
+let timer;
 //let svgDom;
 
 let default_data = {
@@ -57,7 +58,6 @@ export default {
             },
             showHover:false,
             type:"",
-            hoverAmount:0,
             nodeData : [],
             linkData : [],
             isDragging:false,
@@ -66,9 +66,12 @@ export default {
                 network_intro2: default_data,
                 network_intro3: default_data,
                 network_person1: default_data,
+                network_person2: default_data,
                 network_person3: default_data,
+                network_person4: default_data,
+                network_person5: default_data,
                 network_person6: default_data,
-            }
+            },
         }
     },
     props:{
@@ -115,8 +118,8 @@ export default {
             
             nodeSize = d3.scaleLinear()
                 .domain([10,120])
-                .range([15,30])
-                //.range([40, 70]);
+                //.range([15,30])
+                .range([40, 70]);
     
             
             //SVG
@@ -202,6 +205,9 @@ export default {
                     .attr("ref", function (d){
                         return d.source.title + "-" + d.target.title
                     });
+                link.on("pointerenter",scope.enterTooltip)
+                link.on("pointermove",scope.moveTooltip)
+                link.on("pointerleave",scope.leaveTooltip)
 
                 // We create a <circle> SVG element for each node
                 // in the graph, and we specify a few attributes.
@@ -284,9 +290,9 @@ export default {
                 node.append("title").text(function (d) {
                     return d.title;
                 });
-                node.on("mouseenter",scope.enterTooltip)
-                node.on("mousemove",scope.moveTooltip)
-                node.on("mouseleave",scope.leaveTooltip)
+                node.on("pointerenter",scope.enterTooltip)
+                node.on("pointermove",scope.moveTooltip)
+                node.on("pointerleave",scope.leaveTooltip)
 
                     
 
@@ -407,6 +413,7 @@ export default {
                 this.currentNetwork = updatedNetwork
                 this.currentPath = updatedPath
                 this.currentDescription = this.description[this.currentNetwork]
+                this.showHover = false
             }
         },
         updateGraph(step){
@@ -499,9 +506,9 @@ export default {
                         .remove()
                     )
 
-                node.on("mouseenter",scope.enterTooltip)
-                node.on("mousemove",scope.moveTooltip)
-                node.on("mouseleave",scope.leaveTooltip)
+                node.on("pointerenter",scope.enterTooltip)
+                node.on("pointermove",scope.moveTooltip)
+                node.on("pointerleave",scope.leaveTooltip)
                 node.call(d3.drag()
                             .on("start", function (event, d) {
                                 if (!event.active)
@@ -549,6 +556,9 @@ export default {
                             .attr("stroke-opacity", 0))
                         .remove()
                     )
+                link.on("pointerenter",scope.enterTooltip)
+                link.on("pointermove",scope.moveTooltip)
+                link.on("pointerleave",scope.leaveTooltip)
 
                 // Update and restart the simulation.
                 simulation.nodes(graph.nodes);
@@ -561,30 +571,64 @@ export default {
 
         },
         enterTooltip(e,d){
-            this.showHover = true
+            let tooltip = this.$refs.tooltip
+            gsap.to(tooltip,{
+                duration:1,
+                opacity:1,
+                onComplete: () => {this.showHover = true}
+            })
             //tooltip.style("opacity", 1)
             let data = this.hover_data[this.currentNetwork]
 
-            this.hoverMessage = data[d.title];
-            this.hoverAmount = d.weight;
+            if(e.target.tagName === "image"){
+                this.hoverMessage = data[d.title];
+            }
+            else if (e.target.tagName === "path"){
+                this.hoverMessage = data[d.source.title]
+
+                if(d.source.title === "start"|| d.source.title === "stationary"){
+                    this.hoverMessage = data[d.target.title];
+                }
+            }
         },
         moveTooltip(e,d){
 
             let tooltip = this.$refs.tooltip
 
-            gsap.set(tooltip, {
-                x: d.x-nodeSize(d.weight)/2,
-                y: d.y-nodeSize(d.weight)-30//+nodeSize(d.weight)+10,       
-            })
+            if(e.target.tagName === "image"){
 
-            if(d.title === "end"){
                 gsap.set(tooltip, {
-                x: d.x-nodeSize(d.weight)*2,      
-            })
+                    x: d.x-nodeSize(d.weight)/2,
+                    y: d.y-nodeSize(d.weight)-30//+nodeSize(d.weight)+10,       
+                })
+
+                if(d.title === "end"){
+                    gsap.set(tooltip, {
+                        x: d.x-nodeSize(d.weight)*2,      
+                    })
+                }
             }
+            else if(e.target.tagName === "path"){
+                //console.log(e)
+                gsap.to(tooltip, {
+                    duration:0.1,
+                    x: d3.pointer(e)[0] + 30,
+                    y: d3.pointer(e)[1] - 20  
+                })
+            }
+
+
         },
         leaveTooltip(){
-            this.showHover = false;
+            let tooltip = this.$refs.tooltip
+            clearTimeout(timer);
+            timer = setTimeout(()=>{
+                gsap.to(tooltip,{
+                duration:1,
+                opacity:0,
+                onComplete: () => {this.showHover = false}
+            })
+            },2000);
         },
         node(nodeId) {
             return this.nodeData.find(function (node) {
@@ -636,7 +680,7 @@ export default {
             return this.height * 0.2
         },
         widthLegend: function(){
-            return this.width * 0.2
+            return this.width * 0.3
         },
     }
 };
@@ -660,26 +704,15 @@ export default {
 }
 
 #tooltip{
-    background-color: $light;
-    padding: 0.5rem;
-    color: $darkgrey;
-    display: block;
-    z-index:2;
-    position:absolute;
-    text-align:middle;
-    border-radius: 1rem;
-
-    h3{
-        font-size:1rem;
-    }
+    @include tooltip
 }
 
 #description{
     position:absolute;
     top:0;
+    @include small-headline;
     padding-top:2.5rem;
-    font-family: Vollkorn;
-    font-size:1.3rem;
+    padding-bottom: 0rem;
 }
 
 </style>

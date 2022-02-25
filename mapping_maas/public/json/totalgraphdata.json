@@ -4,58 +4,49 @@
             "title": "start",
             "color": "#004e64",
             "weight": 530,
-            "route_from": 0,
-            "route_mean":0
+            "route_from": 0.0
         },
         {
             "title": "walk",
             "color": "#00a5cf",
             "weight": 932,
-            "route_from": 839718,
-            "route_mean":900.0192926045016
-
+            "route_from": 1849.6
         },
         {
             "title": "car",
             "color": "#7ae582",
             "weight": 298,
-            "route_from": 3497456,
-            "route_mean":11697.177257525083
+            "route_from": 19648.63
         },
         {
             "title": "bicycle",
             "color": "#9fffcb",
             "weight": 349,
-            "route_from": 548178,
-            "route_mean":1570.7106017191977
+            "route_from": 3243.66
         },
         {
             "title": "stationary",
             "color": "#004e64",
-            "weight": 14,
-            "route_from": 11855,
-            "route_mean":39.38538205980066
+            "weight": 87,
+            "route_from": 89.73
         },
         {
             "title": "public_transport",
             "color": "#25a18e",
-            "weight": 14,
-            "route_from": 54837,
-            "route_mean":3916.9285714285716
+            "weight": 87,
+            "route_from": 14669.29
         },
         {
             "title": "ship",
             "color": "#25a18e",
             "weight": 1,
-            "route_from": 159,
-            "route_mean":159.0
+            "route_from": 159.0
         },
         {
             "title": "end",
             "color": "#004e64",
             "weight": 1,
-            "route_from": 0,
-            "route_mean":900.0192926045016
+            "route_from": 0
         }
     ],
     "edges": [
@@ -74,7 +65,7 @@
         {
             "source": "start",
             "target": "public_transport",
-            "value": 9,
+            "value": 10,
             "color": "#004e64"
         },
         {
@@ -98,7 +89,7 @@
         {
             "source": "walk",
             "target": "public_transport",
-            "value": 39,
+            "value": 45,
             "color": "#00a5cf"
         },
         {
@@ -116,7 +107,7 @@
         {
             "source": "walk",
             "target": "stationary",
-            "value": 152,
+            "value": 153,
             "color": "#00a5cf"
         },
         {
@@ -176,7 +167,7 @@
         {
             "source": "stationary",
             "target": "public_transport",
-            "value": 12,
+            "value": 28,
             "color": "#004e64"
         },
         {
@@ -188,13 +179,13 @@
         {
             "source": "stationary",
             "target": "end",
-            "value": 2,
+            "value": 3,
             "color": "#004e64"
         },
         {
             "source": "public_transport",
             "target": "walk",
-            "value": 53,
+            "value": 63,
             "color": "#25a18e"
         },
         {
@@ -206,13 +197,13 @@
         {
             "source": "public_transport",
             "target": "end",
-            "value": 3,
+            "value": 4,
             "color": "#25a18e"
         },
         {
             "source": "public_transport",
             "target": "stationary",
-            "value": 2,
+            "value": 14,
             "color": "#25a18e"
         },
         {

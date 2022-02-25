@@ -42,35 +42,9 @@
                 </div>
             </article>
             <D3Network class="network sticky" ref="network" :width="widthSvg" :height="heightSvg"/>
-            <!-- <div class="legend">
-                <div class="sticky">
-                    <div class="legend_item">
-                        <img src = "/img/start.svg"/> <div class="description"> Startpunkt <br>eines Weges </div>
-                    </div>
-                    <div class="legend_item">
-                        <img src = "/img/end.svg"/> <div class="description"> Endpunkt <br>eines Weges </div>
-                    </div>
-                    <div class="legend_item">
-                        <img src = "/img/car.svg"/> <div class="description"> Auto </div>
-                    </div>
-                    <div class="legend_item">
-                        <img src = "/img/bicycle.svg"/> <div class="description"> Fahrrad </div>
-                    </div>
-                    <div class="legend_item">
-                        <img src = "/img/walk.svg"/> 
-                        <div class="description"> Zu Fuß </div>
-                    </div>
-                    <div class="legend_item">
-                        <img src = "/img/public_transport.svg"/> 
-                        <div class="description"> Öffentliche Verkehrsmittel <br>(Bus, Tram, S-Bahn)</div>
-                    </div>
-                </div>
-            
-            </div> -->
-            <!-- -->
         </section>
         <section id="outro">
-            <D3BarChart :width="widthSvgBarChart" :height="heightSvg"/>
+            <D3BarChart :width="widthSvgBarChart" :height="heightSvgBarChart"/>
             <div id="outro_text">
                 <div class="text">
                     <h3>
@@ -183,8 +157,11 @@ export default {
             return height
         },
         widthSvgBarChart:function(){
-            console.log("barchart: ",this.width *0.8)
-            return this.width *0.8},
+            return this.width *0.8
+        },
+        heightSvgBarChart:function(){
+            return this.height * 0.6
+        },
     },
     mounted() {
         this.height = window.innerHeight;
@@ -287,9 +264,7 @@ h1{
 
         .text{
             h3{
-                padding: 2rem 0;
-                font-family: Vollkorn;
-                font-size:1.5rem;
+                @include small-headline;
             }
             p {
                 padding: 2rem 0;
