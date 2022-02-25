@@ -111,7 +111,7 @@ export default {
                     }
                     return filtered;
                     }, []);
-            }).then(console.log(scope.data));
+            });
         },
         updateLegend(){
             this.setupLegend();
@@ -124,7 +124,6 @@ export default {
             if (title === "car") {
                 return "#E3E3E3";
             } else if (title === "bicycle") {
-                console.log("give color of bike hehe");
                 return "#95E673";
             } else if (title === "walk") {
                 return "#73B6E6";
@@ -152,7 +151,7 @@ export default {
         changeHoverMessage(){
             let info = this.description[this.currentHover]
             if (this.isEnglish){
-                 this.hoverMessage = info.eng
+                this.hoverMessage = info.eng
             }
             else{
                 this.hoverMessage = info.de

@@ -56,9 +56,18 @@ export default {
                     de:"Homeoffice & Fahrrad",
                     eng:"Homeoffice & Bicycle"
                 },
-                network_person3: "Mobility of participant 3",
-                network_person4: "Mobility of participant 4",
-                network_person5: "Mobility of participant 5",
+                network_person3: {
+                    de:"participant 3",
+                    eng:"participant 3"
+                },
+                network_person4: {
+                    de:"participant 3",
+                    eng:"participant 3"
+                },
+                network_person5: {
+                    de:"participant 3",
+                    eng:"participant 3"
+                },
                 network_person6: {
                     de:"S-Bahn nach Berlin",
                     eng:"Train to Berlin"

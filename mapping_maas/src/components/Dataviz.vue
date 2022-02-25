@@ -2,17 +2,15 @@
     <div id="dataviz">
         <section id="intro">
             <h1 class="title">Our Mobility in Knots</h1>
-            <div class="text">
-                Thanks to a study conducted by FHP and Universität Siegen, we were able to work with a dataset of 32 participants. They mostly are residents of a small part of northern Potsdam. Not only did they record their GPS pathways. They also collected the mode of transportation and the reason for each, very specific trip. That gave us a unique insight into a set of very privacy-sensitive yet highly interesting data points that possibly tell us more about how individual mobility works. 
+            <div v-for="text in welcome_intro" :key="text.id" class="text"> 
+                <p v-if="isEnglish"> {{text.eng}} </p>
+                <p v-else> {{text.de}} </p>
                 <br><br>
-                This data was recorded in early 2021, right when the pandemic was peaking again and certain lockdown measures were in place. That's why our dataset is also a glimpse into the world of mobility during a global pandemic.
-                <br><br>
-                We asked ourselves how we can create a meaningful, rich visualization of the data while still ensuring the participants' privacy - and came up with mobility networks. But before we take a deep dive into our data, let's first go for a trial run...
             </div>
         </section>
         <section id="scrolly">
             <article>
-                <div v-for="text in intro" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
+                <div v-for="text in network_intro" :key="text.id" :data-step="text.id" class="step" :style="{'margin-top': heightPx}"> 
                     <div class="quote" v-if="isEnglish">{{text.eng}}</div>
                     <div class="quote" v-else>{{text.de}}</div>
                 </div>
@@ -111,7 +109,7 @@ export default {
             width:600,
             lastStep:null,
             //scrollingText:{
-            intro: {
+            network_intro: {
                 step0:{id:0,eng:"This is the simplest possible mobility, as it only consists one mode of mobility: Walking.",de:"hi"},
                 step1:{id:1,eng:"Just follow the arrow that begins at the knot “Start”. That will lead you to the mobility mode the person has chosen. From this point, you will get to the end of the path.",de:"hi"},
                 step2:{id:2,eng:"As we can see, this person is starting and ending walks - nothing more.",de:"hi"},
@@ -148,7 +146,16 @@ export default {
                 step23:{id:23,eng:"person 5",de:"person5"}
             },
             network_person6:{
-                step24:{id:24,eng:"person 6",de:"person6"}
+                step24:{id:24,eng:"person 6",de:"person6"},
+                step25:{id:25,eng:"This person also does not use the car. But similarly to our first person, they travel from Potsdam to Berlin for work.",de:"person6"},
+                step26:{id:26,eng:"For transit, they use public transport. It takes them about 45 minutes to get their.",de:"person6"},
+                step27:{id:27,eng:"Taking the car would take 15 minutes less. But traffic and the time to look for a parking station is not included, so it would probably not be that much faster.",de:"person6"},
+                step28:{id:28,eng:"To further cut down the transit, they take their bike with them in the train and use it to get from their home to the first train station.",de:"person6"},
+                step29:{id:29,eng:'Even though normally they optimize their transit time, sometimes it does not work out: "Today I missed the connecting regional train. The foot way between the two stations is too far". They needed to wait 20 minutes for the next train to come.',de:"person6"},
+                step30:{id:30,eng:"Occasionally, they use a bike sharing service, but less often since the pandemic",de:"person6"},
+                step31:{id:31,eng:"They own a car in their household. About that, they say: 'We did not buy it, we just borrowed it from a friend as they don't use it at the moment'",de:"person6"},
+                step32:{id:32,eng:"They do not give the car any emotional value or memories. It only serves its purpose, but they do not need it specifically.",de:"person6"},
+                step33:{id:33,eng:"At their neighborhood and their workplace, they wish for roofed parking slots for the bike",de:"person6"},
             },
             outro:{
                 text1:{
@@ -184,6 +191,29 @@ export default {
                         de: "Unser Mobilitätsverhalten reagiert auf verschiedene Faktoren: das Angebot an verschiedenen Verkehrsmitteln, die Verfügbarkeit und Qualität des öffentlichen Verkehrs, unser Zeitbudget und, wie man an den Daten gut erkennen kann, die aktuelle (pandemische) Weltlage. Mobilität bleibt jedoch nie eindimensional: In einer Stadt mobil zu sein, bedeutet, sich zwischen verschiedenen Verkehrsmitteln zu bewegen und nach einer Kombination von Verkehrsmitteln zu suchen, die gut miteinander funktionieren und den individuellen Bedürfnissen entsprechen. Diese Verknüpfungen von Verkehrsmitteln geben uns Anlass, genau hinzuschauen: Welches Umsteigen fühlt sich gut an, welche Wartezeit nervt? Wie viele Leihfahrräder reichen aus, wenn jeder morgens zur Arbeit muss?"
                     },
                 }
+            },
+            welcome_intro:{
+                text1:{
+                    id:1,
+                    eng: "Thanks to a study conducted by MaaS L.A.B.S. at FH Potsdam and University of Siegen, we were able to work with a dataset of 32 participants. They mostly are residents of a small part of northern Potsdam. Not only did they record their GPS pathways. They also collected the mode of transportation and the reason for each, very specific trip. That gave us a unique insight into a set of very privacy-sensitive yet highly interesting data points that possibly tell us more about how individual mobility works.",
+                    de: "Dank einer von MaaS L.A.B.S. an der FH Potsdam und der Universität Siegen durchgeführten Studie konnten wir mit einem Datensatz von 32 Teilnehmern arbeiten. Die meisten von ihnen leben in einem kleinen Stadtteil im Norden von Potsdam. Sie haben nicht nur ihre GPS-Wege aufgezeichnet. Sie erfassten auch das Verkehrsmittel und den Grund für jede einzelne, sehr spezifische Fahrt. Das gab uns einen einzigartigen Einblick in eine Reihe von sehr datenschutzsensiblen, aber hochinteressanten Datenpunkten, die uns möglicherweise mehr darüber verraten, wie individuelle Mobilität funktioniert."
+                },
+                text2:{
+                    id:2,
+                    eng: "This data was recorded in early 2021, right when the pandemic was peaking again and certain lockdown measures were in place. That's why our dataset is also a glimpse into the world of mobility during a global pandemic.",
+                    de: "Diese Daten wurden Anfang 2021 aufgezeichnet, genau zu dem Zeitpunkt, als die Pandemie ihren damaligen Höhepunkt erreichte und bestimmte Abriegelungsmaßnahmen in Kraft waren. Deshalb ist unser Datensatz auch ein Einblick in die Welt der Mobilität während einer globalen Pandemie."
+                },
+                text3:{
+                    id:3,
+                    eng: "We have selected four different people for the visualization. Of course, there are many more participants in the dataset. We carefully considered who to select and stuck with the people who had at least some mobility despite being blocked. From these individuals, we selected four individuals with distinct mobility patterns - that is, with different main modes of transportation, times, routes, and regularities within mobility. Even though this is of course anything but representative, we want to use it to represent a diverse spectrum of mobility patterns.",
+                    de: "Für die Visualisierung haben wir vier verschiedene Personen ausgewählt. Natürlich gibt es im Datensatz viel mehr Teilnehmer. Wir haben sorgfältig überlegt, wen wir auswählen sollten, und sind bei den Personen geblieben, die trotz der Sperrung zumindest eine gewisse Mobilität hatten. Aus diesen Personen haben wir vier Personen mit ausgeprägten Mobilitätsmustern ausgewählt - also mit unterschiedlichen Hauptverkehrsmitteln, Zeiten, Wegen und Regelmäßigkeiten innerhalb der Mobilität. Auch wenn dies natürlich alles andere als repräsentativ ist, wollen wir damit ein vielfältiges Spektrum an Mobilitätsmustern abbilden."
+                },
+                text4:{
+                    id:4,
+                    eng: "We asked ourselves how we can create a meaningful, rich visualization of the data while still ensuring the participants' privacy - and came up with mobility networks. But before we take a deep dive into our data, let's first go for a trial run...",
+                    de: "Wir haben uns gefragt, wie wir eine aussagekräftige, reichhaltige Visualisierung der Daten erstellen und gleichzeitig die Privatsphäre der Teilnehmer schützen können - und sind auf Mobilitätsnetzwerke gekommen. Aber bevor wir tief in unsere Daten eintauchen, machen wir erst einmal einen Probelauf..."
+                },
+
             }
             //}
         };
