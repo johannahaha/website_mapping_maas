@@ -88,7 +88,7 @@ export default {
     position:fixed;
     z-index: 3;
     right:0;
-    margin: 5vw;
+    margin: 2.5rem;
 
     &_button{
         -webkit-appearance:none;

@@ -1,7 +1,10 @@
 <template>
     <div>
-        <div id="tooltip" v-show="showHover" ref="tooltip" :style="`{'color': ${getColor(currentHover)}}`">
-            This participant {{hoverMessage}} km per trip.
+        <div v-if="isEnglish" id="tooltip" v-show="showHover" ref="tooltip" :style="`{'color': ${getColor(currentHover)}}`">
+            This participant {{hoverMessage}} km.
+        </div>
+        <div v-else id="tooltip" v-show="showHover" ref="tooltip" :style="`{'color': ${getColor(currentHover)}}`">
+            Diese Person {{hoverMessage}} km.
         </div>
         <div id="d3-legend" :height="heightPx" :width="widthPx" :path="path">
             <svg
@@ -67,17 +70,30 @@ export default {
             showHover:false,
             currentHover:"walk",
             description:{
-                public_transport:"drove with public transport on average ",
-                car:"drove with a car on average ",
-                walk:"walked on average ",
-                bicycle:"drove the bicycle on average "
+                public_transport:{
+                    eng:"drove with public transport on average ",
+                    de:"fährt öffentliche Verkehrmittel durchschnittlich "
+                },
+                car:{
+                    eng:"drove with a car on average ",
+                    de:"fährt das Auto durchschnittlich "
+                },
+                walk:{
+                    eng:"walked on average ",
+                    de:"läuft im Durschnitt "
+                },
+                bicycle:{
+                    eng:"drove the bicycle on average ",
+                    de:"fährt das Fahrrad im Durschnitt "
+                },
             }
         };
     },
     props: {
         width: Number,
         height: Number,
-        path:String
+        path:String,
+        isEnglish:Boolean
     },
     methods: {
         setupLegend() {
@@ -133,11 +149,21 @@ export default {
             let route_mean = this.toKilometer(datapoint["route_mean"])
             return route_mean;
         },
+        changeHoverMessage(){
+            let info = this.description[this.currentHover]
+            if (this.isEnglish){
+                 this.hoverMessage = info.eng
+            }
+            else{
+                this.hoverMessage = info.de
+            }
+            this.hoverMessage += this.getRouteMean(this.currentHover)
+        },
         onEnter(e){
             this.showHover = true;
             let name = e.target.getAttribute('name')
-            this.currentHover = name;
-            this.hoverMessage = this.description[name] + this.getRouteMean(name)
+            this.currentHover = name;   
+            this.changeHoverMessage();
 
             let tooltip = this.$refs.tooltip;
             gsap.set(tooltip, {
@@ -147,6 +173,11 @@ export default {
         },
         onLeave(){
             this.showHover = false;
+        }
+    },
+    watch: {
+        isEnglish: function() {
+            this.changeHoverMessage()
         }
     },
     computed: {

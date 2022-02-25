@@ -41,12 +41,18 @@
                     <div class="quote" v-else>{{text.de}}</div>
                 </div>
             </article>
-            <D3Network class="network sticky" ref="network" :width="widthSvg" :height="heightSvg"/>
+            <D3Network class="network sticky" ref="network" :width="widthSvg" :height="heightSvg" :isEnglish="isEnglish"/>
         </section>
         <section id="outro">
             <D3BarChart :width="widthSvgBarChart" :height="heightSvgBarChart"/>
             <div id="outro_text">
-                <div class="text">
+                <div v-for="text in outro" :key="text.id" class="text"> 
+                    <h3 v-if="isEnglish"> {{text.header.eng}} </h3>
+                    <h3 v-else> {{text.header.de}} </h3>
+                    <p v-if="isEnglish"> {{text.content.eng}} </p>
+                    <p v-else> {{text.content.de}} </p>
+                </div>
+                <!-- <div class="text">
                     <h3>
                         Mobility is individual
                     </h3>
@@ -70,7 +76,7 @@
                     Our mobility behavior responds to various factors: the range of different means of transport, the availability and quality of public transport, our time budget, and, as can be seen well in the data, the current (pandemic) world situation.
                     Mobility, however, never remains one-dimensional: Being mobile in a city means moving between modes of movement, looking for a combination of modes that work well together and suit your individual needs. These connections of means of transport give us reason to take a close look: which transfer feels good, which waiting time annoying? How many rental bicycles are enough when everyone has to go to work in the morning?    
                     </p>
-                </div>
+                </div> -->
             </div>    
         </section>
     </div>
@@ -143,11 +149,46 @@ export default {
             },
             network_person6:{
                 step24:{id:24,eng:"person 6",de:"person6"}
+            },
+            outro:{
+                text1:{
+                    id:1,
+                    header:{
+                        eng: "Mobility is individual",
+                        de: "Mobilität ist individuell"
+                    },
+                    content:{
+                        eng: "Each of us has his or her personal mobility preferences. How do I move around in everyday life, perhaps to experience beautiful moments in nature in between? Which shops do I integrate into my routines because they might have the best bread rolls in town? Where do I have to be at what time, and therefore can't spare a minute? These decisions and connections are highly individual and often difficult to capture. However, with this survey data, we were able to gain insight into individual mobility and the unique motivations of the participants.",
+                        de: "Jeder von uns hat seine persönlichen Mobilitätsvorlieben. Wie bewege ich mich im Alltag, um vielleicht zwischendurch schöne Momente in der Natur zu erleben? Welche Geschäfte binde ich in meine Routine ein, weil es dort vielleicht die besten Brötchen der Stadt gibt? Wo muss ich zu welcher Zeit sein und kann deshalb keine Minute erübrigen? Diese Entscheidungen und Zusammenhänge sind sehr individuell und oft schwer zu erfassen. Mit den Umfragedaten konnten wir jedoch einen Einblick in die individuelle Mobilität und die besonderen Beweggründe der Teilnehmer gewinnen."
+                    },
+                },
+                text2:{
+                    id:2,
+                    header:{
+                        eng: "Mobility is sensitive",
+                        de: "Mobilität ist sensibel"
+                    },
+                    content:{
+                        eng: "Every startpoint and destination, every transferring time, and every change of means of transport reveal something about the individual person. Working with this kind of data made us more aware of what can possibly be done with all those data points and also how we can visualize them without attacking the privacy of participants in the study. That's why we choose to look at networks and the interconnectedness of means of mobility.",
+                        de: "Jeder Start- und Zielort, jede Umsteigezeit und jeder Wechsel des Verkehrsmittels verrät etwas über die einzelne Person. Durch die Arbeit mit dieser Art von Daten wurde uns bewusster, was man mit all diesen Datenpunkten machen kann und wie wir sie visualisieren können, ohne die Privatsphäre der Studienteilnehmer zu verletzen. Deshalb haben wir uns für die Betrachtung von Netzwerken und die Verknüpfung von Mobilitätsmitteln entschieden."
+                    },
+                },
+                text3:{
+                    id:3,
+                    header:{
+                        eng: "Mobility is Plural",
+                        de: "Mobilität ist Plural"
+                    },
+                    content:{
+                        eng: "Our mobility behavior responds to various factors: the range of different means of transport, the availability and quality of public transport, our time budget, and, as can be seen well in the data, the current (pandemic) world situation. Mobility, however, never remains one-dimensional: Being mobile in a city means moving between modes of movement, looking for a combination of modes that work well together and suit your individual needs. These connections of means of transport give us reason to take a close look: which transfer feels good, which waiting time annoying? How many rental bicycles are enough when everyone has to go to work in the morning?",
+                        de: "Unser Mobilitätsverhalten reagiert auf verschiedene Faktoren: das Angebot an verschiedenen Verkehrsmitteln, die Verfügbarkeit und Qualität des öffentlichen Verkehrs, unser Zeitbudget und, wie man an den Daten gut erkennen kann, die aktuelle (pandemische) Weltlage. Mobilität bleibt jedoch nie eindimensional: In einer Stadt mobil zu sein, bedeutet, sich zwischen verschiedenen Verkehrsmitteln zu bewegen und nach einer Kombination von Verkehrsmitteln zu suchen, die gut miteinander funktionieren und den individuellen Bedürfnissen entsprechen. Diese Verknüpfungen von Verkehrsmitteln geben uns Anlass, genau hinzuschauen: Welches Umsteigen fühlt sich gut an, welche Wartezeit nervt? Wie viele Leihfahrräder reichen aus, wenn jeder morgens zur Arbeit muss?"
+                    },
+                }
             }
             //}
         };
     },
-        computed:{
+    computed:{
         heightPx: function(){return this.height * 0.05 + "px"},
         paddingPx: function(){return this.height * 0.1 + "px"},
         widthSvg: function(){
