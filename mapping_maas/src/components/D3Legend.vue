@@ -1,10 +1,15 @@
 <template>
     <div>
+        <input type="radio" id="km" value="km" v-model="legendMode" />
+        <label for="one">km</label>
+
+        <input type="radio" id="min" value="min" v-model="legendMode" />
+        <label for="two">min</label>
         <div v-if="isEnglish" id="tooltip" v-show="showHover" ref="tooltip" :style="`{'color': ${getColor(currentHover)}}`">
-            This participant {{hoverMessage}} km.
+            This participant {{hoverMessage}} {{legendMode}}.
         </div>
         <div v-else id="tooltip" v-show="showHover" ref="tooltip" :style="`{'color': ${getColor(currentHover)}}`">
-            Diese Person {{hoverMessage}} km.
+            Diese Person {{hoverMessage}} {{legendMode}}.
         </div>
         <div id="d3-legend" :height="heightPx" :width="widthPx" :path="path">
             <svg
@@ -45,7 +50,7 @@
                         dy="0.5em"
                         dx="-0.5em"
                         :style="textStyle(bar.mode)"
-                    >{{ toKilometer(bar.value) }} km
+                    > {{getBarValueByTitle(bar.mode)}} {{legendMode}}
                     </text>
                 </g>
             </svg>
@@ -87,7 +92,9 @@ export default {
                     eng:"drove the bicycle on average ",
                     de:"fährt das Fahrrad im Durschnitt "
                 },
-            }
+            },
+            legendMode:"km",
+            updatedScale:false,
         };
     },
     props: {
@@ -104,9 +111,11 @@ export default {
             d3.json(this.path).then(function (data) {
                     scope.data = data.nodes.reduce(function(filtered, d) {
                     if (filterList.includes(d.title)) {
+                        console.log(d)
                         let node = {
                             transport_mode: d.title,
                             route_mean: +d.route_from,
+                            time:+d.time_from
                         }
                         filtered.push(node);
                     }
@@ -144,10 +153,16 @@ export default {
         textStyle(title) {
             return { fill: String(this.getColor(title)) };
         },
-        getRouteMean(title){
+        getBarValueByTitle(title){
             let datapoint = this.data.find(element => element["transport_mode"] === title)
-            let route_mean = this.toKilometer(datapoint["route_mean"])
-            return route_mean;
+            if(this.valueMode === "route_mean"){
+                let route_mean = this.toKilometer(datapoint[this.valueMode])
+                return route_mean;
+            }
+            else{
+                console.log(datapoint[this.valueMode])
+                return datapoint[this.valueMode]
+            }
         },
         changeHoverMessage(){
             console.log(this.currentHover)
@@ -158,7 +173,7 @@ export default {
             else{
                 this.hoverMessage = info.de
             }
-            this.hoverMessage += this.getRouteMean(this.currentHover)
+            this.hoverMessage += this.getBarValueByTitle(this.currentHover)
         },
         onEnter(e){
             this.showHover = true;
@@ -204,21 +219,40 @@ export default {
             //const values = this.data.map((d) => d["route_sum"]);
 
             //const domain = [0, d3.max(values)];
-            const domain = [0, 37000]; //max value for comparability
+            const domain = [0, this.maxRange]; //max value for comparability
             const range = [0, this.chartWidth - this.iconSize - this.offsetLeft];
             return d3.scaleLinear().domain(domain).range(range);
         },
         bars() {
+            console.log("redo bars")
             return this.data.map((d) => {
-                const barWidth = this.scaleY(d["route_mean"]);
+                const barWidth = this.scaleY(d[this.valueMode]);
                 return {
                     mode: d.transport_mode,
-                    value: d["route_mean"],
+                    value: d[this.valueMode],
                     x: this.chartWidth - barWidth,
                     width: barWidth,
                 };
             });
         },
+        maxRange(){
+            if(this.legendMode === "km"){
+                return 37000;
+            }
+            else if(this.legendMode === "min"){
+                return 120;
+            }
+            return 120;
+        },
+        valueMode(){
+            if(this.legendMode === "km"){
+                return "route_mean";
+            }
+            else if(this.legendMode === "min"){
+                return "time";
+            }
+            return "route_mean";
+        }
     },
     mounted() {
         this.setupLegend();
