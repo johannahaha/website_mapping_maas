@@ -1,10 +1,17 @@
 <template>
     <div>
+        <div id="legend_buttons">
+            <input type="radio" id="km" value="km" v-model="legendMode" />
+            <label for="one">km</label>
+
+            <input type="radio" id="min" value="min" v-model="legendMode" />
+            <label for="two">min</label>
+        </div>
         <div v-if="isEnglish" id="tooltip" v-show="showHover" ref="tooltip" :style="`{'color': ${getColor(currentHover)}}`">
-            This participant {{hoverMessage}} km.
+            This participant {{hoverMessage}} {{legendMode}}.
         </div>
         <div v-else id="tooltip" v-show="showHover" ref="tooltip" :style="`{'color': ${getColor(currentHover)}}`">
-            Diese Person {{hoverMessage}} km.
+            Diese Person {{hoverMessage}} {{legendMode}}.
         </div>
         <div id="d3-legend" :height="heightPx" :width="widthPx" :path="path">
             <svg
@@ -22,15 +29,15 @@
                     :name="bar.mode"
                 >
                     <image
-                        :x="0"
-                        y="-10"
+                        :x="offsetLeft"
+                        y="-12.5"
                         :href="getIcon(bar.mode)"
-                        :width="offsetLeft"
-                        :height="offsetLeft"
+                        :width="iconSize"
+                        :height="iconSize"
                         :name="bar.mode"
                     />
                     <rect
-                        :x="offsetLeft"
+                        :x="iconSize + offsetLeft"
                         y="0"
                         :width="bar.width"
                         :height="5"
@@ -39,14 +46,14 @@
                         ry="2.5"
                         :name="bar.mode"
                     />
-                    <!-- <text
-                        :x="bar.x"
+                    <text
+                        :x="offsetLeft" 
                         y="0"
-                        dy="-0.5em"
+                        dy="0.5em"
+                        dx="-0.5em"
                         :style="textStyle(bar.mode)"
-                    >
-                        {{ toKilometer(bar.value) }} km
-                    </text> -->
+                    > {{getBarValueByTitle(bar.mode)}} {{legendMode}}
+                    </text>
                 </g>
             </svg>
         </div>
@@ -65,7 +72,8 @@ export default {
     data() {
         return {
             data: [],
-            offsetLeft: 25,
+            iconSize: 30,
+            offsetLeft:80,
             hoverMessage: "",
             showHover:false,
             currentHover:"walk",
@@ -86,7 +94,9 @@ export default {
                     eng:"drove the bicycle on average ",
                     de:"fährt das Fahrrad im Durschnitt "
                 },
-            }
+            },
+            legendMode:"km",
+            updatedScale:false,
         };
     },
     props: {
@@ -103,15 +113,17 @@ export default {
             d3.json(this.path).then(function (data) {
                     scope.data = data.nodes.reduce(function(filtered, d) {
                     if (filterList.includes(d.title)) {
+                        console.log(d)
                         let node = {
                             transport_mode: d.title,
                             route_mean: +d.route_from,
+                            time:+d.time_from
                         }
                         filtered.push(node);
                     }
                     return filtered;
                     }, []);
-            }).then(console.log(scope.data));
+            });
         },
         updateLegend(){
             this.setupLegend();
@@ -124,7 +136,6 @@ export default {
             if (title === "car") {
                 return "#E3E3E3";
             } else if (title === "bicycle") {
-                console.log("give color of bike hehe");
                 return "#95E673";
             } else if (title === "walk") {
                 return "#73B6E6";
@@ -136,7 +147,7 @@ export default {
             return "#BABABA";
         },
         toKilometer(value) {
-            return Math.round(value / 10) / 100; //2 decimals
+            return Math.round(value / 100) / 10; //2 decimals
         },
         barStyle(title) {
             return { fill: String(this.getColor(title)), rx: "20", ry: "30" };
@@ -144,20 +155,27 @@ export default {
         textStyle(title) {
             return { fill: String(this.getColor(title)) };
         },
-        getRouteMean(title){
+        getBarValueByTitle(title){
             let datapoint = this.data.find(element => element["transport_mode"] === title)
-            let route_mean = this.toKilometer(datapoint["route_mean"])
-            return route_mean;
+            if(this.valueMode === "route_mean"){
+                let route_mean = this.toKilometer(datapoint[this.valueMode])
+                return route_mean;
+            }
+            else{
+                console.log(datapoint[this.valueMode])
+                return datapoint[this.valueMode]
+            }
         },
         changeHoverMessage(){
+            console.log(this.currentHover)
             let info = this.description[this.currentHover]
             if (this.isEnglish){
-                 this.hoverMessage = info.eng
+                this.hoverMessage = info.eng
             }
             else{
                 this.hoverMessage = info.de
             }
-            this.hoverMessage += this.getRouteMean(this.currentHover)
+            this.hoverMessage += this.getBarValueByTitle(this.currentHover)
         },
         onEnter(e){
             this.showHover = true;
@@ -197,27 +215,46 @@ export default {
             return this.height;
         },
         chartWidth() {
-            return this.width - this.offsetLeft;
+            return this.width - this.iconSize;
         },
         scaleY() {
             //const values = this.data.map((d) => d["route_sum"]);
 
             //const domain = [0, d3.max(values)];
-            const domain = [0, 37000]; //max value for comparability
-            const range = [0, this.chartWidth - this.offsetLeft];
+            const domain = [0, this.maxRange]; //max value for comparability
+            const range = [0, this.chartWidth - this.iconSize - this.offsetLeft];
             return d3.scaleLinear().domain(domain).range(range);
         },
         bars() {
+            console.log("redo bars")
             return this.data.map((d) => {
-                const barWidth = this.scaleY(d["route_mean"]);
+                const barWidth = this.scaleY(d[this.valueMode]);
                 return {
                     mode: d.transport_mode,
-                    value: d["route_mean"],
+                    value: d[this.valueMode],
                     x: this.chartWidth - barWidth,
                     width: barWidth,
                 };
             });
         },
+        maxRange(){
+            if(this.legendMode === "km"){
+                return 37000;
+            }
+            else if(this.legendMode === "min"){
+                return 120;
+            }
+            return 120;
+        },
+        valueMode(){
+            if(this.legendMode === "km"){
+                return "route_mean";
+            }
+            else if(this.legendMode === "min"){
+                return "time";
+            }
+            return "route_mean";
+        }
     },
     mounted() {
         this.setupLegend();
@@ -234,8 +271,41 @@ export default {
 
 svg {
     text {
-        text-anchor: start;
-        font-family:Roboto
+        text-anchor: end;
+        font-family:Roboto;
+        padding-right:0.5rem;
     }
+}
+
+#legend_buttons{
+    display:flex;
+    flex-direction: row;
+    align-items:center;
+}
+
+input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: var(--form-background);
+
+    margin: 0.5rem;
+    margin-left:1rem;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.1em solid $light;
+    border-radius: 50%;
+
+    display: grid;
+    justify-content: column;
+
+    &::before {
+        background-color: $light;
+    }
+
+    &:checked {
+        background-color: $light;
+    }
+  
 }
 </style>

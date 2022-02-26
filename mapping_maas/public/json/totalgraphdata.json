@@ -177,12 +177,6 @@
             "color": "#004e64"
         },
         {
-            "source": "stationary",
-            "target": "end",
-            "value": 3,
-            "color": "#004e64"
-        },
-        {
             "source": "public_transport",
             "target": "walk",
             "value": 63,

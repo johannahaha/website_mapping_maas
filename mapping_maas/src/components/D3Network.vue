@@ -17,7 +17,7 @@ import * as d3 from "d3";
 import { gsap } from 'gsap';
 
 let simulation;
-let node,link,marker,svg
+let node,link,marker,svg, startlink
 let colorBasics, colorCar, colorBicycle, colorWalk, colorPublicTransport;
 let edgeWidth, nodeSize;
 let timer;
@@ -56,9 +56,18 @@ export default {
                     de:"Homeoffice & Fahrrad",
                     eng:"Homeoffice & Bicycle"
                 },
-                network_person3: "Mobility of participant 3",
-                network_person4: "Mobility of participant 4",
-                network_person5: "Mobility of participant 5",
+                network_person3: {
+                    de:"participant 3",
+                    eng:"participant 3"
+                },
+                network_person4: {
+                    de:"participant 3",
+                    eng:"participant 3"
+                },
+                network_person5: {
+                    de:"participant 3",
+                    eng:"participant 3"
+                },
                 network_person6: {
                     de:"S-Bahn nach Berlin",
                     eng:"Train to Berlin"
@@ -141,7 +150,7 @@ export default {
             
             nodeSize = d3.scaleLinear()
                 .domain([10,120])
-                //.range([15,30])
+                //.range([10,20])
                 .range([40, 70]);
     
             
@@ -183,6 +192,7 @@ export default {
                     .selectAll("marker")
                     .data(graph.edges, function (d) { return d.source.id + "-" + d.target.id; })
                     .enter()
+                    .filter(function(d) { return d.source.title !== "start" })
                     .append("marker")
                     .attr("id", function (d) { 
                         let id = "marker_" + d.source.title + "-" + d.target.title
@@ -209,6 +219,7 @@ export default {
                     .selectAll(".path")
                     .data(graph.edges)
                     .enter()
+                    .filter(function(d) { return d.source.title !== "start" })
                     .append("path")
                     .attr("class", "path")
                     .attr('stroke',function(d) { 
@@ -231,6 +242,33 @@ export default {
                 link.on("pointerenter",scope.enterTooltip)
                 link.on("pointermove",scope.moveTooltip)
                 link.on("pointerleave",scope.leaveTooltip)
+
+                startlink = svg.append("g")
+                    .attr("id","paths_start")
+                    .selectAll(".path_start")
+                    .data(graph.edges)
+                    .enter()
+                    .filter(function(d) { return d.source.title === "start" })
+                    .append("path")
+                    .attr("class", "path_start")
+                    .attr('stroke',function(d) { 
+                        return scope.getColor(d.source.title,d.target.title,40)
+                    // return d.source.color;
+                    })
+                    .attr("stroke-opacity",1)
+                    .attr("stroke-width", function (d) {
+                        return edgeWidth(d.value);
+                    })
+                    .attr("id", function (d){
+                        return d.source.title + "-" + d.target.title
+                    })
+                    .attr("fill","none")
+                    .attr("ref", function (d){
+                        return d.source.title + "-" + d.target.title
+                    });
+                startlink.on("pointerenter",scope.enterTooltip)
+                startlink.on("pointermove",scope.moveTooltip)
+                startlink.on("pointerleave",scope.leaveTooltip)
 
                 // We create a <circle> SVG element for each node
                 // in the graph, and we specify a few attributes.
@@ -335,38 +373,51 @@ export default {
             let path = "/img/" + title + ".svg"
             return path
         },
+        getLinkAttributeSetup(d){
+            let dx = d.target.x - d.source.x;
+            let dy = d.target.y - d.source.y;
+            let dr = Math.sqrt(dx * dx + dy * dy);
+            return (
+                "M" + d.source.x + "," + d.source.y +"A" + dr + "," + dr +  " 0 0,1 " + d.target.x + "," + d.target.y
+            );
+        },
+        getLinkAttributeUpdate(d,hasMarker){
+            let id = d.source.title + "-" + d.target.title;
+            let thisPath = document.getElementById(id)
+            let pl = thisPath.getTotalLength()
+            let r = 0
+            if(hasMarker){
+                r = nodeSize(d.target.weight)/2 + this.getMarkerLength(this.marker_size + d.value/2)   
+            }
+            let m = thisPath.getPointAtLength(pl - r)
+
+            let startx = d.source.x;
+            let starty = d.source.y;
+
+            let dx = m.x - startx
+            let dy = m.y - starty
+            let dr = Math.sqrt(dx * dx + dy * dy);
+
+            return (
+                "M" +  startx + "," + starty + "A" + dr + "," + dr +  " 0 0,1 " + m.x + "," +  m.y
+            );
+        },
         onTick(){
             try{
                 if (this.i==3) return;
                 //this.i++;
                 
-                link.attr("d", function (d) {
-                    let dx = d.target.x - d.source.x;
-                    let dy = d.target.y - d.source.y;
-                    let dr = Math.sqrt(dx * dx + dy * dy);
-                    return (
-                        "M" + d.source.x + "," + d.source.y +"A" + dr + "," + dr +  " 0 0,1 " + d.target.x + "," + d.target.y
-                    );
+                link.attr("d", d => {
+                    return this.getLinkAttributeSetup(d)
                 });
                 link.attr("d", d => {
-                    let id = d.source.title + "-" + d.target.title;
-                    let thisPath = document.getElementById(id)
-                    let pl = thisPath.getTotalLength()
-                    let r = nodeSize(d.target.weight)/2 + this.getMarkerLength(this.marker_size + d.value/2)//16.97 is the "size" of the marker Math.sqrt(12**2 + 12 **2)
-                    let m = thisPath.getPointAtLength(pl - r)
-
-                    let startx = d.source.x;
-                    let starty = d.source.y;
-
-                    let dx = m.x - startx
-                    let dy = m.y - starty
-                    let dr = Math.sqrt(dx * dx + dy * dy);
-
-            
-
-                    return (
-                        "M" +  startx + "," + starty + "A" + dr + "," + dr +  " 0 0,1 " + m.x + "," +  m.y
-                    );
+                    return this.getLinkAttributeUpdate(d,true)
+                });
+                startlink.attr("d", d => {
+                    return this.getLinkAttributeSetup(d)
+                });
+                startlink.attr("d", d => {
+                    return this.getLinkAttributeUpdate(d,false)
                 });
                 node.attr("transform", this.transform);
                 //text.attr("transform", this.transform);
@@ -464,10 +515,10 @@ export default {
                     return "marker_" + d.source + "-" + d.target;
                 });
 
-                //marker = marker.join(update => update.remove())
                 marker = marker
                     .join(
                         enter => enter
+                            .filter(function(d) { return d.source !== "start" })
                             .append("marker")
                             .attr("id", function (d) { 
                                 let id = "marker_" + d.source + "-" + d.target
@@ -480,6 +531,7 @@ export default {
                             .append("path")
                             .attr("d", "M0,-5L10,0L0,5"),
                         update => update
+                            .filter(function(d) { return d.source !== "start" })
                             .attr("markerWidth", d=> {
                                 return scope.marker_size + d.value/2})
                             .attr("markerHeight", d=> {return scope.marker_size + d.value/2}))
@@ -564,6 +616,7 @@ export default {
 
                 link = link.join(
                     enter => enter
+                        .filter(function(d) { return d.source !== "start" })
                         .append("path")
                         .attr('stroke',function(d) { 
                             //return d.color
@@ -591,6 +644,37 @@ export default {
                 link.on("pointerenter",scope.enterTooltip)
                 link.on("pointermove",scope.moveTooltip)
                 link.on("pointerleave",scope.leaveTooltip)
+
+                startlink = startlink.data(graph.edges, function(d) { return d.source + "-" + d.target; });
+
+                startlink = startlink.join(
+                    enter => enter
+                        .filter(function(d) { return d.source === "start" })
+                        .append("path")
+                        .attr('stroke',function(d) { 
+                            //return d.color
+                            return scope.getColor(d.source,d.target,d.value)
+                        })
+        
+                        .attr("stroke-width", function (d) {
+                            return edgeWidth(d.value);
+                        })
+                        .attr("stroke-opacity",1)
+                        .attr("id", function (d){
+                            return d.source + "-" + d.target
+                        })
+                        .attr("fill","none")
+                        .attr("stroke-opacity", 0)
+                        .call(enter => enter.transition(t)
+                            .attr("stroke-opacity", 1.0)),
+                    exit => exit
+                        .call(exit => exit.transition(t)
+                            .attr("stroke-opacity", 0))
+                        .remove()
+                    )
+                startlink.on("pointerenter",scope.enterTooltip)
+                startlink.on("pointermove",scope.moveTooltip)
+                startlink.on("pointerleave",scope.leaveTooltip)
 
                 // Update and restart the simulation.
                 simulation.nodes(graph.nodes);
@@ -716,7 +800,7 @@ export default {
             return this.height * 0.2
         },
         widthLegend: function(){
-            return this.width * 0.3
+            return this.width * 0.4
         },
     }
 };
