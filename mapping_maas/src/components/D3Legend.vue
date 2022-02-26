@@ -22,15 +22,15 @@
                     :name="bar.mode"
                 >
                     <image
-                        :x="0"
-                        y="-10"
+                        :x="offsetLeft"
+                        y="-12.5"
                         :href="getIcon(bar.mode)"
-                        :width="offsetLeft"
-                        :height="offsetLeft"
+                        :width="iconSize"
+                        :height="iconSize"
                         :name="bar.mode"
                     />
                     <rect
-                        :x="offsetLeft"
+                        :x="iconSize + offsetLeft"
                         y="0"
                         :width="bar.width"
                         :height="5"
@@ -39,14 +39,14 @@
                         ry="2.5"
                         :name="bar.mode"
                     />
-                    <!-- <text
-                        :x="bar.x"
+                    <text
+                        :x="offsetLeft" 
                         y="0"
-                        dy="-0.5em"
+                        dy="0.5em"
+                        dx="-0.5em"
                         :style="textStyle(bar.mode)"
-                    >
-                        {{ toKilometer(bar.value) }} km
-                    </text> -->
+                    >{{ toKilometer(bar.value) }} km
+                    </text>
                 </g>
             </svg>
         </div>
@@ -65,7 +65,8 @@ export default {
     data() {
         return {
             data: [],
-            offsetLeft: 25,
+            iconSize: 30,
+            offsetLeft:80,
             hoverMessage: "",
             showHover:false,
             currentHover:"walk",
@@ -135,7 +136,7 @@ export default {
             return "#BABABA";
         },
         toKilometer(value) {
-            return Math.round(value / 10) / 100; //2 decimals
+            return Math.round(value / 100) / 10; //2 decimals
         },
         barStyle(title) {
             return { fill: String(this.getColor(title)), rx: "20", ry: "30" };
@@ -149,6 +150,7 @@ export default {
             return route_mean;
         },
         changeHoverMessage(){
+            console.log(this.currentHover)
             let info = this.description[this.currentHover]
             if (this.isEnglish){
                 this.hoverMessage = info.eng
@@ -196,14 +198,14 @@ export default {
             return this.height;
         },
         chartWidth() {
-            return this.width - this.offsetLeft;
+            return this.width - this.iconSize;
         },
         scaleY() {
             //const values = this.data.map((d) => d["route_sum"]);
 
             //const domain = [0, d3.max(values)];
             const domain = [0, 37000]; //max value for comparability
-            const range = [0, this.chartWidth - this.offsetLeft];
+            const range = [0, this.chartWidth - this.iconSize - this.offsetLeft];
             return d3.scaleLinear().domain(domain).range(range);
         },
         bars() {
@@ -233,8 +235,9 @@ export default {
 
 svg {
     text {
-        text-anchor: start;
-        font-family:Roboto
+        text-anchor: end;
+        font-family:Roboto;
+        padding-right:0.5rem;
     }
 }
 </style>

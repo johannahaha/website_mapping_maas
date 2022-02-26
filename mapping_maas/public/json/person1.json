@@ -91,12 +91,6 @@
             "target": "car",
             "value": 9,
             "color": "#004e64"
-        },
-        {
-            "source": "stationary",
-            "target": "end",
-            "value": 1,
-            "color": "#004e64"
         }
     ]
 }

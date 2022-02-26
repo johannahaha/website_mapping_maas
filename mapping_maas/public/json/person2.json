@@ -106,12 +106,6 @@
         },
         {
             "source": "stationary",
-            "target": "end",
-            "value": 2,
-            "color": "#004e64"
-        },
-        {
-            "source": "stationary",
             "target": "public_transport",
             "value": 3,
             "color": "#004e64"
