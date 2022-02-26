@@ -1,10 +1,12 @@
 <template>
     <div>
-        <input type="radio" id="km" value="km" v-model="legendMode" />
-        <label for="one">km</label>
+        <div id="legend_buttons">
+            <input type="radio" id="km" value="km" v-model="legendMode" />
+            <label for="one">km</label>
 
-        <input type="radio" id="min" value="min" v-model="legendMode" />
-        <label for="two">min</label>
+            <input type="radio" id="min" value="min" v-model="legendMode" />
+            <label for="two">min</label>
+        </div>
         <div v-if="isEnglish" id="tooltip" v-show="showHover" ref="tooltip" :style="`{'color': ${getColor(currentHover)}}`">
             This participant {{hoverMessage}} {{legendMode}}.
         </div>
@@ -273,5 +275,37 @@ svg {
         font-family:Roboto;
         padding-right:0.5rem;
     }
+}
+
+#legend_buttons{
+    display:flex;
+    flex-direction: row;
+    align-items:center;
+}
+
+input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: var(--form-background);
+
+    margin: 0.5rem;
+    margin-left:1rem;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.1em solid $light;
+    border-radius: 50%;
+
+    display: grid;
+    justify-content: column;
+
+    &::before {
+        background-color: $light;
+    }
+
+    &:checked {
+        background-color: $light;
+    }
+  
 }
 </style>

@@ -4,19 +4,22 @@
             "title": "start",
             "color": "#004e64",
             "weight": 36,
-            "route_from": 0.0
+            "route_from": 0.0,
+            "time_from": 0.0
         },
         {
             "title": "walk",
             "color": "#00a5cf",
             "weight": 36,
-            "route_from": 1588.14
+            "route_from": 1588.14,
+            "time_from": 17.0
         },
         {
             "title": "end",
             "color": "#004e64",
             "weight": 36,
-            "route_from": 0.0
+            "route_from": 0.0,
+            "time_from": 0.0
         }
     ],
     "edges": [

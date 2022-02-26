@@ -51,9 +51,12 @@
                     <p v-else> {{text.content.de}} </p>
                 </div>
             </div>
-            <p>Ein Projekt von: Johanna Hartmann, Helmut Büttner, Sascha Höver</p>
-            <p>Entstanden im Kurs "Mapping Cities - Making Cities" 2021 an der FH Potsdam bei Marian Dörk.</p> 
-            <p>Ein besonderer Dank geht an Christian Berkes und das M.a.A.S Labs Team für die Möglichkeit zur Mitwirkung, das Feedback und die Bereitstellung der Daten für dieses Projekt.</p>             
+            <div id="outro_credits">
+                <h3> Credits </h3>
+                <p>von <br> Helmut Büttner <br> Johanna Hartmann <br> Sascha Höver</p>
+                <p>Diese Website ist 2021 im Kurs "Mapping Cities - Making Cities" 2021 an der FH Potsdam bei Marian Dörk entstanden. Vielen Dank für die Unterstützung!</p> 
+                <p>Ein besonderer Dank geht außerdem an Christian Berkes und das M.a.A.S Labs Team für die Möglichkeit zur Mitwirkung, das Feedback und die Bereitstellung der Daten für dieses Projekt.</p>
+            </div>             
         </section>
     </div>
 </template>
@@ -294,6 +297,19 @@ h1{
     padding: 2rem 5vw;
     margin-bottom: 4rem;
     margin: 0 auto;
+}
+
+#outro_credits{
+    width: 66vw;
+    margin: 4rem auto;
+
+    h3{
+        @include small-headline
+    }
+
+    p{
+        margin-top:2rem;
+    }
 }
 
 #outro {
