@@ -1,6 +1,18 @@
 <template>
     <div id="bar-chart-container">
-        <h3>  How far did a participant on average travel with each transport mode in a trip?</h3>
+        <div class="bar_chart_text">
+            <h3 v-if="isEnglish">  How far and how long do the participants on average travel with each transport mode?</h3>
+            <h3 v-else>  Wie weit und wie lange reisen die Studienteilnehmer:innen durchschnittlich mit jedem Verkehrsmittel?</h3>
+            <p v-if="isEnglish"> {{text.intro.eng}} </p>
+            <p v-else> {{text.intro.de}} </p>
+        </div>
+        <div id="legend_buttons">
+            <input type="radio" id="km" value="km" v-model="legendMode" />
+            <label for="one">km</label>
+
+            <input type="radio" id="min" value="min" v-model="legendMode" />
+            <label for="two">min</label>
+        </div>
         <div id="d3-bar-chart" :height="heightPx" :width="widthPx">
             <svg
                 id="svg"
@@ -21,10 +33,10 @@
                         :height="offsetRight"
                     />
                     <rect
-                        :x="bar.x - 10"
+                        :x="bar.x - offsetRight / 2"
                         y="0"
                         :width="bar.width"
-                        :height="15"
+                        :height="offsetRight / 2"
                         :style="barStyle(bar.mode)"
                         rx="7.5"
                         ry="7.5"
@@ -35,13 +47,18 @@
                         dy="-0.5em"
                         :style="textStyle(bar.mode)"
                     >
-                        {{ toKilometer(bar.value) }} km
+                        {{ getBarValueByTitle(bar.mode) }} {{legendMode}}
                     </text>
                 </g>
             </svg>
         </div>
-        (vielleicht eher in unsere Dokumentation als auf unserer Seite)
-        A trip consists of several routes with different modes of transport that are needed to get from the start to the destination. To determine the average meters traveled by each mode of transportation, we first added up the routes traveled by each mode of transportation in each trip. Then we averaged these routes. If we had calculated only the average meters of all recorded routes without taking the trips into account, we would have distorted the result. Because then we would have ignored the fact that, for example, one uses several means of public transport in a row and walks in between. You don't do that when you use a car, so it would look like a car covers much longer distances.
+        
+        <div class="bar_chart_text">
+            <div v-for="text in text.outro" :key="text.id" class="text"> 
+                <p v-if="isEnglish"> {{text.eng}} </p>
+                <p v-else> {{text.de}} </p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -56,12 +73,35 @@ export default {
     data() {
         return {
             data: [],
-            offsetRight: 25,
+            //offsetRight: 25,
+            legendMode:"km",
+            text:{
+                intro:{
+                    eng:"As you could already tell from the small graphs on the lower left, it is nonetheless important to reflect and compare the impact of each mode of transport. Therefore, we now look at all participants of the study together and visualize, how war they travel on average with each mode.",
+                    de:"Wie auch schon in den kleinen Grafiken unten links zu sehen war, ist es dennoch wichtig, sich die Wirkung der einzelnen Verkehrsmittel klarzumachen und zu vergleichen. Daher haben wir hier nochmal alle Teilnehmenden der Studie zusammengenommen und geschaut, wie weit sie jeweils mit dem jeweiligen Verkehrsmittel fahren."
+                },
+                outro:{
+                    text1:{
+                        eng:"How did we calculate this averages? Each of the recorded trips consists of smaller legs with different means of transport that the person needs to get to the destination. So, to calculate the average length and average time for each mode of transport, we had to be careful that the small legs did not distort the result. Therefore, we first calculated the total distances for each mode of transportation within a trip - so it doesn't matter if you had to change trains during the trip. From these total distances, we then calculated the average.",
+                        de:"Wie haben wir diese Durchschnittswerte berechnet? Jeder der aufgenommen Fahrten besteht aus kleineren Teilstrecken mit verschiedenen Verkehrsmitteln, die die Person braucht, um zum Ziel zu gelangen. Um die Durchschnittslänge und Durchschnittszeit für jedes Verkehrsmittel zu berechnen, mussten wir also aufpassen, dass die kleinen Teilstrecken das Ergebnis nicht verfälschen. Daher haben wir zunächst die Gesamtstrecken für jedes Verkehrmittel innerhalb einer Fahrt berechnet - also ist es egal, ob man während der Bahnstrecke umsteigen musste. Von diese Gesamtstrecken haben wir dann den Durchschnitt ermittelt."
+                    },
+                    text2:{
+                        eng:"As expected, people travel on average with the car and the public transport the farest. The difference between the two is only a few kilometers. The networks you saw before hihlighted the more frequent use of bicycles and walking. However, this bar chart shows that in total one single trip with the car or public transport, respectively, has a higher impact.",
+                        de:"Wie erwartet reisten die Teilnehmenden mit dem Auto und den öffentlichen Verkersmitteln am weitesten. Der Unterschied zwischen beiden beträgt bloß ein paar Kilometer. Während die Netzwerkgrafiken vor allem die häufigeren Modi von Fahrrad und zu Fuß gehen herausgehoben hat, kann man hier sehen, dass insgesamt eine Autofahrt bzw. eine Fahrt mit dem öffentlicheren Verkehrmitteln ein höheres Gewicht hat."
+                    },
+                    text3:{
+                        eng:"So what is our conclusion in total?",
+                        de:"Was ist insgesamt unsere Erkenntnis?"
+                    }
+
+                },
+            },
         };
     },
     props: {
         width: Number,
         height: Number,
+        isEnglish:Boolean
     },
     methods: {
         setupBarChart() {
@@ -74,6 +114,7 @@ export default {
                     let node = {
                         transport_mode: d.title,
                         route_mean: +d.route_from,
+                        time: +d.time_from
                     }
                     filtered.push(node);
                 }
@@ -100,6 +141,17 @@ export default {
             }
             return "#BABABA";
         },
+        getBarValueByTitle(title){
+            let datapoint = this.data.find(element => element["transport_mode"] === title)
+            if(this.valueMode === "route_mean"){
+                let route_mean = this.toKilometer(datapoint[this.valueMode])
+                return route_mean;
+            }
+            else{
+                console.log(datapoint[this.valueMode])
+                return datapoint[this.valueMode]
+            }
+        },
         toKilometer(value) {
             return Math.round(value / 10) / 100; //2 decimals
         },
@@ -111,6 +163,11 @@ export default {
         }
     },
     computed: {
+        offsetRight:function(){
+            console.log("offset:",this.width / 50)
+            let offset = this.width / 40.0
+            return Math.max(offset,20.0);
+        },
         viewBox: function () {
             return "0 0 " + this.width + " " + this.height;
         },
@@ -121,7 +178,7 @@ export default {
             return this.width + "px";
         },
         barHeight() {
-            return (this.height - 25) / this.data.length;
+            return (this.height - this.offsetRight) / this.data.length;
         },
         chartHeight() {
             return this.height;
@@ -130,22 +187,31 @@ export default {
             return this.width - this.offsetRight;
         },
         scaleY() {
-            const values = this.data.map((d) => d["route_mean"]);
+            const values = this.data.map((d) => d[this.valueMode]);
             const domain = [0, d3.max(values)];
             const range = [0, this.chartWidth - this.offsetRight];
             return d3.scaleLinear().domain(domain).range(range);
         },
         bars() {
             return this.data.map((d) => {
-                const barWidth = this.scaleY(d["route_mean"]);
+                const barWidth = this.scaleY(d[this.valueMode]);
                 return {
                     mode: d.transport_mode,
-                    value: d["route_mean"],
+                    value: d[this.valueMode],
                     x: this.chartWidth - barWidth,
                     width: barWidth,
                 };
             });
         },
+        valueMode(){
+            if(this.legendMode === "km"){
+                return "route_mean";
+            }
+            else if(this.legendMode === "min"){
+                return "time";
+            }
+            return "route_mean";
+        }
     },
     mounted() {
         this.setupBarChart();
@@ -159,8 +225,8 @@ export default {
 #bar-chart-container{
     margin: 10% 0;
 
-    h3{
-        @include small-headline;
+    .bar_chart_text{
+        @include textblock;
     }
 }
 
@@ -169,5 +235,16 @@ svg {
         text-anchor: start;
         font-family:Roboto
     }
+}
+
+#legend_buttons{
+    display:flex;
+    flex-direction: row;
+    align-items:center;
+}
+
+input[type="radio"] {
+    @include radiobutton
+  
 }
 </style>

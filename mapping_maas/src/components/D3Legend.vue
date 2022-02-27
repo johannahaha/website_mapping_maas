@@ -278,34 +278,14 @@ svg {
 }
 
 #legend_buttons{
+    justify-content: center;
     display:flex;
     flex-direction: row;
     align-items:center;
 }
 
 input[type="radio"] {
-    -webkit-appearance: none;
-    appearance: none;
-    /* For iOS < 15 */
-    background-color: var(--form-background);
-
-    margin: 0.5rem;
-    margin-left:1rem;
-    width: 1.15em;
-    height: 1.15em;
-    border: 0.1em solid $light;
-    border-radius: 50%;
-
-    display: grid;
-    justify-content: column;
-
-    &::before {
-        background-color: $light;
-    }
-
-    &:checked {
-        background-color: $light;
-    }
+    @include radiobutton;
   
 }
 </style>

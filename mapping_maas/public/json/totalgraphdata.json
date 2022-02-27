@@ -4,49 +4,57 @@
             "title": "start",
             "color": "#004e64",
             "weight": 530,
-            "route_from": 0.0
+            "route_from": 0.0,
+            "time_from": 0.0
         },
         {
             "title": "walk",
             "color": "#00a5cf",
             "weight": 932,
-            "route_from": 1849.6
+            "route_from": 1849.6,
+            "time_from": 25.0
         },
         {
             "title": "car",
             "color": "#7ae582",
             "weight": 298,
-            "route_from": 19648.63
+            "route_from": 19648.63,
+            "time_from": 30.0
         },
         {
             "title": "bicycle",
             "color": "#9fffcb",
             "weight": 349,
-            "route_from": 3243.66
+            "route_from": 3243.66,
+            "time_from": 16.0
         },
         {
             "title": "stationary",
             "color": "#004e64",
             "weight": 87,
-            "route_from": 89.73
+            "route_from": 89.73,
+            "time_from": 5.0
         },
         {
             "title": "public_transport",
             "color": "#25a18e",
             "weight": 87,
-            "route_from": 14669.29
+            "route_from": 14669.29,
+            "time_from": 26.0
         },
         {
             "title": "ship",
             "color": "#25a18e",
             "weight": 1,
-            "route_from": 159.0
+            "route_from": 159.0,
+            "time_from": 2.0
         },
         {
             "title": "end",
             "color": "#004e64",
             "weight": 1,
-            "route_from": 0
+            "route_from": 0,
+            "time_from": 0
         }
     ],
     "edges": [

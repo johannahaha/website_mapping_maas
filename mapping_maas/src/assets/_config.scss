@@ -24,6 +24,46 @@ $darkgrey: #111;
     }
 }
 
+@mixin textblock{
+    width: 66vw;
+    margin: 4rem auto;
+
+    h3{
+        @include small-headline
+    }
+
+    p{
+        margin-top:2rem;
+    }
+}
+
+@mixin radiobutton{
+
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: var(--form-background);
+
+    margin: 0.5rem;
+    margin-left:1rem;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.1em solid $light;
+    border-radius: 50%;
+
+    display: grid;
+    justify-content: column;
+
+    &::before {
+        background-color: $light;
+    }
+
+    &:checked {
+        background-color: $light;
+    }
+  
+}
+
 // $fa-font-path: "/webfonts";
 // @import "scss/fontawesome.scss";
 // @import "scss/solid.scss";
