@@ -49,28 +49,20 @@ export default {
                     eng:"Introduction"
                 },
                 network_person1: {
-                    de:"Zur Arbeit Fahren",
-                    eng:"Driving to Work"
+                    de:"1. Zur Arbeit Fahren",
+                    eng:"1. Driving to Work"
                 },
                 network_person2: {
-                    de:"Homeoffice & Fahrrad",
-                    eng:"Homeoffice & Bicycle"
+                    de:"2. Homeoffice & Fahrrad",
+                    eng:"2. Homeoffice & Bicycle"
                 },
                 network_person3: {
-                    de:"participant 3",
-                    eng:"participant 3"
-                },
-                network_person4: {
-                    de:"participant 3",
-                    eng:"participant 3"
-                },
-                network_person5: {
-                    de:"participant 3",
-                    eng:"participant 3"
+                    de:"3. Gemische Mobilität",
+                    eng:"3. Mixed Mobility"
                 },
                 network_person6: {
-                    de:"S-Bahn nach Berlin",
-                    eng:"Train to Berlin"
+                    de:"4. S-Bahn nach Berlin",
+                    eng:"4. Train to Berlin"
                 },
             },
             showHover:false,
@@ -447,13 +439,7 @@ export default {
             else if(step === 21){
                 this.updateNetworkData("network_person3","/json/person3.json")
             }
-            else if(step === 22){
-                this.updateNetworkData("network_person4","/json/person4.json")
-            }
-            else if(step === 23){
-                this.updateNetworkData("network_person5","/json/person5.json")
-            }
-            else if(step === 24){
+            else if(step === 29){
                 this.updateNetworkData("network_person6","/json/person6.json")
             }
             return path;

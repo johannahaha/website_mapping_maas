@@ -56,9 +56,29 @@
             </div>
             <div id="outro_credits">
                 <h3> Credits </h3>
+                <div id="outro_credits_team">
+                    <div v-for="text in outro_team" :key="text.id" class="text"> 
+                        <h4> {{text.name}} </h4>
+                        <p v-if="isEnglish"> {{text.eng}} </p>
+                        <p v-else> {{text.de}} </p>
+                    </div>
+                </div>
                 <div v-for="text in outro_credits" :key="text.id" class="text"> 
                     <p v-if="isEnglish"> {{text.eng}} </p>
                     <p v-else> {{text.de}} </p>
+                </div>
+                <div class="text"> 
+                    <h3 v-if="isEnglish">Study</h3>
+                    <h3 v-else>Studie</h3>
+                    <p v-if="isEnglish">Find out more about the MaaS L.A.B.S project on their website and keep up to date with new reseach and events: <a href="https://www.maas4.de">"https://www.maas4.de"</a>. The invitation to participate in this study "digital traces potsdam" is here: <a href="https://www.maas4.de/movinglab"></a>https://www.maas4.de/movinglab</p>
+                    <p v-else>Finde mehr über das MaaS L.A.B.S Projekt, neue Updates, Forschung und Events auf ihrer Website: <a href="https://www.maas4.de">"https://www.maas4.de"</a>. Der Aufruf zur Teilnahme an dieser Studie "Digitale Spuren Potsdams" ist hier zu finden: <a href="https://www.maas4.de/movinglab"></a>https://www.maas4.de/movinglab</p>
+                    <p>Stevens, G.; Pakusch, C.; Böhm, L.; Bossauer, P. (09.09.2021). Digital Traces Potsdam. DLR MovingLab Studie. Universität Siegen, MaaS L.A.B.S., <a href="https://movinglab.dlr.de/en/projects-campaigns/digital-traces-potsdam-maas-labs-research-project">https://movinglab.dlr.de/en/projects-campaigns/digital-traces-potsdam-maas-labs-research-project </a></p>
+                    <h3>References</h3>
+                    <p>Dörk, M. (18.06.2020). Experiments in Temporal & Relational Data Visualization [Slides]. University of Applied Sciences Potsdam.</p>
+                    <p>Horne, Rp.; Jeffrey-Wilensky J.; Kranz, M.; Ozelli, K.; Stefaner, M. (12.06.2020). Reseacher Connections: Understanding a decade of collaborations in autism science [Project]. Spectrum News. <a href="https://connections.spectrumnews.org">https://connections.spectrumnews.org</a></p>
+                    <p>Otten, H.; Hildebrandt, L.; Nagel, T.; Dörk, M.; Müller B. (2014 - 2018). Shifted Maps: Revealing networks in personal movement data [Project]. UCLAB, University of Applied Sciences Potsdam. <a href="https://uclab.fh-potsdam.de/projects/shifted-maps/">https://uclab.fh-potsdam.de/projects/shifted-maps/</a></p>
+                    <p>Sedlmair, M., Meyer, M., and Munzner, T. (2012). Design study methodology: Reflections from the trenches and the stacks. IEEE Transactions on Visualization and Computer Graphics, 18(12):2431–2440. <a href="https://sci-hub.se/10.1109/TVCG.2012.213">https://doi.org/10.1109/TVCG.2012.213</a></p>
+                    <p>Meyer, M. and Dykes, J. (2019). Criteria for rigor in visualization design study. IEEE transactions on visualization and computer graphics, 26(1):87–97. <a href="https://doi.org/10.1109/TVCG.2019.2934539">https://doi.org/10.1109/TVCG.2019.2934539</a></p>
                 </div>
             </div>             
         </section>
@@ -122,24 +142,24 @@ export default {
                 step20:{id:20,eng:"If you look at the visualisation, you can see a strong relationship between bicycling and short stops and vice versa. This could be related to the fact that traffic is not optimized for bicycles, so they have to stop frequently. Even though biking is the fastest mode of transport for the participant, it could still be better.",de:"Wenn du dir die Visualisierung ansiehst, kannst du eine starke Verbindung zwischen Radfahren und kurzen Stopps und umgekehrt erkennen. Das könnte damit zusammenhängen, dass der Verkehr nicht für Fahrräder optimiert ist, so dass häufig angehalten werden muss. Auch wenn das Fahrrad das schnellste Verkehrsmittel für diese Person ist, könnte es noch besser sein."}
             },
             network_person3:{
-                step21:{id:21,eng:"person 3",de:"person3"}
-            },
-            network_person4:{
-                step22:{id:22,eng:"person 4",de:"person4"}
-            },
-            network_person5:{
-                step23:{id:23,eng:"person 5",de:"person5"}
+                step21:{id:21,eng:"The next participant has a diverse mobility and uses all modes of transport for different occasions.",de:"Die nächste Person hat eine sehr gemischte Mobilität und verwendet alle Verkehrmittel zu unterschiedlichen Anlässen."},
+                step22:{id:22,eng:"Despite having a job ticket, the person drives to work by car. One reason for this could be the pandemic, as the person uses public transport much less as a result.",de:"Trotz eines Jobtickets fährt die Person mit dem Auto zur Arbeit. Ein Grund dafür könnte die Pandemie sein, da die Person den ÖPNV dadurch viel weniger benutzt."},
+                step23:{id:23,eng:"Oftentimes, the persons combines the car ride to work with other errands. For example, they bring their kid to kindergarden or get groceries.",de:"Oft wird die Autofahrt zur Arbeit mit weiteren Orten kombiniert. Beispielsweise wird ein Kind zur Kita gebracht oder ein Einkauf erledigt."},
+                step24:{id:24,eng:"In their free time, the person uses different means of transport such as the bicycle or public transport. They like to go for a walk in the nearby forest. For longer distances such as to the southwest of Berlin and shopping the car is used. Most mornings, they bring their kid to kindergarden with a bike.",de:"In ihrer Freizeit nutzt die Person unterschiedliche Verkehrsmittel wie das Fahrrad, den ÖPNV oder geht im nahegelegenen Wald spazieren. Für längere Strecken wie beispielsweise in den Südwesten Berlins und Einkäufe wird das Auto genutzt. An den meisten Morgenden bringt die Person ihr Kind mit dem Fahrrad zu Kita"},
+                step25:{id:25,eng:'They say: "I bought the car for routes that are not accessible by public transport (last mile)."',de:'Sie sagt in der Umfrage:"Ich habe mir das Auto für Strecken angeschafft, die nicht mit dem ÖPNV erreichbar sind (letzte Meile)."'},
+                step26:{id:26,eng:'"My neighborhood lacks a pharmacy, a youth center, a swimming pool, a sports club with a sports field, or a sports hall."',de:'"In meiner Nachbarschaft fehlt es an einer Apotheke, einem Jugendzentrum, einer Schwimmhalle, einem Sportverein mit Sportplatz oder einer Sporthalle."'},
+                step27:{id:27,eng:"The nearest bus stop is less than a kilometer from home and very accessible.",de:"Die nächste Haltestelle ist unter einen Kilometer vom Zuhause entfernt und sehr gut erreichbar."},
+                step28:{id:28,eng:'"Due to the pandemic, my mobility has decreased considerably, but it does not pose any major challenges. If anything, my mobility has become more climate-friendly. I use the bicycle just as often, but public transport and the car much less. Nevertheless, the car is my main means of transport."',de:'"Durch die Pandemie ist meine Mobilität stark rückläufig, bildet aber keine großen Herausforderungen. Meine Mobilität wurde eher klimafreundlicher. Ich nutze das Fahrrad genauso oft, den ÖPNV und das Auto aber viel weniger. Dennoch ist das Auto mein Hauptverkehrsmittel."'}
             },
             network_person6:{
-                step24:{id:24,eng:"person 6",de:"person6"},
-                step25:{id:25,eng:"Similarly to our first person, they travel from Potsdam to Berlin for work.",de:"Ähnlich wie unsere erste Person pendelt diese Person zwischen Potsdam und Berlin."},
-                step26:{id:26,eng:"For transit, they use public transport. It takes them about 50 minutes to get there.",de:"Zum Pendeln nutzt sie vor allem öffentliche Verkehrmittel. Für den Weg brauchen sie etwa 50 Minuten"},
-                step27:{id:27,eng:"Taking the car would take 15 minutes less. But traffic and the time to look for a parking station is not included, so it would probably not be that much faster.",de:"Es wäre etwa fünfzehn Minuten schneller, das Auto zu nehmen. Darin ist allerdings kein Verkehr oder die Zeit, die es braucht einen Parkplatz zu suchen, eingerechnet."},
-                step28:{id:28,eng:"To further cut down the transit, they occasionally take their bike with them on the train and use it to get from their home to the first train station. Sometimes, they use a bike-sharing service, but less often since the pandemic.",de:"Um den Arbeitsweg weiter zu verkürzen, nimmt die Person manchmal ihr Fahrrad mit in den Zug und verwendet es, um vom Bahnhof zum Zielort zu fahren. Manchmal verwenden sie einen Bike-Sharing-Service, aber seltener seit Pandemiebeginn."},
-                step29:{id:29,eng:'Even though they normally optimize their transit time, sometimes it does not work out: "Today I missed the connecting regional train." The walk between the two stations is too long. They needed to wait 20 minutes for the next train to come.',de:'Obwohl die Person sich Mühe gibt, ihr Umsteigezeit zu optimieren, klappt das nicht immer: "Heute habe ich den Anschlusszug verpasst. Der Fußweg zwischen den zwei Stationen war zu lang". Sie musste 20 Minuten auf den nächsten Regionalzug warten.'},
-                step31:{id:31,eng:"They own a car in their household. About that, they say: 'We did not buy it, we just borrowed it from a friend as they don't use it at the moment.'",de:'Ihr Haushalt besitzt ein Auto. "Wir haben es uns nicht bewusst gekauft. Ein Freund hat es uns geliehen, weil er es gerade nicht verwendet."'},
-                step32:{id:32,eng:"They do not give the car any emotional value or memories. It only serves its purpose, but they do not need it specifically.",de:"Mit dem Auto verbinder sie keine Erinnerungen oder emotionale Werte. Es ist ein Gebrauchsgegenstand, auf den sie aber nicht angewiesen ist."},
-                step33:{id:33,eng:"At their neighborhood and their workplace, they wish for roofed parking slots for the bike",de:"In ihrer Nachbarschaft würde sich die Person überdachte Parkplätze für das Rad wünschen."},
+                step29:{id:29,eng:"Similarly to our first person, they travel from Potsdam to Berlin for work.",de:"Ähnlich wie unsere erste Person pendelt diese Person zwischen Potsdam und Berlin."},
+                step30:{id:30,eng:"For transit, they use public transport. It takes them about 50 minutes to get there.",de:"Zum Pendeln nutzt sie vor allem öffentliche Verkehrmittel. Für den Weg brauchen sie etwa 50 Minuten"},
+                step31:{id:31,eng:"Taking the car would take 15 minutes less. But traffic and the time to look for a parking station is not included, so it would probably not be that much faster.",de:"Es wäre etwa fünfzehn Minuten schneller, das Auto zu nehmen. Darin ist allerdings kein Verkehr oder die Zeit, die es braucht einen Parkplatz zu suchen, eingerechnet."},
+                step32:{id:32,eng:"To further cut down the transit, they occasionally take their bike with them on the train and use it to get from their home to the first train station. Sometimes, they use a bike-sharing service, but less often since the pandemic.",de:"Um den Arbeitsweg weiter zu verkürzen, nimmt die Person manchmal ihr Fahrrad mit in den Zug und verwendet es, um vom Bahnhof zum Zielort zu fahren. Manchmal verwenden sie einen Bike-Sharing-Service, aber seltener seit Pandemiebeginn."},
+                step33:{id:33,eng:'Even though they normally optimize their transit time, sometimes it does not work out: "Today I missed the connecting regional train." The walk between the two stations is too long. They needed to wait 20 minutes for the next train to come.',de:'Obwohl die Person sich Mühe gibt, ihr Umsteigezeit zu optimieren, klappt das nicht immer: "Heute habe ich den Anschlusszug verpasst. Der Fußweg zwischen den zwei Stationen war zu lang". Sie musste 20 Minuten auf den nächsten Regionalzug warten.'},
+                step34:{id:34,eng:"They own a car in their household. About that, they say: 'We did not buy it, we just borrowed it from a family member as they don't use it at the moment.'",de:'Ihr Haushalt besitzt ein Auto. "Wir haben es uns nicht bewusst gekauft. Ein Familienmitglied hat es uns geliehen, weil er es gerade nicht verwendet."'},
+                step35:{id:35,eng:"They do not give the car any emotional value or memories. It only serves its purpose, but they do not need it specifically.",de:"Mit dem Auto verbinder sie keine Erinnerungen oder emotionale Werte. Es ist ein Gebrauchsgegenstand, auf den sie aber nicht angewiesen ist."},
+                step36:{id:36,eng:"At their neighborhood and their workplace, they wish for roofed parking slots for the bike",de:"In ihrer Nachbarschaft würde sich die Person überdachte Parkplätze für das Rad wünschen."},
             },
             outro:{
                 text1:{
@@ -194,18 +214,35 @@ export default {
                 },
 
             },
-            outro_credits:{
-                text1: {
-                    eng: "by <br> Helmut Büttner <br> Johanna Hartmann <br> Sascha Höver",
-                    de: "von <br> Helmut Büttner <br> Johanna Hartmann <br> Sascha Höver"
-                },
+            outro_team:{
                 text2: {
-                    eng: "Credits Kurs",
-                    de: 'Diese Website ist 2021 im Kurs "Mapping Cities - Making Cities" 2021 an der FH Potsdam bei Marian Dörk entstanden. Vielen Dank für die Unterstützung!'
+                    name: "Helmut Büttner",
+                    eng: "Research, Data Analytics & Narrative Structure",
+                    de: "Recherche, Datenanalyse & Struktur des Narrativs"
                 },
-                text3:{
-                    eng:"Credits Feedback",
-                    de:"Ein besonderer Dank geht außerdem an Christian Berkes und das M.a.A.S Labs Team für die Möglichkeit zur Mitwirkung, das Feedback und die Bereitstellung der Daten für dieses Projekt."
+                text3: {
+                    name: "Johanna Hartmann",
+                    eng: "Conception, Data Analytics / Processing, Data Viz & Web Development",
+                    de: "Konzeption, Datenanalyse / Verarbeitung, Visualisierung & Webentwicklung"
+                },
+                text4: {
+                    name: "Sascha Höver",
+                    eng: "Design, Conception & Co-Design Workshop",
+                    de: "Design, Konzeption & Co-Design Workshop"
+                },
+            },
+            outro_credits:{
+                text5: {
+                    eng: "We finished the project on 28th February 2021.",
+                    de: "Das Projekt haben wir am 28.02.2021 abgeschlossen."
+                },
+                text6: {
+                    eng: "We developed this project for the course Mapping Cities – Making Cities by Prof. Dr. Marian Dörk at University of Applied Sciences Potsdam, Winter semester 2021/22. Thanks for your support and feedback!",
+                    de: 'Wir haben dieses Projekt im Kurs Mapping Cities – Making Cities von Prof. Dr. Marian Dörk an der FH Potsdam im Wintersemester 2021/22 entwickelt. Vielen Dank für die Unterstützung!'
+                },
+                study:{
+                    eng:"Special thanks also go to Christian Berkes and the MaaS L.a.b.s. team for the collaboration, your valuable feedback and for providing data for this project.",
+                    de:"Ein besonderer Dank geht außerdem an Christian Berkes und das MaaS L.a.b.s. Team für die Möglichkeit zur Mitwirkung, die Zusammenarbeit, das Feedback und die Bereitstellung der Daten für dieses Projekt."
                 }
             },
             //}
@@ -253,7 +290,7 @@ export default {
             gsap.set(step.element,{opacity:0})
             gsap.to(step.element,{opacity:1.0,duration:3})
 
-            let stepList = [0,3,5,8,13,21,22,23,24]
+            let stepList = [0,3,5,8,13,21,29]
             
             if(step.direction === "down" && stepList.includes(this.step)){
                 this.$refs.network.updateGraph(this.step)
@@ -294,6 +331,11 @@ export default {
     display: flex;
     flex-direction: column;
     line-height: 1.5rem;
+
+    a{
+        text-decoration: underline;
+        color:$light;
+    }
 }
 
 h1{
@@ -314,15 +356,29 @@ h1{
     .text{
         padding:1rem 0;
     }
-
-    a{
-        text-decoration: underline;
-        color:$light;
-    }
 }
 
 #outro_credits{
     @include textblock;
+
+    p{
+        margin: 1rem 0;
+    }
+
+    &_team{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        h4{
+            font-family: "Vollkorn";
+            font-size:1.2rem;
+        }
+
+        p{
+            width: 15vw;
+        }
+    }
 }
 
 #outro {
@@ -346,7 +402,8 @@ h1{
             p {
                 padding: 2rem 0;
             }
-    }
+        }
+
     }
 
 
