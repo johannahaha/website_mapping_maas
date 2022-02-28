@@ -77,8 +77,8 @@ export default {
             legendMode:"km",
             text:{
                 intro:{
-                    eng:"As you could already tell from the small graphs on the lower left, it is nonetheless important to reflect and compare the impact of each mode of transport. Therefore, we now look at all participants of the study together and visualize, how far and how long they travel on average with each mode.",
-                    de:"Wie auch schon in den kleinen Grafiken unten links zu sehen war, ist es dennoch wichtig, sich die Wirkung der einzelnen Verkehrsmittel klarzumachen und zu vergleichen. Daher haben wir hier nochmal alle Teilnehmenden der Studie zusammengenommen und geschaut, wie weit und wie lange sie jeweils mit dem jeweiligen Verkehrsmittel fahren."
+                    eng:"The networks visualize individual mobility patterns while allowing a look into relationships and links between modes of mobility. As you could already tell from the small graphs on the lower left, it is nonetheless important to reflect and compare the impact of each mode of transport. Therefore, we now look at all participants of the study together and visualize, how far and how long they travel on average with each mode.",
+                    de:"Die Netzwerke visualisieren individuelle Mobilitätsmuster und bieten einen Einblick in Zusammenhänge und Verknüpfungen verschiedener Fortbewegungsarten. Wie auch schon in den kleinen Grafiken unten links zu sehen war, ist es dennoch wichtig, sich die Wirkung der einzelnen Verkehrsmittel klarzumachen und zu vergleichen. Daher haben wir hier nochmal alle Teilnehmenden der Studie zusammengenommen und geschaut, wie weit und wie lange sie jeweils mit dem jeweiligen Verkehrsmittel fahren."
                 },
                 outro:{
                     text1:{
